@@ -1,0 +1,16 @@
+services:
+    spring-verify:
+        build:
+            context: ../
+            dockerfile: .devcontainer/Dockerfile
+        container_name: spring-verify
+        tty: true
+        volumes:
+            - ../:/app
+            # maven 依存ライブラリをキャッシュするために利用
+            - maven-repo:/root/.m2
+        ports:
+            - 18080:8080
+
+volumes:
+    maven-repo:

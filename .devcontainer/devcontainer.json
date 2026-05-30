@@ -1,0 +1,56 @@
+{
+    "name": "Spring Boot Dev Environment",
+    "dockerComposeFile": "./compose.yaml",
+    "service": "spring-verify",
+    "workspaceFolder": "/app",
+    "shutdownAction": "stopCompose",
+    "customizations": {
+        "vscode": {
+            // 拡張機能
+            "extensions": [
+                //// Java
+                "vscjava.vscode-java-pack",
+                //// Spring
+                "vmware.vscode-boot-dev-pack",
+                // VSCode用
+                "esbenp.prettier-vscode",
+                "mosapride.zenkaku",
+                "shardulm94.trailing-spaces",
+                "oderwat.indent-rainbow",
+                "anteprimorac.html-end-tag-labels",
+                "vincaslt.highlight-matching-tag",
+                "christian-kohler.path-intellisense",
+                "mhutchie.git-graph",
+                // AI
+                "google.geminicodeassist"
+            ],
+            "settings": {
+                "editor.formatOnSave": true,
+                "editor.defaultFormatter": "esbenp.prettier-vscode",
+                // 保存時にインポートを整理
+                "editor.codeActionsOnSave": {
+                    "source.optimizeImports": "explicit"
+                },
+                // Prettier設定
+                "prettier.singleQuote": true,
+                "prettier.jsxSingleQuote": true,
+                "prettier.printWidth": 120,
+                "prettier.tabWidth": 4,
+                "js/ts.preferences.quoteStyle": "single",
+                "[java]": {
+                    "editor.defaultFormatter": "redhat.java"
+                },
+                // 利用ライブラリ変更した時に自動同期
+                "java.configuration.updateBuildConfiguration": "automatic",
+                // コンパイルエラーが発生している場合も起動する
+                "java.debug.settings.onBuildFailureProceed": true,
+                // Null安全性を高めるための分析
+                "java.compile.nullAnalysis.mode": "automatic",
+                "java.format.settings.url": "${workspaceFolder}/.devcontainer/eclipse-formatter.xml",
+                "java.format.settings.profile": "Eclipse",
+                "java.jdt.ls.vmargs": "-Xmx8G -XX:+UseG1GC -XX:+UseStringDeduplication"
+            },
+            "postStartCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}"
+        }
+    }
+}
