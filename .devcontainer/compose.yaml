@@ -5,12 +5,34 @@ services:
             dockerfile: .devcontainer/Dockerfile
         container_name: spring-verify
         tty: true
+        environment:
+            POSTGRES_DB: ${POSTGRES_DATABASE_NAME}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
         volumes:
             - ../:/app
             # maven 依存ライブラリをキャッシュするために利用
             - maven-repo:/root/.m2
         ports:
             - 18080:8080
+        depends_on:
+            - spring-db
+
+    spring-db:
+        image: postgres:18
+        labels:
+            - 'org.springframework.boot.service-connection=postgres'
+        container_name: spring-db
+        environment:
+            POSTGRES_DB: ${POSTGRES_DATABASE_NAME}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        ports:
+            - 15432:5432
+        volumes:
+            - db-store:/var/lib/postgresql
+            - ./postgres_logs:/var/log/postgresql
 
 volumes:
+    db-store:
     maven-repo:
