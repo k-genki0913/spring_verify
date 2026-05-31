@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class WelcomeController {
 
     @GetMapping("/")
-    public String welcome() {
+    public String init() {
         return "welcome";
     }
 }
