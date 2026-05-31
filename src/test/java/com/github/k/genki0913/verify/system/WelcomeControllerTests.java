@@ -30,7 +30,7 @@ public class WelcomeControllerTests {
                     get("/"))
                     .andExpect(status().isOk())
                     .andExpect(view().name("welcome"))
-                    .andExpect(content().string(containsString("WelCome")));
+                    .andExpect(content().string(containsString("Spring Boot Verify")));
         }
 
         @Test
@@ -41,7 +41,7 @@ public class WelcomeControllerTests {
                             .param("test_key", "test_value"))
                     .andExpect(status().isOk())
                     .andExpect(view().name("welcome"))
-                    .andExpect(content().string(containsString("WelCome")));
+                    .andExpect(content().string(containsString("Spring Boot Verify")));
             ;
         }
     }

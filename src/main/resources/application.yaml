@@ -1,3 +1,8 @@
 spring:
-  application:
-    name: verify
+    application:
+        name: verify
+    messages:
+        basename: messages
+        encoding: UTF-8
+    web:
+        locale: ja # デフォルトのロケールを日本語に固定
