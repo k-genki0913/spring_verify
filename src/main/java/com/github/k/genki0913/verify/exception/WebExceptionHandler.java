@@ -1,6 +1,7 @@
 package com.github.k.genki0913.verify.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,6 +14,41 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @ControllerAdvice(annotations = Controller.class)
 public class WebExceptionHandler {
+
+    // =========================================================================
+    // 403 Forbidden（セキュリティ対策として404にすり替え）
+    // =========================================================================
+    /**
+     * 【全画面共通】認可エラー（403 Forbidden）を一括ハンドリングし、404画面へ隠蔽遷移させます。
+     *
+     * <p>
+     * <strong>■ 発生契機</strong><br>
+     * ログイン中のユーザーが、自身の権限（Role）ではアクセスを許可されていない
+     * ページや管理機能（例: 一般ユーザーによるシステム管理者画面へのURL直叩きなど）を要求した場合。
+     * </p>
+     *
+     * <p>
+     * <strong>■ 制御概要（【重要】隠蔽によるセキュリティ対策）</strong><br>
+     * 本システムでは、セキュリティ（脆弱性）対策の一環として、認可エラー時に本来の
+     * 403ステータスや専用画面を返却せず、<strong>あえて「404 Not Found」として偽装処理</strong>します。<br>
+     * これにより、悪意ある攻撃者（ハッカー）に対して「そもそもそこに秘匿な管理画面が存在する」
+     * という事実そのものを隠蔽（列挙攻撃を防御）します。
+     * </p>
+     *
+     * <p>
+     * <strong>■ 画面（View）への返却データ</strong><br>
+     * なし（※ユーザーに404と信じ込ませるため、404エラー発生時と全く同じ外観・データ構造を保ちます）
+     * </p>
+     *
+     * @param ex
+     *               発生した認可エラー（アクセス拒否例外）
+     * @return 遷移先としてあえて404画面のパス {@code "error/404"} を設定したModelAndView
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ModelAndView handleForbidden(AccessDeniedException ex) {
+        return new ModelAndView("error/404");
+    }
 
     // =========================================================================
     // 404 Not Found (Spring Boot 3.2+ 最新仕様)

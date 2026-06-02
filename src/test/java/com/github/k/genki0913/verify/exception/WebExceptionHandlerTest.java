@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -29,6 +30,24 @@ public class WebExceptionHandlerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    // =========================================================================
+    // 403 Forbidden のテストグループ
+    // =========================================================================
+    @Nested
+    @DisplayName("AccessDeniedException(403エラー)のハンドリング")
+    class HandleForbidden {
+        @Test
+        @DisplayName("【正常系】認可エラーが発生した際、セキュリティ対策として404エラー画面と404ステータスが返ること")
+        void givenAccessDenied_whenRequest_thenStatus404AndReturnError404View() throws Exception {
+            mockMvc.perform(get("/test/403"))
+                    .andExpect(status().isNotFound())
+                    .andExpect(view().name("error/404"));
+        }
+    }
+
+    // =========================================================================
+    // 404 Not Found のテストグループ
+    // =========================================================================
     @Nested
     @DisplayName("NoResourceFoundException(404エラー)のハンドリング")
     class HandleNotFound {
@@ -41,6 +60,9 @@ public class WebExceptionHandlerTest {
         }
     }
 
+    // =========================================================================
+    // 405 Method Not Allowed のテストグループ
+    // =========================================================================
     @Nested
     @DisplayName("HttpRequestMethodNotSupportedException (405エラー) のハンドリング")
     class HandleMethodNotAllowed {
@@ -72,6 +94,13 @@ public class WebExceptionHandlerTest {
      */
     @Controller
     static class TestController {
+
+        @GetMapping("/test/403")
+        public String trigger403() {
+            // 【重要】MockMvc環境で認可エラーを再現するため、手動でAccessDeniedExceptionを発生させる
+            // 引数1: デバッグ用の適当なメッセージ
+            throw new AccessDeniedException("Access is denied (Testing purposes)");
+        }
 
         @GetMapping("/test/404")
         public String trigger404() throws NoResourceFoundException {
