@@ -54,7 +54,6 @@ public class WebExceptionHandler {
 
         ModelAndView mav = new ModelAndView("error/405");
 
-        mav.addObject("errorTitle", "エラーが発生しました（詳細：405 Method Not Allowed）");
         mav.addObject("requestedMethod", ex.getMethod());
         mav.addObject("supportedMethods", ex.getSupportedMethods());
 

@@ -38,7 +38,6 @@ public class WebExceptionHandlerTest {
                     .andExpect(status().isMethodNotAllowed())
                     .andExpect(header().string("Allow", "POST"))
                     .andExpect(view().name("error/405"))
-                    .andExpect(model().attribute("errorTitle", "エラーが発生しました（詳細：405 Method Not Allowed）"))
                     .andExpect(model().attribute("requestedMethod", "GET"))
                     .andExpect(model().attributeExists("supportedMethods"));
         }
