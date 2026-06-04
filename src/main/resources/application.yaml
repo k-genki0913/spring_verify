@@ -6,3 +6,11 @@ spring:
         encoding: UTF-8
     web:
         locale: ja # デフォルトのロケールを日本語に固定
+
+logging:
+    level:
+        root: INFO
+        '[com.github.k.genki0913.verify]': DEBUG
+    pattern:
+        # どのログレベルが表示されても縦のラインが揃うように5桁分確保する
+        console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%highlight(%-5level)] %clr(%logger{0}){magenta} - %msg%n'

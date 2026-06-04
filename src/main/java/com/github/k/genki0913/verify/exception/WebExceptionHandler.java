@@ -1,5 +1,7 @@
 package com.github.k.genki0913.verify.exception;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @ControllerAdvice(annotations = Controller.class)
 public class WebExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(WebExceptionHandler.class);
 
     // =========================================================================
     // 403 Forbidden（セキュリティ対策として404にすり替え）
@@ -47,6 +51,9 @@ public class WebExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ModelAndView handleForbidden(AccessDeniedException ex) {
+
+        log.warn("【認可エラー】アクセス権限のないリクエストを検知しました。ブラウザには404を返却して隠蔽します。 エラー詳細: {}", ex.getMessage());
+
         return new ModelAndView("error/404");
     }
 

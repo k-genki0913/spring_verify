@@ -53,7 +53,8 @@ public class WebExceptionHandlerTest {
     class HandleNotFound {
         @Test
         @DisplayName("【正常系】存在しないリソースをリクエストした時、共通のエラー画面(error/404)を返すこと")
-        void givenNonExistentResource_whenRequest_thenStatus404AndReturnErrorView() throws Exception {
+        void givenNonExistentResource_whenRequest_thenStatus404AndReturnErrorView()
+                throws Exception {
             mockMvc.perform(get("/test/404"))
                     .andExpect(status().isNotFound())
                     .andExpect(view().name("error/404"));
