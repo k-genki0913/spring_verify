@@ -1,0 +1,66 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <title>システムエラー - 500</title>
+        <style>
+            body {
+                font-family: 'Helvetica Neue', Arial, sans-serif;
+                background-color: #f8f9fa;
+                color: #333;
+                text-align: center;
+                padding: 50px 20px;
+                margin: 0;
+            }
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                background: #fff;
+                padding: 40px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            }
+            h1 {
+                font-size: 72px;
+                color: #dc3545; /* 警告を表すマイルドな赤 */
+                margin: 0 0 20px 0;
+                font-weight: 300;
+            }
+            h2 {
+                font-size: 24px;
+                margin-bottom: 15px;
+                color: #212529;
+            }
+            p {
+                font-size: 16px;
+                color: #6c757d;
+                line-height: 1.6;
+                margin-bottom: 30px;
+            }
+            .btn {
+                display: inline-block;
+                background-color: #007bff;
+                color: #fff;
+                text-decoration: none;
+                padding: 12px 24px;
+                border-radius: 4px;
+                font-weight: bold;
+                transition: background-color 0.2s;
+            }
+            .btn:hover {
+                background-color: #0056b3;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>500</h1>
+            <h2>システムエラーが発生しました</h2>
+            <p>
+                申し訳ございません。システム内で予期せぬエラーが発生したため、リクエストを処理できませんでした。<br />
+                一時的な問題の可能性があるため、時間を置いてもう一度お試しいただくか、トップページへお戻りください。
+            </p>
+            <a href="/" class="btn">トップページへ戻る</a>
+        </div>
+    </body>
+</html>

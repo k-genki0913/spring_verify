@@ -140,4 +140,44 @@ public class WebExceptionHandler {
 
         return mav;
     }
+
+    // =========================================================================
+    // 500 Internal Server Error (予期せぬシステム例外の最終防衛ライン)
+    // =========================================================================
+    /**
+     * 【全画面共通】アプリ内で発生したすべての予期せぬ例外（500 Internal Server Error）を一括ハンドリング。
+     * *
+     * <p>
+     * <strong>■ 発生契機</strong><br>
+     * 他の具体的な例外ハンドラー（404, 403, 405等）でキャッチされなかった、すべての未定義の例外が発生した場合。<br>
+     * （例：{@link NullPointerException}, {@link IllegalArgumentException},
+     * データベース接続エラー、予期せぬシステム障害等）
+     * </p>
+     * *
+     * <p>
+     * <strong>■ 制御概要</strong><br>
+     * 全例外の基底クラスである{@link Exception}を指定することで、アプリケーション全体の「最後の砦（セーフティネット）」として機能させる。<br>
+     * 開発者向けにはバグ修正の命綱となる<b>スタックトレース付きのエラーログ（ERRORレベル）</b>をコンソール・ログファイルに確実に一発出力する。<br>
+     * 一方で、一般ユーザーに対しては、Spring
+     * Boot標準の無機質なエラー画面を上書きし、一元化されたWeb共通の500システムエラー画面へ安全に誘導する。
+     * </p>
+     * *
+     * <p>
+     * <strong>■ セキュリティ上の配慮（重要）</strong><br>
+     * 画面（HTML）側には、発生した例外の具体的なメッセージ（{@code ex.getMessage()}）やスタックトレースは<b>絶対に渡さない</b>。<br>
+     * これらを画面に露出させると、システムの内部構造（SQL文、パッケージ名、使用ライブラリ等）がハッカーへの脆弱性情報として漏洩するリスクがあるため、<br>
+     * 画面側には一貫して「システムエラーが発生しました」という抽象的な文言のみを表示させる設計とする。
+     * </p>
+     * * @param ex
+     * 発生した予期せぬ例外オブジェクト。ログへのスタックトレース出力に使用。
+     * 
+     * @return 遷移先テンプレートのパス {@code "error/500"} を含むModelAndView
+     */
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ModelAndView handleAllException(Exception ex) {
+        log.error("【システムエラー】予期せぬ例外が発生しました。");
+
+        return new ModelAndView("error/500");
+    }
 }
