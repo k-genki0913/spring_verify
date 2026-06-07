@@ -81,6 +81,24 @@ public class WebExceptionHandlerTest {
     }
 
     // =========================================================================
+    // 500 Internal Server Error のテストグループ
+    // =========================================================================
+    @Nested
+    @DisplayName("Exception(500エラー)のハンドリング")
+    class handleAllException {
+        @Test
+        @DisplayName("【正常系】予期せぬシステム例外が発生した時、共通のエラー画面(error/500)を返し、画面に例外詳細を渡さないこと")
+        void givenSystemExceptionOccurs_whenRequest_thenStatus500AndReturnErrorViewWithoutExceptionDetails()
+                throws Exception {
+            mockMvc.perform(get("/test/500"))
+                    .andExpect(status().isInternalServerError())
+                    .andExpect(view().name("error/500"))
+                    .andExpect(model().attributeDoesNotExist("ex"))
+                    .andExpect(model().attributeDoesNotExist("message"));
+        }
+    }
+
+    // =========================================================================
     // テスト専用のダミーController
     // =========================================================================
     /**
@@ -119,5 +137,11 @@ public class WebExceptionHandlerTest {
             throw new HttpRequestMethodNotSupportedException("GET", List.of("POST"));
         }
 
+        @GetMapping("/test/500")
+        public String trigger500() {
+            // 【重要】一元管理された最外周のExceptionハンドラーを強制発動させるため、
+            // 業務ロジック等で発生しうる予期せぬ例外（RuntimeException）を故意にスローする。
+            throw new RuntimeException("自動テスト用の擬似システム例外です。");
+        }
     }
 }
