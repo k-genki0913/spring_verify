@@ -20,9 +20,7 @@
                 "anteprimorac.html-end-tag-labels",
                 "vincaslt.highlight-matching-tag",
                 "christian-kohler.path-intellisense",
-                "mhutchie.git-graph",
-                // AI
-                "google.geminicodeassist"
+                "mhutchie.git-graph"
             ],
             "settings": {
                 "editor.formatOnSave": true,
