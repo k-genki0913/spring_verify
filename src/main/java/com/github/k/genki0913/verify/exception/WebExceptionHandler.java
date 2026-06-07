@@ -89,6 +89,9 @@ public class WebExceptionHandler {
     @ExceptionHandler(NoResourceFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ModelAndView handleNotFound(NoResourceFoundException ex) {
+
+        log.warn("【リソース未検出エラー】存在しないリソースへのリクエストを検知しました。エラー詳細: {}", ex.getMessage());
+
         return new ModelAndView("error/404");
     }
 
@@ -128,6 +131,8 @@ public class WebExceptionHandler {
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public ModelAndView handleMethodNotAllowed(HttpRequestMethodNotSupportedException ex,
             HttpServletResponse response) {
+
+        log.warn("【未許可メソッドエラー】許可していないメソッドのリクエストを検知しました。エラー詳細: {}", ex.getMessage());
 
         if (ex.getHeaders().getAllow() != null && !ex.getHeaders().getAllow().isEmpty()) {
             response.setHeader("Allow", ex.getHeaders().getFirst("Allow"));
