@@ -22,8 +22,8 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-@WebMvcTest(controllers = WebExceptionHandlerTest.TestController.class)
-@Import(WebExceptionHandler.class)
+@WebMvcTest
+@Import({ WebExceptionHandler.class, WebExceptionHandlerTest.TestController.class })
 @DisplayName("グローバルHTML例外ハンドラのテスト")
 public class WebExceptionHandlerTest {
 
