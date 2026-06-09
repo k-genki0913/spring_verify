@@ -15,9 +15,13 @@ logging:
         root: INFO
         '[com.github.k.genki0913.verify]': DEBUG
     pattern:
-        # どのログレベルが表示されても縦のラインが揃うように5桁分確保する
-        # ローカル用：クラス名のみ(0) ＆ 5桁揃えカラフル仕様
-        console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%highlight(%-5level)] %clr(%logger{0}){magenta} - %msg%n'
+        # settings for local : 1ミリの狂いもなく縦のラインが美しく整列する構造化ログ仕様
+        # [%-22thread]       : スレッド番号（exec-10等）の文字切れを防ぐため、最大値制限(.22)はつけず、最小22文字幅で右詰めスペース埋め
+        # [%-8.8X{traceId}]  : AOPで発行したトレースIDを8文字固定で出力（空の時は8文字分の空白をキープ）
+        # [%highlight(...)]  : ログレベルを5文字固定し、ERRORは赤、WARNは黄など自動で色付け
+        # %clr(...){magenta} : パッケージ名を省いたクラス名({0})を20文字固定し、マゼンタ色（紫ピンク）で着色
+        # [%-5.5X{status}]   : 💡 AOPで制御する処理ステータス（START/END/FAIL）を5文字固定でメッセージの直前に配置
+        console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%-22thread] [%-8.8X{traceId}] [%highlight(%-5level)] %clr(%-20.20logger{0}){magenta} - [%-5.5X{status}] %msg%n'
 
 ---
 # ↑この「---」が、1つのファイル内で環境を隔てる境界線
@@ -36,5 +40,6 @@ spring:
 
 logging:
     pattern:
-        # AWS用：CloudWatchで見やすいようにフルパッケージ名(100) ＆ 色なし(5桁揃え)
-        console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %logger{100} - %msg%n'
+        # AWS用：CloudWatchで見やすいように「色なし（文字化け防止）」＆「フルパッケージ名」＆「等幅整列」
+        # 順番（左側のフォーマット）をローカル用と完全に合わせることで、環境が変わっても解析しやすくなります
+        console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%-22thread] [%-8.8X{traceId}] [%-5level] %logger{100} - [%-5.5X{status}] %msg%n'
