@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content)">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Spring Boot 機能検証サンドボックス</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <style>
+            body {
+                min-height: 100vh;
+                background-color: #f8f9fa;
+            }
+            .sidebar {
+                background-color: #343a40;
+                min-height: 100vh;
+                color: white;
+            }
+            .sidebar a {
+                color: #adbcca;
+                text-decoration: none;
+            }
+            .sidebar a:hover {
+                color: white;
+                background-color: #495057;
+            }
+            .sidebar .active {
+                color: white;
+                background-color: #0d6efd;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <nav class="col-md-3 col-lg-2 d-md-block sidebar px-3 pt-3">
+                    <h5 class="text-white border-bottom pb-2">🚀 検証メニュー</h5>
+                    <ul class="nav flex-column gap-1">
+                        <li class="nav-item">
+                            <a class="nav-link rounded px-3 py-2" th:href="@{/}">🏠 HOME</a>
+                        </li>
+                        <li class="nav-item mt-3">
+                            <span class="text-muted small px-3 fw-bold">■ バリデーション</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded px-3 py-2" th:href="@{/validation/single}">├─ 単項目チェック</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded px-3 py-2" th:href="@{/validation/correlation}"
+                                >├─ 相関チェック</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded px-3 py-2" th:href="@{/validation/multi-form}">└─ 複数Form値</a>
+                        </li>
+                        <li class="nav-item mt-3">
+                            <span class="text-muted small px-3 fw-bold">■ データベースアクセス</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded px-3 py-2" th:href="@{/db/select}">├─ 参照</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded px-3 py-2" th:href="@{/db/insert}">├─ 登録</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded px-3 py-2" th:href="@{/db/update}">└─ 更新</a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-4">
+                    <div th:replace="${content}"></div>
+                </main>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>

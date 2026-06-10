@@ -1,11 +1,19 @@
 <!doctype html>
-<html lang="ja" th:fragment="layout (template, menu)" xmlns:th="https://www.thymeleaf.org">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
-    </head>
+<!-- th:replace = "{ファイル名::フラグメント名(渡す中身)}" -->
+<!-- ファイル名：ファイル名.html フラグメントはファイル名のth:fragment="layout(content)"のlayoutを指している -->
+<!-- 渡す中身： ::divは本ファイルの最初に見つかったdivタグの中身すべてフラグメント先のファイルへ渡す -->
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::div})}">
     <body>
-        <h1 th:text="#{common.site-name}">WelCome</h1>
+        <div>
+            <div class="bg-white p-5 rounded shadow-sm">
+                <h1 class="display-5 fw-bold text-primary">Spring Boot 技術検証サンドボックスへようこそ！</h1>
+                <p class="lead mt-3 text-muted">
+                    このアプリケーションは、実務で必要なSpringの各種機能を画面操作しながら検証し、
+                    いつでもコードを確認できるように構築された「動く技術リファレンス」です。
+                </p>
+                <hr class="my-4" />
+                <p>左側のメニューから、検証したい機能を選択してください。</p>
+            </div>
+        </div>
     </body>
 </html>
