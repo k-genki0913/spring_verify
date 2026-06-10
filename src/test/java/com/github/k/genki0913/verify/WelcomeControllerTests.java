@@ -1,4 +1,4 @@
-package com.github.k.genki0913.verify.system;
+package com.github.k.genki0913.verify;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -30,7 +30,7 @@ public class WelcomeControllerTests {
                     get("/"))
                     .andExpect(status().isOk())
                     .andExpect(view().name("welcome"))
-                    .andExpect(content().string(containsString("Spring Boot Verify")));
+                    .andExpect(content().string(containsString("Spring Boot 技術検証サンドボックスへようこそ！")));
         }
 
         @Test
@@ -41,7 +41,7 @@ public class WelcomeControllerTests {
                             .param("test_key", "test_value"))
                     .andExpect(status().isOk())
                     .andExpect(view().name("welcome"))
-                    .andExpect(content().string(containsString("Spring Boot Verify")));
+                    .andExpect(content().string(containsString("Spring Boot 技術検証サンドボックスへようこそ！")));
             ;
         }
     }

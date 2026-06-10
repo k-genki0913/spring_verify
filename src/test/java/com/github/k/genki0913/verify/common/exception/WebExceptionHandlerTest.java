@@ -1,4 +1,4 @@
-package com.github.k.genki0913.verify.exception;
+package com.github.k.genki0913.verify.common.exception;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;

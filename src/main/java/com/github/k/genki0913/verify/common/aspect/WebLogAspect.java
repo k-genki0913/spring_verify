@@ -1,4 +1,4 @@
-package com.github.k.genki0913.verify.aspect;
+package com.github.k.genki0913.verify.common.aspect;
 
 import java.util.Arrays;
 import java.util.UUID;

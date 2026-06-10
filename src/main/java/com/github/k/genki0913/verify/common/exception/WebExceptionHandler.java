@@ -1,4 +1,4 @@
-package com.github.k.genki0913.verify.exception;
+package com.github.k.genki0913.verify.common.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
