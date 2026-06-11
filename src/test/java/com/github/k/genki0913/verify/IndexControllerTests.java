@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(WelcomeController.class)
-public class WelcomeControllerTests {
+@WebMvcTest(IndexController.class)
+public class IndexControllerTests {
 
     @Autowired
     MockMvc mockMvc;
@@ -24,23 +24,23 @@ public class WelcomeControllerTests {
     class Init {
 
         @Test
-        @DisplayName("リクエストパラメータがない場合、ステータス200、View名がWelcome、HTML内にWelComeが含まれたレスポンスを返すこと")
-        void init_nonParam_return200AndWelComeView() throws Exception {
+        @DisplayName("リクエストパラメータがない場合、ステータス200、View名がIndex、HTML内にSpring Boot 技術検証サンドボックスへようこそ！が含まれたレスポンスを返すこと")
+        void init_nonParam_return200AndIndexView() throws Exception {
             mockMvc.perform(
                     get("/"))
                     .andExpect(status().isOk())
-                    .andExpect(view().name("welcome"))
+                    .andExpect(view().name("index"))
                     .andExpect(content().string(containsString("Spring Boot 技術検証サンドボックスへようこそ！")));
         }
 
         @Test
-        @DisplayName("リクエストパラメータがある場合、ステータス200、View名がWelcome、HTML内にWelComeが含まれたレスポンスを返すこと")
-        void init_existParam_return200AndWelComeVIew() throws Exception {
+        @DisplayName("リクエストパラメータがある場合、ステータス200、View名がIndex、HTML内にSpring Boot 技術検証サンドボックスへようこそ！が含まれたレスポンスを返すこと")
+        void init_existParam_return200AndIndexVIew() throws Exception {
             mockMvc.perform(
                     get("/")
                             .param("test_key", "test_value"))
                     .andExpect(status().isOk())
-                    .andExpect(view().name("welcome"))
+                    .andExpect(view().name("index"))
                     .andExpect(content().string(containsString("Spring Boot 技術検証サンドボックスへようこそ！")));
             ;
         }
