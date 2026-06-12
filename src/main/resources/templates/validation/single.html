@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::div})}">
+    <body>
+        <div>
+            <div class="mb-4">
+                <h1 class="h2 border-bottom pb-2">🎯 単項目チェックの検証</h1>
+                <p class="text-muted">
+                    GETリクエストにおける、メッセージ外出し＆動的プレースホルダーの挙動を検証します。
+                </p>
+            </div>
+
+            <div th:if="${successMessage}" class="alert alert-success shadow-sm mb-4">
+                <h5 class="alert-heading fw-bold">✅ バリデーション成功（正常終了）</h5>
+                <p class="mb-0" th:text="${successMessage}"></p>
+                <ul class="mt-2 mb-0 small">
+                    <li>必須パラメータ (requiredParam): <strong th:text="${savedRequired}"></strong></li>
+                    <li>長さパラメータ (lengthParam): <strong th:text="${savedLength}"></strong></li>
+                </ul>
+            </div>
+
+            <div th:if="${errors}" class="alert alert-danger shadow-sm mb-4">
+                <h5 class="alert-heading fw-bold">⚠️ 入力内容に不備があります</h5>
+                <ul class="mb-0">
+                    <li th:each="error: ${errors}" th:text="${error}"></li>
+                </ul>
+            </div>
+
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-dark text-white fw-bold">
+                    📥 パターン1：GETメソッドによるクエリパラメータ検証（外出しメッセージ版）
+                </div>
+                <div class="card-body bg-white p-4">
+                    <p class="card-text text-secondary small">
+                        ※ボタンを押すと
+                        <code>/validation/single/query?requiredParam=...&lengthParam=...</code>
+                        でGET送信されます。<br />
+                        わざと空っぽにしたり、6文字以上入力してエラーを起こしてみてください。
+                    </p>
+
+                    <form th:action="@{/validation/single/query}" method="get">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">① 必須チェック項目</label>
+                                <input
+                                    type="text"
+                                    name="requiredParam"
+                                    class="form-control"
+                                    th:value="${param.requiredParam}"
+                                    placeholder="空っぽのままボタンを押すとエラー"
+                                />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">② 長さチェック項目（5文字以内）</label>
+                                <input
+                                    type="text"
+                                    name="lengthParam"
+                                    class="form-control"
+                                    th:value="${param.lengthParam}"
+                                    placeholder="6文字以上入力するとエラー"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary px-4 shadow-sm">
+                                🔍 複数バリデーションを実行（GET）
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

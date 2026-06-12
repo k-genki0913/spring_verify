@@ -1,9 +1,13 @@
 package com.github.k.genki0913.verify.common.exception;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.ui.Model;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,12 +15,154 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import com.github.k.genki0913.verify.config.AppValidationProperties;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolationException;
 
 @ControllerAdvice
 public class WebExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(WebExceptionHandler.class);
+
+    private final AppValidationProperties validationProperties;
+    private final MessageSource messageSource;
+
+    public WebExceptionHandler(AppValidationProperties validationProperties, MessageSource messageSource) {
+        this.validationProperties = validationProperties;
+        this.messageSource = messageSource;
+    }
+
+    // =========================================================================
+    // 400 Bad Request（GETパラメータ等の単項目バリデーションエラー）
+    // =========================================================================
+    /**
+     * 【全画面共通】GETメソッド等における引数（クエリパラメータ）のバリデーションエラーを一括ハンドリングし、
+     * ユーザーがリクエストを送ってきた元の入力画面へ動的に送還します。
+     *
+     * <p>
+     * <strong>■ 発生契機</strong><br>
+     * Controllerのメソッド引数（{@code @RequestParam}）に対して直接 {@code @NotBlank} や
+     * {@code @Size} などの
+     * 制約アノテーションが配置されている状況において、ブラウザから送信された値がその制約に違反した場合。<br>
+     * （※クラスの頭に {@code @Validated} を付与することで起動する、Spring AOPのプロキシ網によって検知・スローされます）
+     * </p>
+     *
+     * <p>
+     * <strong>■ 制御概要（動的View解決による汎用送還）</strong><br>
+     * 発生したエラーからプロパティファイルに定義されたエラーメッセージを自動抽出し、画面表示用データとして格納します。<br>
+     * 遷移先は特定の画面に固定せず、{@link HttpServletRequest} からリクエスト元のURIを動的に解析・取得し、
+     * 末尾のアクション（例: {@code /query}）を切り落とすことで、<strong>エラーが発生した「元の入力画面」のテンプレート名（View名）を
+     * 自動で導き出して返却</strong>します。これにより、画面ごとにハンドラーを乱立させる必要のない高い汎用性を実現しています。
+     * </p>
+     *
+     * <p>
+     * <strong>■ 画面（View）への返却データ</strong><br>
+     * <ul>
+     * <li>{@code errors}:
+     * 発生したすべての制約違反メッセージ（日本語化・動的置換適用済）のリスト（{@code List<String>}）</li>
+     * </ul>
+     * （※URLパラメータはブラウザ側に保持されたまま画面が再描画されるため、入力値の復元はThymeleafの {@code ${param.xxx}}
+     * 側で自動的に行われます）
+     * </p>
+     *
+     * @param ex
+     *                    AOPプロキシによってスローされた制約違反例外
+     * @param model
+     *                    元の画面へエラーメッセージのリストを詰め替えて引き渡すためのUIモデル
+     * @param request
+     *                    リクエスト元のURLパス（URI）を解析するために使用するサーブレットリクエスト
+     * @return 動的に導き出された、エラー発生元のThymeleafテンプレート名（例: {@code "validation/single"}）
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public String handlerConstraintViolationException(ConstraintViolationException ex, Model model,
+            HttpServletRequest request) {
+
+        List<String> errorMessages = ex.getConstraintViolations().stream().map(violation -> {
+            final String placeholder = validationProperties.getPlaceholder();
+            final String queryParamItemName = validationProperties.getQueryParamItemName();
+            String resolvedMessage = violation.getMessage();
+            String template = violation.getMessageTemplate();
+
+            if (!template.contains(queryParamItemName)) {
+                String defaultField = messageSource.getMessage("common.default.field", null, "対象項目",
+                        request.getLocale());
+                return resolvedMessage.replace(placeholder, defaultField);
+            }
+
+            int queryParamItemNameIndexInMsg = resolvedMessage.indexOf(queryParamItemName);
+            String cleanMessage = resolvedMessage.substring(0, queryParamItemNameIndexInMsg);
+
+            String fieldName = template
+                    .substring(template.indexOf(queryParamItemName) + queryParamItemName.length());
+            return cleanMessage.replace(placeholder, fieldName);
+        }).toList();
+
+        model.addAttribute(validationProperties.getErrorAttributeName(), errorMessages);
+
+        String requestURI = request.getRequestURI();
+        String viewName = deriveViewName(requestURI);
+
+        return viewName;
+    }
+
+    /**
+     * リクエストURIから、戻り先となるThymeleafのテンプレート名（View名）を動的に導き出します。
+     *
+     * <p>
+     * <strong>■ 設計思想（ルーティング規約）</strong><br>
+     * 本システムでは、URLのパス構造と {@code src/main/resources/templates} 構造を一致させる規約としています。<br>
+     * 本メソッドは、アクセスされたURLの末尾にある「実行アクション（メソッド名に相当するパス）」を削り落とすことで、
+     * エラー発生時に送還すべき<strong>「元の入力画面のHTML配置パス」</strong>を自動計算します。
+     * </p>
+     *
+     * <p>
+     * <strong>■ 処理仕様（インプットとアウトプットの具体例）</strong><br>
+     * 先頭のスラッシュ（{@code /}）を削除したのち、一番最後のスラッシュ以降の文字列（アクション名）を切り落とします。<br>
+     * 解析に失敗した場合、またはスラッシュが含まれないトップレベルのパスの場合は、安全のため一律トップ画面（{@code "index"}）を返却します。
+     * </p>
+     * *
+     * <table border="1" style="border-collapse: collapse; padding: 5px;">
+     * <tr style="background-color: #f2f2f2;">
+     * <th>入力（requestURI）</th>
+     * <th>変換プロセス</th>
+     * <th>出力（戻り値：View名）</th>
+     * </tr>
+     * <tr>
+     * <td>{@code "/validation/single/query"}</td>
+     * <td>先頭の/を削り、末尾の {@code /query} を切り落とす</td>
+     * <td><strong>{@code "validation/single"}</strong> （単項目チェック画面）</td>
+     * </tr>
+     * <tr>
+     * <td>{@code "/validation/correlation/submit"}</td>
+     * <td>先頭の/を削り、末尾の {@code /submit} を切り落とす</td>
+     * <td><strong>{@code "validation/correlation"}</strong> （相関チェック画面）</td>
+     * </tr>
+     * <tr>
+     * <td>{@code "/"} または {@code "/index"}</td>
+     * <td>スラッシュによる階層が存在しないため、フォールバックが作動</td>
+     * <td><strong>{@code "index"}</strong> （トップ画面）</td>
+     * </tr>
+     * </table>
+     *
+     * @param requestURI
+     *                       サーバーが受け取ったリクエストURI（例:
+     *                       {@code "/validation/single/query"}）
+     * @return 導き出されたThymeleafのテンプレート名（末尾の {@code .html} は除外した形式）
+     */
+    private String deriveViewName(String requestURI) {
+        // 先頭のロリポップ（/）を削除
+        String path = requestURI.startsWith("/") ? requestURI.substring(1) : requestURI;
+
+        // 末尾のメソッド名（/query や /submit など）を削る
+        if (path.contains("/")) {
+            int lastSlashIndex = path.lastIndexOf("/");
+            return path.substring(0, lastSlashIndex);
+        }
+
+        return "index";
+    }
 
     // =========================================================================
     // 403 Forbidden（セキュリティ対策として404にすり替え）
