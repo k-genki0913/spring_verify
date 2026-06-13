@@ -2,13 +2,18 @@ package com.github.k.genki0913.verify.validation.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.github.k.genki0913.verify.validation.form.UserForm;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @RequestMapping("/validation")
@@ -22,7 +27,8 @@ public class ValidationController {
      * @return 遷移先のリファレンス画面パス
      */
     @GetMapping("/single")
-    public String showSingleValidationForm() {
+    public String showSingleValidationForm(Model model) {
+        model.addAttribute("userForm", new UserForm());
         return "validation/single";
     }
 
@@ -60,6 +66,21 @@ public class ValidationController {
         model.addAttribute("successMessage", "サーバー側で正常に値を受け取りました! （DB保存なし）");
         model.addAttribute("savedRequired", requiredParam);
         model.addAttribute("savedLength", lengthParam);
+        model.addAttribute("userForm", new UserForm());
+        return "validation/single";
+    }
+
+    @PostMapping("/single/form")
+    public String executeFormSingleValidation(@Validated @ModelAttribute("userForm") UserForm userForm,
+            BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "validation/single";
+        }
+
+        model.addAttribute("successMessagePost", "サーバー側でFormオブジェクトを正常に受け取りました!(POST)");
+        model.addAttribute("savedUsername", userForm.getUsername());
+        model.addAttribute("savedPassword", userForm.getPassword());
+
         return "validation/single";
     }
 

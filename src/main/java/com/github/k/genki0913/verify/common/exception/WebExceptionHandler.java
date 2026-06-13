@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.github.k.genki0913.verify.config.AppValidationProperties;
+import com.github.k.genki0913.verify.validation.form.UserForm;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -78,6 +79,9 @@ public class WebExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public String handlerConstraintViolationException(ConstraintViolationException ex, Model model,
             HttpServletRequest request) {
+
+        // 単項目チェックバリデーションでGETとPOSTを一つの画面にまとめた弊害
+        model.addAttribute("userForm", new UserForm());
 
         List<String> errorMessages = ex.getConstraintViolations().stream().map(violation -> {
             final String placeholder = validationProperties.getPlaceholder();
