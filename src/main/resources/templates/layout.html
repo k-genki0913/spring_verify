@@ -43,7 +43,14 @@
                             <span class="text-muted small px-3 fw-bold">■ バリデーション</span>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link rounded px-3 py-2" th:href="@{/validation/single}">├─ 単項目チェック</a>
+                            <a class="nav-link rounded px-3 py-2" th:href="@{/validation/single}"
+                                >├─ 単項目 (GET検証)</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded px-3 py-2" th:href="@{/validation/single/form}"
+                                >├─ 単項目 (POST検証)</a
+                            >
                         </li>
                         <li class="nav-item">
                             <a class="nav-link rounded px-3 py-2" th:href="@{/validation/correlation}"
