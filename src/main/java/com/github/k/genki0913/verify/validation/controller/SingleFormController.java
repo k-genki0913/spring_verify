@@ -37,8 +37,7 @@ public class SingleFormController {
      * @return 遷移先のリファレンス画面パス（POST専用画面）
      */
     @GetMapping("/single/form")
-    public String showSingleForm(Model model) {
-        model.addAttribute("userForm", new UserForm());
+    public String showSingleForm(UserForm userForm) {
         return "validation/single-form";
     }
 
