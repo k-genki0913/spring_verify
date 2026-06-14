@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-@FieldsMatch(field = "email", fieldToMatch = "retryEmail", message = "メールアドレスと再入力が一致しません")
+@FieldsMatch(field = "email", fieldToMatch = "retryEmail", message = "{MailAddressNotMatch}")
 public class CorrelationUserRegistForm {
 
     @NotBlank
