@@ -7,4 +7,7 @@ public interface ValidationGroup {
 
     interface Required {
     }
+
+    interface Correlation {
+    }
 }

@@ -1,28 +1,36 @@
 package com.github.k.genki0913.verify.validation.form;
 
 import com.github.k.genki0913.verify.common.validation.FieldsMatch;
+import com.github.k.genki0913.verify.common.validation.ValidationGroup;
 
+import jakarta.validation.GroupSequence;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-@FieldsMatch(field = "email", fieldToMatch = "retryEmail", message = "{MailAddressNotMatch}")
+@GroupSequence({
+        ValidationGroup.Required.class,
+        ValidationGroup.Format.class,
+        ValidationGroup.Correlation.class,
+        CorrelationUserRegistForm.class
+})
+@FieldsMatch(field = "email", fieldToMatch = "retryEmail", message = "{MailAddressNotMatch}", groups = ValidationGroup.Correlation.class)
 public class CorrelationUserRegistForm {
 
-    @NotBlank
+    @NotBlank(groups = ValidationGroup.Required.class)
     private String userId;
 
-    @NotBlank
-    @Size(min = 8, max = 16)
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9-]+$")
+    @NotBlank(groups = ValidationGroup.Required.class)
+    @Size(min = 8, max = 16, groups = ValidationGroup.Format.class)
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9-]+$", groups = ValidationGroup.Format.class)
     private String password;
 
-    @NotBlank
-    @Email
+    @NotBlank(groups = ValidationGroup.Required.class)
+    @Email(groups = ValidationGroup.Format.class)
     private String email;
 
-    @NotBlank
+    @NotBlank(groups = ValidationGroup.Required.class)
     private String retryEmail;
 
     public String getUserId() {
