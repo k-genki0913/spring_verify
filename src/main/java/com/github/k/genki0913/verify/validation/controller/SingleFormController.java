@@ -68,7 +68,8 @@ public class SingleFormController {
      * @return 遷移先のリファレンス画面パス（エラー時は入力画面の再描画、成功時は結果表示）
      */
     @PostMapping("/single/form")
-    public String executeFormSingleValidation(@Validated(UserForm.class) @ModelAttribute("userForm") UserForm userForm,
+    public String executeFormSingleValidation(
+            @Validated(UserForm.ValidationSequence.class) @ModelAttribute("userForm") UserForm userForm,
             BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {

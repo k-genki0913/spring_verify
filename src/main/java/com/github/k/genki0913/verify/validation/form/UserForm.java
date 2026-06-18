@@ -40,12 +40,15 @@ import jakarta.validation.constraints.Size;
  * 項目名を動的に切り出すための目印として {@code ?item.name=項目名} というクエリ文字列形式の独自規格を付与しています。
  * </p>
  */
-@GroupSequence({
-        ValidationGroup.Required.class,
-        ValidationGroup.Format.class,
-        UserForm.class
-})
+
 public class UserForm {
+
+    @GroupSequence({
+            ValidationGroup.Required.class,
+            ValidationGroup.Format.class
+    })
+    public @interface ValidationSequence {
+    }
 
     /**
      * 必須入力チェックのみを第一段階として実施します。
