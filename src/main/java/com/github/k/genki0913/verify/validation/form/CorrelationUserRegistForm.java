@@ -9,14 +9,16 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-@GroupSequence({
-        ValidationGroup.Required.class,
-        ValidationGroup.Format.class,
-        ValidationGroup.Correlation.class,
-        CorrelationUserRegistForm.class
-})
 @FieldsMatch(field = "email", fieldToMatch = "retryEmail", message = "{MailAddressNotMatch}", groups = ValidationGroup.Correlation.class)
 public class CorrelationUserRegistForm {
+
+    @GroupSequence({
+            ValidationGroup.Required.class,
+            ValidationGroup.Format.class,
+            ValidationGroup.Correlation.class
+    })
+    public @interface ValidationSequence {
+    }
 
     @NotBlank(groups = ValidationGroup.Required.class)
     private String userId;

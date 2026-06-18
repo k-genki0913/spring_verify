@@ -64,7 +64,7 @@ public class CorrelationFormController {
      */
     @PostMapping("/form")
     public String registUser(
-            @Validated(CorrelationUserRegistForm.class) @ModelAttribute("correlationUserRegistForm") CorrelationUserRegistForm form,
+            @Validated(CorrelationUserRegistForm.ValidationSequence.class) @ModelAttribute("correlationUserRegistForm") CorrelationUserRegistForm form,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "validation/correlation-form";
