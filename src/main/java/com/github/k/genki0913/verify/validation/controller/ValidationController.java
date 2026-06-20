@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.github.k.genki0913.verify.validation.constant.View;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -23,7 +25,7 @@ public class ValidationController {
      */
     @GetMapping("/single")
     public String showSingleValidationForm(Model model) {
-        return "validation/single";
+        return View.SINGLE;
     }
 
     /**
@@ -60,6 +62,6 @@ public class ValidationController {
         model.addAttribute("successMessage", "サーバー側で正常に値を受け取りました! （DB保存なし）");
         model.addAttribute("savedRequired", requiredParam);
         model.addAttribute("savedLength", lengthParam);
-        return "validation/single";
+        return View.SINGLE;
     }
 }

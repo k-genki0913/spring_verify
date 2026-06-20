@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.github.k.genki0913.verify.validation.constant.View;
 import com.github.k.genki0913.verify.validation.form.UserForm;
 
 /**
@@ -38,7 +39,7 @@ public class SingleFormController {
      */
     @GetMapping("/single/form")
     public String showSingleForm(UserForm userForm) {
-        return "validation/single-form";
+        return View.SINGLE_FORM;
     }
 
     /**
@@ -73,13 +74,13 @@ public class SingleFormController {
             BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
-            return "validation/single-form";
+            return View.SINGLE_FORM;
         }
 
         model.addAttribute("successMessagePost", "サーバー側でFormオブジェクトを正常に受け取りました!(POST)");
         model.addAttribute("savedUsername", userForm.getUsername());
         model.addAttribute("savedPassword", userForm.getPassword());
 
-        return "validation/single-form";
+        return View.SINGLE_FORM;
     }
 }

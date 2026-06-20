@@ -5,6 +5,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.github.k.genki0913.verify.validation.constant.View;
 import com.github.k.genki0913.verify.validation.form.CorrelationUserRegistForm;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +36,7 @@ public class CorrelationFormController {
      */
     @GetMapping("/form")
     public String showCorrelationForm(CorrelationUserRegistForm correlationUserRegistForm) {
-        return "validation/correlation-form";
+        return View.CORRELATION_FORM;
     }
 
     /**
@@ -67,7 +68,7 @@ public class CorrelationFormController {
             @Validated(CorrelationUserRegistForm.ValidationSequence.class) @ModelAttribute("correlationUserRegistForm") CorrelationUserRegistForm form,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "validation/correlation-form";
+            return View.CORRELATION_FORM;
         }
 
         return "redirect:/validation/correlation/form";
