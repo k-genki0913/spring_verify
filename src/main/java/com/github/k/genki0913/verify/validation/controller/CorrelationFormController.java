@@ -4,7 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.RedirectView;
 
+import com.github.k.genki0913.verify.common.util.WebUrlUtils;
 import com.github.k.genki0913.verify.validation.constant.View;
 import com.github.k.genki0913.verify.validation.form.CorrelationUserRegistForm;
 
@@ -64,14 +66,16 @@ public class CorrelationFormController {
      * @return エラー時は入力画面の再描画（フォワード）、成功時は初期表示URLへのリダイレクト
      */
     @PostMapping("/form")
-    public String registUser(
+    public Object registUser(
             @Validated(CorrelationUserRegistForm.ValidationSequence.class) @ModelAttribute("correlationUserRegistForm") CorrelationUserRegistForm form,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return View.CORRELATION_FORM;
         }
 
-        return "redirect:/validation/correlation/form";
+        String redirectUrl = WebUrlUtils.getPath(CorrelationFormController.class, "showCorrelationForm");
+
+        return new RedirectView(redirectUrl, true);
     }
 
 }

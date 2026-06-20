@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -52,8 +52,8 @@ public class CorrelationFormControllerTests {
                     .param("password", "Pass1234-")
                     .param("email", "test@example.com")
                     .param("retryEmail", "test@example.com"))
-                    .andExpect(status().is3xxRedirection())
-                    .andExpect(redirectedUrl("/validation/correlation/form"))
+                    .andExpect(status().isFound())
+                    .andExpect(redirectedUrlPattern("**/validation/correlation/form"))
                     .andExpect(model().hasNoErrors());
         }
 
