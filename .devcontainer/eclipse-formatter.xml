@@ -1,405 +1,810 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <profiles version="23">
 <profile kind="CodeFormatterProfile" name="Eclipse" version="23">
+<!-- 縦ラインの調整は基本的にしないのが良い。理由は利用する変数名が長くなった際に他項目全てに調整が入りGitで差分が発生するため -->
+<!-- switch式の矢印(->)の縦ラインを揃えるかどうか falseが推奨-->
 <setting id="org.eclipse.jdt.core.formatter.align_arrows_in_switch_on_columns" value="false"/>
+<!-- 代入演算子の縦ラインを揃えるかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.align_assignment_statements_on_columns" value="false"/>
+<!-- フィールドの縦の整列を行う際、何行空いたら別グループとみなして整列の基準を分けるか ※2147483647はJavaの整数(int)の最大値 -->
 <setting id="org.eclipse.jdt.core.formatter.align_fields_grouping_blank_lines" value="2147483647"/>
+<!-- メソッドチェーンを開業した時、最初のドットの位置を1行目の開始位置に合わせるか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.align_selector_in_method_invocation_on_expression_first_line" value="true"/>
+<!-- クラスのメンバ(フィールドの方、変数名、初期値)の縦ラインを全て列ごとに揃えるか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.align_type_members_on_columns" value="false"/>
+<!-- ローカル変数の宣言時に縦ラインを揃えるか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.align_variable_declarations_on_columns" value="false"/>
-<setting id="org.eclipse.jdt.core.formatter.align_with_spaces" value="false"/>
+
+<!-- ========================================== -->
+<!-- 改行・配置ルールの数値目安: 0=改行しない, 16=長くなったら改行, 20=要素ごとに必ず改行しインデントを揃える, 49=強制改行して縦並び, 80=必要に応じて改行し、次の行の先頭インデントを下げる -->
+<!-- ========================================== -->
+
+<!-- 足し算・引き算（+や-）の演算子部分で長くなった場合に改行するか 16(必要に応じて改行) -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_additive_operator" value="16"/>
+<!-- Enum（列挙型）の定数につけるアノテーションを縦に並べるか 49(強制改行) -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_annotations_on_enum_constant" value="49"/>
+<!-- クラスのフィールドにつけるアノテーションを縦に並べるか 49(強制改行)推奨 （例: @Autowired の直後で改行） -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_annotations_on_field" value="49"/>
+<!-- メソッド内のローカル変数につけるアノテーションを縦に並べるか 49(強制改行) -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_annotations_on_local_variable" value="49"/>
+<!-- メソッドにつけるアノテーションを縦に並べるか 49(強制改行)推奨 （例: @Test や @GetMapping の直後で改行） -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_annotations_on_method" value="49"/>
+<!-- パッケージにつけるアノテーションを縦に並べるか 49(強制改行) -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_annotations_on_package" value="49"/>
+<!-- メソッドの【引数】につけるアノテーションの直後で改行するか 0(絶対に改行せず横に並べる)絶対推奨！ ※49にすると引数ごとに縦長になりすぎてコードが崩壊するため -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_annotations_on_parameter" value="0"/>
+<!-- クラスやインターフェース定義につけるアノテーションを縦に並べるか 49(強制改行)推奨 （例: @Controller の直後で改行） -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_annotations_on_type" value="49"/>
+<!-- newでインスタンス生成する際、引数が長くなった時に改行するかどうか 16推奨-->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_allocation_expression" value="16"/>
+<!-- アノテーションの引数を改行するかどうか 0推奨-->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_annotation" value="0"/>
+<!-- Enumの定数にわたす引数を改行するかどうか 16推奨-->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_enum_constant" value="16"/>
+<!-- コンストラクタないで別のコンストラクタを呼ぶ際(this(引数))に改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_explicit_constructor_call" value="16"/>
+<!-- メソッド呼び出し時に引数が長くなった時に改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_method_invocation" value="16"/>
+<!-- 内部クラスなどの特殊なインスタンス生成時に改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_qualified_allocation_expression" value="16"/>
+<!-- assert 条件 : "エラーメッセージ"の構文で、えっセージ部分が長くなった時に改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_assertion_message" value="16"/>
+<!-- 代入演算子の右側が長くなった時に、=直後で改行するかどうか 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_assignment" value="0"/>
+<!-- ビット演算し(&,|,^)で繋いだ式が長くなった時に、演算子の部分で改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_bitwise_operator" value="16"/>
+<!-- 中括弧 {} を省略した if (条件) 処理; を1行で書いたとき、処理の手前で改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_compact_if" value="16"/>
+<!-- 中括弧 {} を省略した for や while ループを1行で書いたとき、処理の手前で改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_compact_loops" value="16"/>
+<!-- 三項演算子（条件 ? 一致 : 不一致）が長くなったときに改行するかどうか 80推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_conditional_expression" value="80"/>
+<!-- 三項演算子がネストしてチェーン（つなぎ文字）のようになったときに、自動で改行するかどうか 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_conditional_expression_chain" value="0"/>
+<!-- Enum（列挙型）の定数同士（A, B, C）を1行の中に並べる際、自動で改型するかどうか 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_enum_constants" value="0"/>
+<!-- 配列の初期化（new int[]{1, 2, 3, 4}）の要素が長くなったときに改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_expressions_in_array_initializer" value="16"/>
+<!-- for (int i = 0; i < 10; i++) の丸括弧の中の式が長くなったときに改行するかどうか 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_expressions_in_for_loop_header" value="0"/>
+<!-- 新しいSwitch式（case A -> 処理;）の矢印の右側が長くなったときに改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_expressions_in_switch_case_with_arrow" value="16"/>
+<!-- 従来のSwitch文（case A: 処理;）のコロンの右側が長くなったときに改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_expressions_in_switch_case_with_colon" value="16"/>
+<!-- 論理演算子（&& や ||）で繋いだ条件式が長くなったときに、演算子の位置で改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_logical_operator" value="16"/>
+<!-- メソッドを宣言する際、戻り値の型などが長くなったときに「メソッド名」の手前で改行するかどうか 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_method_declaration" value="0"/>
+<!-- Java 9以降の module-info.java 内に書くモジュール関連の構文（exports や requires など）が長くなったときに改行するかどうか 16推奨-->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_module_statements" value="16"/>
+<!-- int a, b, c; のように1行の中にコンマ区切りで複数のフィールド（クラス変数）を宣言し、長くなったときに改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_multiple_fields" value="16"/>
+<!-- 掛け算や割り算、剰余の演算子（*, /, %）を含む計算式が長くなったときに、演算子の位置で改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_multiplicative_operator" value="16"/>
+<!-- ジェネリクス（例: Map<String, List<User>>）の記述が非常に長くなったときに、型指定の途中で改行するかどうか 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_parameterized_type_references" value="0"/>
+<!-- コンストラクタを宣言する際、丸括弧の中の引数（パラメータ）リストが長くなったときに改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_parameters_in_constructor_declaration" value="16"/>
+<!-- メソッドを宣言する際、丸括弧の中の引数（パラメータ）リストが長くなったときに改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_parameters_in_method_declaration" value="16"/>
+<!-- Java 17以降のSealedクラス（継承を制限するクラス）の宣言で、許可するサブクラスを指定する permits A, B, C の部分が長くなったときに改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_permitted_types_in_type_declaration" value="16"/>
+<!-- Java 14以降の record クラスの宣言時、丸括弧の中のコンポーネント（フィールド）リストが長くなったときに改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_record_components" value="16"/>
+<!-- 比較演算子（==, !=, <, >, <=, >=）や instanceof を含む式が長くなったときに、演算子の位置で改行するかどうか 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_relational_operator" value="0"/>
+<!-- try-with-resources構文（try (Resource r = ...)）の丸括弧の中で、リソース宣言が複数あり長くなったときに改行するかどうか 80推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_resources_in_try" value="80"/>
+<!-- メソッドチェーンのドット（.）の位置で改行するかどうか（※Stream処理などを綺麗に縦に並べるための基本設定） 16推奨-->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_selector_in_method_invocation" value="16"/>
+<!-- シフト演算子（<<, >>, >>>）を含む式が長くなったときに、演算子の位置で改行するかどうか 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_shift_operator" value="0"/>
-<setting id="org.eclipse.jdt.core.formatter.alignment_for_string_concatenation" value="16"/>
+<!-- 文字列をプラス記号（+）で結合している処理が長くなったときに、演算子の位置で改行するかどうか 16推奨 -->
+<setting id="org.eclipse.jdt.core.formatter.alignment_for_string_concatenation" value="16" />
+<!-- クラスを定義する際、extends 親クラス名 の記述が長くなったときに改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_superclass_in_type_declaration" value="16"/>
+<!-- Enum（列挙型）を定義する際、implements インターフェース名 の記述が長くなったときに改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_superinterfaces_in_enum_declaration" value="16"/>
+<!-- Java 14以降の record クラスを定義する際、implements インターフェース名 の記述が長くなったときに改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_superinterfaces_in_record_declaration" value="16"/>
+<!-- 通常のクラスを定義する際、implements インターフェース名1, インターフェース名2 のように実装する対象が多くて長くなったときに改行するかどうか 16推奨-->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_superinterfaces_in_type_declaration" value="16"/>
+<!-- 新しいSwitch式（case A -> 処理;）のケース部分が複数あったり長くなったりした際、矢印（->）の直前・直後で改行するかどうか 20推奨-->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_switch_case_with_arrow" value="20"/>
+<!-- コンストラクタを宣言する際、throws IOException, SQLException のように投げる例外リストが長くなったときに改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_throws_clause_in_constructor_declaration" value="16"/>
+<!-- ソッドを宣言する際、throws 以下の例外リストが長くなったときに改行するかどうか 16推奨-->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_throws_clause_in_method_declaration" value="16"/>
+<!-- 型自体に付与する特殊なアノテーション（例: List<@NonNull String> など）の直後で改行するかどうか 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_type_annotations" value="0"/>
+<!-- メソッドを呼び出す際に明示的に指定する型引数（例: handler.<String>process() の <String> 部分）の途中で改行するかどうか 0推奨-->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_type_arguments" value="0"/>
+<!-- クラスやインターフェースを定義する際の型パラメータ（例: public class MyList<E> の <E> 部分）の途中で改行するかどうか 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_type_parameters" value="0"/>
+<!-- 例外のマルチキャッチ構文（例: catch (IOException | SQLException e)）の縦棒（|）の位置で、長くなったときに改行するかどうか 16推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.alignment_for_union_type_in_multicatch" value="16"/>
+<!-- import文のブロックが終わったあと、クラス宣言が始まるまでに何行の空行を入れるか 1推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.blank_lines_after_imports" value="1"/>
+<!-- クラスの閉じ括弧（}）の手前、つまりクラス内の最後のメソッドなどが終わったあとに何行の空行を入れるか 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.blank_lines_after_last_class_body_declaration" value="0"/>
+<!-- 先頭の package 宣言のあと、import 文が始まるまでに何行の空行を入れるか 1推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.blank_lines_after_package" value="1"/>
+<!-- インターフェースや抽象クラス内で、抽象メソッド（abstract メソッド）を宣言する手前に何行の空行を入れるか 1推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.blank_lines_before_abstract_method" value="1"/>
+<!-- クラス変数の手前に何行の空行を入れるか 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.blank_lines_before_field" value="0"/>
+<!-- クラスの開始括弧（class MyClass {）の直後、最初の変数やメソッドが始まるまでに何行の空行を入れるか 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.blank_lines_before_first_class_body_declaration" value="0"/>
+<!-- import 文のブロックが始まる手前（package 宣言との間）に何行の空行を入れるか 1推奨 -->
+<!-- 内部クラス（インナークラス）を定義する手前に何行の空行を入れるか 1推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.blank_lines_before_imports" value="1"/>
+<!-- 通常のメソッド（具象メソッド）を宣言する手前に何行の空行を入れるか 1推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.blank_lines_before_member_type" value="1"/>
+<!-- メソッドを宣言する手前に何行の空行を入れるか 1推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.blank_lines_before_method" value="1"/>
+<!-- コメントの記述方法やフォーマッタの内部的な判断で、コードの「新しいまとまり（チャンク）」とみなされた手前に何行の空行を入れるか 1推奨-->
 <setting id="org.eclipse.jdt.core.formatter.blank_lines_before_new_chunk" value="1"/>
+<!-- ファイルの最頭部、package 宣言の手前に何行の空行を入れるか 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.blank_lines_before_package" value="0"/>
+<!-- import 文の中で、グループ（例: java.〜 のグループと org.〜 のグループなど）の間に何行の空行を入れるか 1推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.blank_lines_between_import_groups" value="1"/>
+<!-- Switch文の中で、case ブロックと次の case ブロックの間に何行の空行を入れるか 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.blank_lines_between_statement_group_in_switch" value="0"/>
+<!-- 1つのファイル内に複数のクラスやインターフェースを定義する場合（※トップレベルクラスが複数あるような特殊なケース）、その型同士の間に何行の空行を入れるか 1推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.blank_lines_between_type_declarations" value="1"/>
+<!-- アノテーションを独自定義する際（@interface MyAnnotation {）の中括弧 { をどこに置くか end_of_line推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.brace_position_for_annotation_type_declaration" value="end_of_line"/>
+<!-- 匿名クラス（クラスのインスタンスをその場で生成して定義する構文）の開始中括弧 { をどこに置くか end_of_line推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.brace_position_for_anonymous_type_declaration" value="end_of_line"/>
+<!-- 配列の初期化（new int[] {1, 2, 3}）の開始中括弧 { をどこに置くか end_of_line推奨-->
 <setting id="org.eclipse.jdt.core.formatter.brace_position_for_array_initializer" value="end_of_line"/>
+<!-- 従来のSwitch文の case 内部で中括弧ブロック（case A: { 処理 }）を使う際、開始中括弧 { をどこに置くか end_of_line推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.brace_position_for_block_in_case" value="end_of_line"/>
+<!-- 新しいSwitch式の矢印の右側で中括弧ブロック（case A -> { 処理 }）を使う際、開始中括弧 { をどこに置くか end_of_line推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.brace_position_for_block" value="end_of_line"/>
+<!-- 新しいSwitch式の矢印の右側で中括弧ブロック（case A -> { 処理 }）を使う際、開始中括弧 { をどこに置くか end_of_line推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.brace_position_for_block_in_case_after_arrow" value="end_of_line"/>
+<!-- コンストラクタを宣言する際（public MyClass() {）の開始中括弧 { をどこに置くか end_of_line推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.brace_position_for_constructor_declaration" value="end_of_line"/>
+<!-- Enum（列挙型）の各定数の中で、独自のメソッドなどを実装するために中括弧ブロック（MY_VALUE { ... }）を使う際、開始中括弧 { をどこに置くか end_of_line推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.brace_position_for_enum_constant" value="end_of_line"/>
+<!-- Enum自体を定義する際（public enum MyEnum {）の開始中括弧 { をどこに置くか end_of_line推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.brace_position_for_enum_declaration" value="end_of_line"/>
+<!-- ラムダ式の処理を中括弧ブロック（(x) -> { 処理 }）で書く際、開始中括弧 { をどこに置くか end_of_line推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.brace_position_for_lambda_body" value="end_of_line"/>
+<!-- メソッドを宣言する際（public void test() {）の開始中括弧 { をどこに置くか end_of_line推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.brace_position_for_method_declaration" value="end_of_line"/>
+<!-- Recordクラスのコンパクト・コンストラクタ（引数の丸括弧を省略した特殊なコンストラクタ）を宣言する際、開始中括弧 { をどこに置くか end_of_line推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.brace_position_for_record_constructor" value="end_of_line"/>
+<!-- Recordクラス自体を定義する際（public record MyRecord() {）の開始中括弧 { をどこに置くか end_of_line推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.brace_position_for_record_declaration" value="end_of_line"/>
+<!-- Switch文・Switch式そのものを開始する際（switch (x) {）の開始中括弧 { をどこに置くか end_of_line推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.brace_position_for_switch" value="end_of_line"/>
+<!-- 通常のクラスやインターフェースを定義する際（public class MyClass {）の開始中括弧 { をどこに置くか end_of_line推奨-->
 <setting id="org.eclipse.jdt.core.formatter.brace_position_for_type_declaration" value="end_of_line"/>
+<!-- Javadoc内の同一タググループ（例: @param が複数並んでいる場合など）の「説明文（ディスクリプション）」の開始位置を、縦に綺麗に揃える（インデントを自動調整する）かどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.align_tags_descriptions_grouped" value="true"/>
+<!-- Javadoc内のすべてのタグ（@param, @return, @throws など）に対して、引数名や説明文の開始位置を「ファイル全体で一律の縦ライン」に揃えるかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.align_tags_names_descriptions" value="false"/>
+<!-- 複数行コメント（/* ... */）の中に手動で入れた空行を、フォーマット時に強制的に削除するかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.clear_blank_lines_in_block_comment" value="false"/>
+<!-- Javadocコメント（/ ... */）の中に手動で入れた空行を、フォーマット時に強制的に削除するかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.clear_blank_lines_in_javadoc_comment" value="false"/>
+<!-- コメントの1行の最大文字数をカウントする際、行頭のインデント（空白スペース）の数を含めず、コメント文字が「実際に書き始まるところ」からカウントするかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.count_line_length_from_starting_position" value="true"/>
+<!-- 複数行コメント（/* ... */）をフォーマッタの自動整形の対象にするかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.format_block_comments" value="true"/>
+<!-- ファイルの最頭部によくある「ライセンス表記や著作権情報（コピーライト）」のコメントブロックを自動整形の対象にするかどうか false推奨-->
 <setting id="org.eclipse.jdt.core.formatter.comment.format_header" value="false"/>
+<!-- Javadoc内で使われているHTMLタグ（<p> や <ul> など）を認識して、綺麗にインデントや改行を整形するかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.format_html" value="true"/>
+<!-- Javadocコメント（/ ... */）をフォーマッタの自動整形の対象にするかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.format_javadoc_comments" value="true"/>
+<!-- 単一行コメント（// ...）をフォーマッタの自動整形の対象にするかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.format_line_comments" value="true"/>
+<!-- Java 23以降で導入された「Markdown形式で書かれた新しいJavadocコメント」を綺麗に自動整形するかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.format_markdown_comments" value="true"/>
+<!-- Javadocなどのコメント内に書かれた「サンプルコード（{@code ...} や <pre>...</pre> で囲まれたソースコード）」も、Java本体のコードと同じフォーマットルールで綺麗に自動整形するかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.format_source_code" value="true"/>
+<!-- Javadocの @param タグで、パラメータ名とその説明文が長くなって改行された際、2行目以降の説明文をさらにインデントして見やすくするかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.indent_parameter_description" value="true"/>
+<!-- Javadocのルートタグ（@param, @return, @throws など）自体の行頭にインデント（スペース）を入れるかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.indent_root_tags" value="true"/>
+<!-- すべてのルートタグの説明文（1行目）を、タグの直後ではなく、一律でさらに1段深いインデント位置から書き始めるかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.indent_tag_description" value="false"/>
+<!-- Javadocの冒頭の説明文（概要）が終わり、@param などのタグ一覧が始まる手前に、空行を1行挟むかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.insert_new_line_before_root_tags" value="insert"/>
+<!-- 種類の違うタグの間（例: @param のブロックと @return の間）に、空行を1行挟むかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.insert_new_line_between_different_tags" value="do not insert"/>
+<!-- @param タグの後ろで、「パラメータ名」と「その説明文」の間に改行を挟んで、説明文を次の行から書き始めるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.insert_new_line_for_parameter" value="insert"/>
+<!-- Javadoc内のカスタムタグやブロックタグを、フォーマッタの判断で勝手に改行して切り離さない（一つの塊として維持する）かどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.javadoc_do_not_separate_block_tags" value="false"/>
-<setting id="org.eclipse.jdt.core.formatter.comment.line_length" value="80"/>
+<!-- メントの1行の最大文字数。この文字数を超えると自動的に次の行へ折り返される 120推奨 -->
+<setting id="org.eclipse.jdt.core.formatter.comment.line_length" value="120"/>
+<!-- 複数行コメント（/* ... */）の開始（/*）の直後と、終了（*/）の直前で必ず改行を入れるかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.new_lines_at_block_boundaries" value="true"/>
+<!-- Javadocコメント（/ ... */）の開始（/）の直後と、終了（*/）の直前で必ず改行を入れるかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.new_lines_at_javadoc_boundaries" value="true"/>
+<!-- コードと同じ行の右側に書いたコメント（例: int a = 1;   // コメント）の手前にある手動の空白スペースを、そのまま維持するかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.comment.preserve_white_space_between_code_and_line_comments" value="false"/>
+<!-- else if を書く際、else と if を離さずに1行にまとめて else if (...) とコンパクトに記述するかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.compact_else_if" value="true"/>
+<!-- 配列の初期化（new int[] { ... }）が長くなって途中で改行された際、次の行のインデントを通常より何段深くするか 2推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.continuation_indentation_for_array_initializer" value="2"/>
+<!-- 配列以外の通常のコード（長い数式やメソッド呼び出しなど）が長くなって途中で改行された際（継続行）、次の行のインデントを何段深くするか 2推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.continuation_indentation" value="2"/>
+<!-- コード内で「ここから先は自動整形（フォーマッタ）を適用したくない！」というときに記述する特殊なコメントタグの名前 -->
 <setting id="org.eclipse.jdt.core.formatter.disabling_tag" value="@formatter:off"/>
+<!-- 上記の無効化を解除し、「ここから自動整形を再開する」ときに記述する特殊なコメントタグの名前 -->
 <setting id="org.eclipse.jdt.core.formatter.enabling_tag" value="@formatter:on"/>
+<!-- エラーチェックなどで使われるガード節（例: if (user == null) return;）のような短いif文を、中括弧を省略して無理やり1行にまとめるかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.format_guardian_clause_on_one_line" value="false"/>
+<!-- インデントを一切挟まず、行の完全に先頭（1列目）から書き始められている単一行コメント（// ...）も、他のコードと同様にインデント位置を自動調整（自動整形）するかどうか true推奨-->
 <setting id="org.eclipse.jdt.core.formatter.format_line_comment_starting_on_first_column" value="true"/>
+<!-- アノテーション定義（@interface MyAnnotation）の内部にある属性やメソッドを、ヘッダーに対してインデントするかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.indent_body_declarations_compare_to_annotation_declaration_header" value="true"/>
+<!-- Enum（列挙型）の定数内で、独自のメソッドなどをオーバーライドした際の中身をインデントするかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.indent_body_declarations_compare_to_enum_constant_header" value="true"/>
+<!-- Enum（enum MyEnum）の中に並べる各定数やメソッドを、ヘッダーに対してインデントするかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.indent_body_declarations_compare_to_enum_declaration_header" value="true"/>
+<!-- ecordクラス（record MyRecord()）の内部に定義するコンストラクタやメソッドを、ヘッダーに対してインデントするかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.indent_body_declarations_compare_to_record_header" value="true"/>
+<!-- 通常のクラスやインターフェース（class MyClass）の内部にある変数やメソッドを、ヘッダーに対してインデントするかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.indent_body_declarations_compare_to_type_header" value="true"/>
+<!-- Switch文の各 case の中にある break; 文を、case の位置からさらに一段インデントするかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.indent_breaks_compare_to_cases" value="true"/>
+<!-- 中身が何もない「空行」に対しても、周囲の深さに合わせてインデント（空白スペースやタブ）を自動で挿入するかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.indent_empty_lines" value="false"/>
+<!-- if や for などの「中括弧ブロック { ... }」の内部に書く処理を、ブロックの開始位置から一段インデントするかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.indent_statements_compare_to_block" value="true"/>
+<!-- メソッドなどの「ボディ（中身）」の内部に書く処理を、メソッド宣言の位置から一段インデントするかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.indent_statements_compare_to_body" value="true"/>
+<!-- Switch文の内部に並ぶ case ラベル自体を、switch キーワードの位置からさらに一段インデントするかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.indent_switchstatements_compare_to_cases" value="true"/>
+<!-- ※上の設定とほぼ同様の制御を行います）Switch文の中身を、switch 全体の開始位置に対してインデントするかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.indent_switchstatements_compare_to_switch" value="true"/>
+<!-- インデント1段階分（1つの階層を下げる際）の幅（サイズ）を、スペース何個分として換算するか 4推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.indentation.size" value="4"/>
+<!-- Enumの各定数にアノテーションをつけた際、後ろに改行を入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_new_line_after_annotation_on_enum_constant" value="insert"/>
+<!-- クラス変数（フィールド）にアノテーションをつけた際、後ろに改行を入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_new_line_after_annotation_on_field" value="insert"/>
+<!-- メソッド内のローカル変数にアノテーションをつけた際、後ろに改行を入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_new_line_after_annotation_on_local_variable" value="insert"/>
+<!-- メソッドにアノテーションをつけた際、後ろに改行を入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_new_line_after_annotation_on_method" value="insert"/>
+<!-- パッケージ宣言（package-info.java など）にアノテーションをつけた際、後ろに改行を入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_new_line_after_annotation_on_package" value="insert"/>
+<!-- メソッドの引数（パラメータ）にアノテーションをつけた際、後ろに改行を入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_new_line_after_annotation_on_parameter" value="do not insert"/>
+<!-- クラスやインターフェースの定義自体にアノテーションをつけた際、後ろに改行を入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_new_line_after_annotation_on_type" value="insert"/>
+<!-- ループ文などで使う「ラベル」（例：label1:）を書いた際、その後ろに改行を入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_new_line_after_label" value="do not insert"/>
+<!-- 配列を初期化する際、開始中括弧 { の直後に一律で必ず改行を入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_new_line_after_opening_brace_in_array_initializer" value="do not insert"/>
+<!-- 型そのものに対して付与する「型アノテーション」（例：List<@NonNull String> など）の後ろに改行を入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_new_line_after_type_annotation" value="do not insert"/>
-<setting id="org.eclipse.jdt.core.formatter.insert_new_line_at_end_of_file_if_missing" value="do not insert"/>
+<!-- ファイルの1番最後の行（末尾）に空行（改行コード）が無い場合、自動で末尾に改行を1つ追加するかどうか insert推奨 -->
+<setting id="org.eclipse.jdt.core.formatter.insert_new_line_at_end_of_file_if_missing" value="insert"/>
+<!-- try-catch 文で、try ブロックの閉じ中括弧 } と、catch キーワードの間に改行を入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_new_line_before_catch_in_try_statement" value="do not insert"/>
+<!-- 配列を初期化する際、最後の閉じ中括弧 } の手前に一律で必ず改行を入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_new_line_before_closing_brace_in_array_initializer" value="do not insert"/>
+<!-- if-else 文で、if ブロックの閉じ中括弧 } と、else キーワードの間に改行を入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_new_line_before_else_in_if_statement" value="do not insert"/>
+<!-- try-catch-finally 文で、前段の閉じ中括弧 } と、finally キーワードの間に改行を入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_new_line_before_finally_in_try_statement" value="do not insert"/>
+<!-- do-while 文で、処理ブロックの閉じ中括弧 } と、後ろの while キーワードの間に改行を入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_new_line_before_while_in_do_statement" value="do not insert"/>
+<!-- 加減算演算子（+ や -）の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_additive_operator" value="insert"/>
+<!-- ジェネリクス（型パラメータ）で複数の境界を指定する際の & 記号（例：<T extends A & B>）の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_and_in_type_parameter" value="insert"/>
+<!-- 新しいSwitch式（アロー構文）の case 値 -> の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_arrow_in_switch_case" value="insert"/>
+<!-- Switch式（アロー構文）の default -> の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_arrow_in_switch_default" value="insert"/>
+<!-- 代入演算子（= や += など）の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_assignment_operator" value="insert"/>
+<!-- 役割： アノテーションを新しく定義する際、@ と interface の間に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_at_in_annotation_type_declaration" value="do not insert"/>
+<!-- コード内でアノテーションを使用する際、@ とアノテーション名の間に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_at_in_annotation" value="do not insert"/>
+<!-- ビット演算子（&, |, ^）の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_bitwise_operator" value="insert"/>
+<!-- メソッド呼び出しなどの型引数（Type Arguments）で、閉じアングルブラケット > の後ろに半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_closing_angle_bracket_in_type_arguments" value="do not insert"/>
+<!-- クラスやメソッドを定義する側の型パラメータ（Type Parameters）で、閉じアングルブラケット > の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_closing_angle_bracket_in_type_parameters" value="insert"/>
+<!-- ブロックの閉じ中括弧 } の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_closing_brace_in_block" value="insert"/>
+<!-- キャスト（型変換）を行う際、閉じ丸括弧 ) の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_closing_paren_in_cast" value="insert"/>
+<!-- アサート文（assert 条件 : エラーメッセージ;）で、コロン : の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_colon_in_assert" value="insert"/>
+<!-- 従来のSwitch文（コロン構文）の case 値 : および default : の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_colon_in_case" value="insert"/>
+<!-- 三項演算子（条件 ? 式1 : 式2）で、コロン : の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_colon_in_conditional" value="insert"/>
+<!-- 拡張for文（エンハンスドfor文、for (型 変数 : 配列・コレクション)）で、コロン : の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_colon_in_for" value="insert"/>
+<!-- ループなどで使う「ラベル」（例：label1:）の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_colon_in_labeled_statement" value="insert"/>
+<!-- インスタンス生成（new クラス呼び出し）の引数リストで、カンマ , の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_allocation_expression" value="insert"/>
+<!-- 複数の値を指定するアノテーション（例：@RequestMapping(value = "/api", method = RequestMethod.GET)）の中で、カンマ , の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_annotation" value="insert"/>
+<!-- 配列を初期化する際、要素を区切るカンマ , の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_array_initializer" value="insert"/>
+<!-- コンストラクタを定義（宣言）する際の引数リスト（パラメータ）で、カンマ , の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_constructor_declaration_parameters" value="insert"/>
+<!-- コンストラクタ定義で複数の例外をスローする際、throws の後ろの例外を区切るカンマ , の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_constructor_declaration_throws" value="insert"/>
+<!-- numの定数に引数がある場合（例：APPLE("赤", 100)）、その引数を区切るカンマ , の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_enum_constant_arguments" value="insert"/>
+<!-- Enumで定数を横並びに列挙する際、定数同士を区切るカンマ , の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_enum_declarations" value="insert"/>
+<!-- 明示的なコンストラクタ呼び出し（this(a, b) や super(a, b)）の引数リストで、カンマ , の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_explicitconstructorcall_arguments" value="insert"/>
+<!-- 従来のfor文の「更新式（インクリメント部）」で、複数の式をカンマで区切る際（例：for (...; i++, j++)）、カンマの後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_for_increments" value="insert"/>
+<!-- 従来のfor文の「初期化式」で、複数の変数を同時に初期化してカンマで区切る際（例：for (int i = 0, j = 0; ...)）、カンマの後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_for_inits" value="insert"/>
+<!-- メソッドを定義（宣言）する際の引数リスト（パラメータ）で、カンマ , の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_method_declaration_parameters" value="insert"/>
+<!-- メソッド定義で複数の例外をスローする際、throws の後ろの例外を区切るカンマ , の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_method_declaration_throws" value="insert"/>
+<!-- メソッドを実際に呼び出す（実行する）際の引数リストで、カンマ , の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_method_invocation_arguments" value="insert"/>
+<!-- クラスのフィールド（メンバー変数）を、カンマを使って1行で同時に複数宣言する際、カンマの後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_multiple_field_declarations" value="insert"/>
+<!-- メソッド内のローカル変数を、カンマを使って1行で同時に複数宣言する際、カンマの後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_multiple_local_declarations" value="insert"/>
+<!-- 変数宣言などのジェネリクス（型参照）で複数の型を指定する際、カンマ , の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_parameterized_type_reference" value="insert"/>
+<!-- Sealedクラス（継承を制限するクラス）で、継承を許可するサブクラスを指定する permits のカンマ , の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_permitted_types" value="insert"/>
+<!-- Recordクラス（record）の構成要素（コンポーネント）を定義する際、カンマ , の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_record_components" value="insert"/>
+<!-- クラスが複数のインターフェースを実装する（implements）際、インターフェース名を区切るカンマ , の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_superinterfaces" value="insert"/>
+<!-- 新しいSwitch構文で、1つの case にカンマ区切りで複数の条件を並べる際、カンマの後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_switch_case_expressions" value="insert"/>
+<!-- メソッド呼び出しなどの型引数（Type Arguments）で、複数の型をカンマで区切る際、カンマの後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_type_arguments" value="insert"/>
+<!-- クラスやメソッドを定義する側の型パラメータ（Type Parameters）で、複数の型をカンマで区切る際、カンマの後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_type_parameters" value="insert"/>
+<!-- 可変長引数（三点リーダー ...）の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_ellipsis" value="insert"/>
+<!-- ラムダ式の矢印 -> の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_lambda_arrow" value="insert"/>
+<!-- 論理演算子（&& や ||）の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_logical_operator" value="insert"/>
+<!-- 乗除算・剰余演算子（*, /, %）の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_multiplicative_operator" value="insert"/>
+<!-- 論理否定演算子（!）の後ろに半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_not_operator" value="do not insert"/>
+<!-- 変数宣言などのジェネリクス（型参照）で、開始の < の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_angle_bracket_in_parameterized_type_reference" value="do not insert"/>
+<!-- メソッド呼び出しなどの型引数（Type Arguments）で、開始の < の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_angle_bracket_in_type_arguments" value="do not insert"/>
+<!-- クラスやメソッドを定義する側の型パラメータ（Type Parameters）で、開始の < の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_angle_bracket_in_type_parameters" value="do not insert"/>
+<!-- 配列を初期化する際、開始中括弧 { の直後に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_brace_in_array_initializer" value="insert"/>
+<!-- 配列の領域を確保（要素数を指定）する際、開始角括弧 [ の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_bracket_in_array_allocation_expression" value="do not insert"/>
+<!-- 配列の要素にアクセス（添字を指定）する際、開始角括弧 [ の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_bracket_in_array_reference" value="do not insert"/>
+<!-- アノテーションに引数を指定する際、開始の ( の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_annotation" value="do not insert"/>
+<!-- キャスト（型変換）を行う際、開始の ( の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_cast" value="do not insert"/>
+<!-- catch 節で、開始の ( の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_catch" value="do not insert"/>
+<!-- コンストラクタを定義（宣言）する際、引数リストの開始の ( の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_constructor_declaration" value="do not insert"/>
+<!-- Enumの定数に引数を指定する際、開始の ( の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_enum_constant" value="do not insert"/>
+<!-- for 文で、開始の ( の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_for" value="do not insert"/>
+<!-- if 文で、条件式の開始の ( の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_if" value="do not insert"/>
+<!-- メソッドを定義（宣言）する際、引数リストの開始の ( の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_method_declaration" value="do not insert"/>
+<!-- メソッドを呼び出す（実行する）際、引数リストの開始の ( の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_method_invocation" value="do not insert"/>
+<!-- 計算の優先順位を変えるための括弧など、通常の丸括弧で囲まれた式（例：(a + b) * c）で、開始の ( の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_parenthesized_expression" value="do not insert"/>
+<!-- Recordクラス（record）を定義する際、構成要素リストの開始の ( の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_record_declaration" value="do not insert"/>
+<!-- switch 文（または式）で、対象の変数を指定する開始の ( の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_switch" value="do not insert"/>
+<!-- synchronized ブロックで、ロック対象オブジェクトを指定する開始の ( の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_synchronized" value="do not insert"/>
+<!-- リソース付きtry文（try-with-resources）で、リソース宣言の開始の ( の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_try" value="do not insert"/>
+<!-- while 文（または do-while の後ろのwhile）で、ループ条件の開始の ( の直後に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_while" value="do not insert"/>
+<!-- 後置演算子（i++など）の後ろに半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_postfix_operator" value="do not insert"/>
+<!-- 前置演算子（++iなど、正負を表す +num, -num）の後ろに半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_prefix_operator" value="do not insert"/>
+<!-- 三項演算子（条件 ? 式1 : 式2）で、クエスチョンマーク ? の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_question_in_conditional" value="insert"/>
+<!-- ジェネリクスの不特定な型を表すワイルドカード（例：List<? extends Number>）で、? の直後に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_question_in_wildcard" value="do not insert"/>
+<!-- 比較演算子（<, >, <=, >=, instanceof）の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_relational_operator" value="insert"/>
+<!-- 従来のfor文の中で、式を区切るセミコロン ; の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_semicolon_in_for" value="insert"/>
+<!-- リソース付きtry文（try-with-resources）で、複数のリソースを区切るセミコロン ; の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_semicolon_in_try_resources" value="insert"/>
+<!-- シフト演算子（<<, >>, >>>）の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_shift_operator" value="insert"/>
+<!-- 文字列結合の + 演算子の後ろに半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_string_concatenation" value="insert"/>
+<!-- 単項演算子（符号反転の -, + や、ビット反転の ~）の後ろに半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_unary_operator" value="do not insert"/>
+<!-- 加減算演算子（+ や -）の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_additive_operator" value="insert"/>
+<!-- ジェネリクス（型パラメータ）で複数の境界を指定する際の & 記号（例：<T extends A & B>）の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_and_in_type_parameter" value="insert"/>
+<!-- 新しいSwitch式（アロー構文）の case 値 -> の、矢印 -> の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_arrow_in_switch_case" value="insert"/>
+<!-- Switch式（アロー構文）の default -> の、矢印 -> の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_arrow_in_switch_default" value="insert"/>
+<!-- 代入演算子（= や += など）の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_assignment_operator" value="insert"/>
+<!-- アノテーションを新しく定義する際、@interface の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_at_in_annotation_type_declaration" value="insert"/>
+<!-- ビット演算子（&, |, ^）の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_bitwise_operator" value="insert"/>
+<!-- 変数宣言などのジェネリクス（型参照）で、閉じの > の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_angle_bracket_in_parameterized_type_reference" value="do not insert"/>
+<!-- メソッド呼び出しなどの型引数（Type Arguments）で、閉じの > の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_angle_bracket_in_type_arguments" value="do not insert"/>
+<!-- クラスやメソッドを定義する側の型パラメータ（Type Parameters）で、閉じの > の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_angle_bracket_in_type_parameters" value="do not insert"/>
+<!-- 配列を初期化する際、閉じ中括弧 } の直前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_brace_in_array_initializer" value="insert"/>
+<!-- 配列の領域を確保（要素数を指定）する際、閉じ角括弧 ] の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_bracket_in_array_allocation_expression" value="do not insert"/>
+<!-- 配列の要素にアクセス（添字を指定）する際、閉じ角括弧 ] の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_bracket_in_array_reference" value="do not insert"/>
+<!-- アノテーションに引数を指定する際、閉じの ) の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_annotation" value="do not insert"/>
+<!-- キャスト（型変換）を行う際、閉じの ) の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_cast" value="do not insert"/>
+<!-- catch 節で、閉じの ) の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_catch" value="do not insert"/>
+<!-- コンストラクタを定義（宣言）する際、引数リストの閉じの ) の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_constructor_declaration" value="do not insert"/>
+<!-- Enumの定数に引数を指定する際、閉じの ) の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_enum_constant" value="do not insert"/>
+<!-- for 文で、閉じの ) の直前に半角スペースを入れるかどうか do not insert推奨-->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_for" value="do not insert"/>
+<!-- if 文で、条件式の閉じの ) の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_if" value="do not insert"/>
+<!-- メソッドを定義（宣言）する際、引数リストの閉じの ) の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_method_declaration" value="do not insert"/>
+<!-- メソッドを呼び出す（実行する）際、引数リストの閉じの ) の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_method_invocation" value="do not insert"/>
+<!-- 通常の丸括弧で囲まれた式（例：(a + b) * c）で、閉じの ) の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_parenthesized_expression" value="do not insert"/>
+<!-- Recordクラス（record）を定義する際、構成要素リストの閉じの ) の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_record_declaration" value="do not insert"/>
+<!-- switch 文（または式）で、対象変数を指定する括弧の閉じの ) の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_switch" value="do not insert"/>
+<!-- synchronized ブロックで、ロック対象オブジェクトを指定する括弧の閉じの ) の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_synchronized" value="do not insert"/>
+<!-- リソース付きtry文（try-with-resources）で、リソース宣言の閉じの ) の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_try" value="do not insert"/>
+<!-- while 文（または do-while の後ろのwhile）で、ループ条件の閉じの ) の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_while" value="do not insert"/>
+<!-- アサーション文（例：assert condition : "Error";）で、エラーメッセージを区切るコロン : の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_colon_in_assert" value="insert"/>
+<!-- Switch文の case 値: で、コロン : の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_colon_in_case" value="do not insert"/>
+<!-- 三項演算子（条件 ? 式1 : 式2）で、コロン : の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_colon_in_conditional" value="insert"/>
+<!-- Switch文の default: で、コロン : の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_colon_in_default" value="do not insert"/>
+<!-- 拡張for文（foreach文、例：for (String s : list)）で、コロン : の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_colon_in_for" value="insert"/>
+<!-- ループ制御などで使うラベル定義（例：MY_LABEL:）で、コロン : の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_colon_in_labeled_statement" value="do not insert"/>
+<!-- インスタンス生成（new）時の引数を区切るカンマ , の手前に半角スペースを入れるかどうか do not insert推奨-->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_allocation_expression" value="do not insert"/>
+<!-- アノテーションに複数の引数を指定する際のカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_annotation" value="do not insert"/>
+<!-- 配列を初期化する際、要素を区切るカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_array_initializer" value="do not insert"/>
+<!-- コンストラクタ定義で、引数同士を区切るカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_constructor_declaration_parameters" value="do not insert"/>
+<!-- コンストラクタ定義の throws 節で、複数の例外を区切るカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_constructor_declaration_throws" value="do not insert"/>
+<!-- Enum定数の引数を区切るカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_enum_constant_arguments" value="do not insert"/>
+<!-- Enum定義で、定数同士を区切るカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_enum_declarations" value="do not insert"/>
+<!-- 明示的なコンストラクタ呼び出し（this() や super()）の引数を区切るカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_explicitconstructorcall_arguments" value="do not insert"/>
+<!-- for文の更新式（インクリメント部分）で、複数の式を区切るカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_for_increments" value="do not insert"/>
+<!-- for文の初期化式で、複数の変数を宣言・初期化する際のカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_for_inits" value="do not insert"/>
+<!-- メソッド定義で、引数同士を区切るカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_method_declaration_parameters" value="do not insert"/>
+<!-- メソッド定義の throws 節で、複数の例外を区切るカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_method_declaration_throws" value="do not insert"/>
+<!-- メソッドを呼び出す（実行する）際、引数同士を区切るカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_method_invocation_arguments" value="do not insert"/>
+<!-- 複数のフィールド（クラス直下のメンバ変数）を1行でまとめて宣言する際、区切りのカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_multiple_field_declarations" value="do not insert"/>
+<!-- メソッド内のローカル変数を1行でまとめて宣言する際、区切りのカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_multiple_local_declarations" value="do not insert"/>
+<!-- ジェネリクス（Mapなど）で、複数の型パラメータを区切るカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_parameterized_type_reference" value="do not insert"/>
+<!-- Sealedクラス・インターフェースで、継承を許可するサブクラスを指定する permits 節のカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_permitted_types" value="do not insert"/>
+<!-- Recordクラスの構成要素（コンポーネント）を区切るカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_record_components" value="do not insert"/>
+<!-- クラスの implements 節やインターフェースの extends 節で、複数のインターフェースを区切るカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_superinterfaces" value="do not insert"/>
+<!-- 新しいSwitch構文で、1つのケースに複数の値を指定する際のカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_switch_case_expressions" value="do not insert"/>
+<!-- メソッド呼び出しなどの型引数を区切るカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_type_arguments" value="do not insert"/>
+<!-- クラスやメソッドを定義する側の型パラメータを区切るカンマ , の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_comma_in_type_parameters" value="do not insert"/>
+<!-- 可変長引数（三点リーダー ...）の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_ellipsis" value="do not insert"/>
+<!-- ラムダ式の矢印 -> の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_lambda_arrow" value="insert"/>
+<!-- 論理演算子（&& や ||）の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_logical_operator" value="insert"/>
+<!-- 乗除算・剰余演算子（*, /, %）の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_multiplicative_operator" value="insert"/>
+<!-- 変数宣言などのジェネリクス（型参照）で、開始の < の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_angle_bracket_in_parameterized_type_reference" value="do not insert"/>
+<!-- メソッド呼び出しなどの型引数（Type Arguments）で、開始の < の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_angle_bracket_in_type_arguments" value="do not insert"/>
+<!-- クラスやメソッドを定義する側の型パラメータ（Type Parameters）で、開始の < の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_angle_bracket_in_type_parameters" value="do not insert"/>
+<!-- アノテーション定義の開始中括弧 { の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_annotation_type_declaration" value="insert"/>
+<!-- 匿名クラス（無名クラス）を定義する際の開始中括弧 { の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_anonymous_type_declaration" value="insert"/>
+<!-- 配列を初期化する際の開始中括弧 { の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_array_initializer" value="insert"/>
+<!-- 独立したブロックや、if / for / try などの構文に伴う開始中括弧 { の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_block" value="insert"/>
+<!-- コンストラクタ定義の開始中括弧 { の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_constructor_declaration" value="insert"/>
+<!-- Enumの定数で、特定のメソッドをオーバーライドするなどの独自ブロック（クラスボディ）を始める際の開始中括弧 { の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_enum_constant" value="insert"/>
+<!-- Enumそのものを定義（宣言）する際の開始中括弧 { の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_enum_declaration" value="insert"/>
+<!-- メソッド定義の開始中括弧 { の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_method_declaration" value="insert"/>
+<!-- Recordクラスのコンパクト・コンストラクタなどを定義する際、開始中括弧 { の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_record_constructor" value="insert"/>
+<!-- Recordクラスそのものを定義（宣言）する際、開始中括弧 { の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_record_declaration" value="insert"/>
+<!-- switch 文（または式）の開始中括弧 { の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_switch" value="insert"/>
+<!-- 通常のクラス（class）やインターフェース（interface）を定義する際、開始中括弧 { の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_type_declaration" value="insert"/>
+<!-- 配列の領域を確保（要素数を指定）する際、開始の [ の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_bracket_in_array_allocation_expression" value="do not insert"/>
+<!-- 配列の要素にアクセス（添字を指定）する際、開始の [ の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_bracket_in_array_reference" value="do not insert"/>
+<!-- 変数宣言などで配列型を表現する際、開始の [ の直前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_bracket_in_array_type_reference" value="do not insert"/>
+<!-- アノテーションの要素（メソッドに似た宣言）を定義する際、開始の ( の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_annotation_type_member_declaration" value="do not insert"/>
+<!-- アノテーションに引数を指定する際、開始の ( の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_annotation" value="do not insert"/>
+<!-- catch 節で、開始の ( の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_catch" value="insert"/>
+<!-- コンストラクタ定義で、引数リストの開始の ( の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_constructor_declaration" value="do not insert"/>
+<!-- Enumの定数に引数を渡す際、開始の ( の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_enum_constant" value="do not insert"/>
+<!-- for 文（拡張for文含む）で、条件・ループ式を始める ( の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_for" value="insert"/>
+<!-- if 文で、条件式の開始の ( の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_if" value="insert"/>
+<!-- メソッド定義（宣言）で、引数リストの開始の ( の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_method_declaration" value="do not insert"/>
+<!-- メソッド呼び出し（実行）で、引数リストの開始の ( の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_method_invocation" value="do not insert"/>
+<!-- 通常の丸括弧で囲まれた式（例：(a + b)）で、開始の ( の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_parenthesized_expression" value="do not insert"/>
+<!-- Recordクラスを定義する際、構成要素リストの開始の ( の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_record_declaration" value="do not insert"/>
+<!-- switch 文（または式）で、対象変数を指定する括弧の開始の ( の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_switch" value="insert"/>
+<!-- synchronized ブロックで、ロック対象オブジェクトを指定する括弧の開始の ( の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_synchronized" value="insert"/>
+<!-- リソース付きtry文（try-with-resources）で、リソース宣言の開始の ( の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_try" value="insert"/>
+<!-- while 文（または do-while）で、ループ条件の開始の ( の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_while" value="insert"/>
+<!-- return 文で、戻り値全体が丸括弧で囲まれている場合、return と開始の ( の間に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_parenthesized_expression_in_return" value="insert"/>
+<!-- throw 文で、投げる例外オブジェクト式（あるいはその一部）が丸括弧で囲まれている場合、throw と開始の ( の間に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_parenthesized_expression_in_throw" value="insert"/>
+<!-- 後置演算子（i++など）の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_postfix_operator" value="do not insert"/>
+<!-- 前置演算子（++iなど、否定の !bit、正負の -num など）の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_prefix_operator" value="do not insert"/>
+<!-- 三項演算子（条件 ? 式1 : 式2）で、クエスチョン ? の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_question_in_conditional" value="insert"/>
+<!-- ジェネリクスの非限定ワイルドカード（例：List<?>）や上限・下限付きワイルドカード（例：List<? extends Number>）で、クエスチョン ? の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_question_in_wildcard" value="do not insert"/>
+<!-- 比較演算子（<, >, <=, >=, ==, !=）の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_relational_operator" value="insert"/>
+<!-- for 文の中で、各式を区切るセミコロン ; の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_semicolon_in_for" value="do not insert"/>
+<!-- リソース付きtry文（try-with-resources）で、複数のリソースを区切るセミコロン ; の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_semicolon_in_try_resources" value="do not insert"/>
+<!-- 通常の文の末尾にあるセミコロン ; の手前に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_semicolon" value="do not insert"/>
+<!-- ビットシフト演算子（<<, >>, >>>）の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_shift_operator" value="insert"/>
+<!-- 文字列結合のプラス演算子（+）の手前に半角スペースを入れるかどうか insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_string_concatenation" value="insert"/>
+<!-- 単項演算子（正負の +, -、論理否定の !、ビット反転の ~）の手前（直前）に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_unary_operator" value="do not insert"/>
+<!-- 配列の型宣言で、角括弧の中（例：[]）に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_between_brackets_in_array_type_reference" value="do not insert"/>
+<!-- 空の配列初期化（要素がゼロ）の際、中括弧の中（例：{}）に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_between_empty_braces_in_array_initializer" value="do not insert"/>
+<!-- 配列の領域確保時に初期化を伴う場合などの空の角括弧（例：[]）の中に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_between_empty_brackets_in_array_allocation_expression" value="do not insert"/>
+<!-- アノテーションの要素定義で、引数がない場合の空の丸括弧（例：()）の中に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_between_empty_parens_in_annotation_type_member_declaration" value="do not insert"/>
+<!-- 引数なしコンストラクタの定義で、空の丸括弧（例：()）の中に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_between_empty_parens_in_constructor_declaration" value="do not insert"/>
+<!-- 引数なしEnum定数の宣言で、空の丸括弧（例：()）の中に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_between_empty_parens_in_enum_constant" value="do not insert"/>
+<!-- 引数なしメソッドの定義（宣言）で、空の丸括弧（例：()）の中に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_between_empty_parens_in_method_declaration" value="do not insert"/>
+<!-- 引数なしメソッドの呼び出し（実行）で、空の丸括弧（例：()）の中に半角スペースを入れるかどうか do not insert推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.insert_space_between_empty_parens_in_method_invocation" value="do not insert"/>
+<!-- 連続する単一行コメント（//）を、フォーマッタが1行にまとめて結合するかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.join_line_comments" value="false"/>
+<!-- ブロックコメント（/* ... */）やJavadocコメント内の改行を、フォーマッタが自動で無視して1行に結合するかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.join_lines_in_comments" value="false"/>
+<!-- 長いコードが自動（または手動）で折り返された（wrapされた）際、フォーマッタがそれを再び1行に結合しようとするかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.join_wrapped_lines" value="false"/>
+<!-- アノテーション定義（@interface）を1行の中に収めるかどうか one_line_never推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_annotation_declaration_on_one_line" value="one_line_never"/>
+<!-- 匿名クラス（無名クラス）の定義を1行の中に収めるかどうか one_line_never推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_anonymous_type_declaration_on_one_line" value="one_line_never"/>
+<!-- メソッド内などの一般的なコードブロック（{ ... }）を1行の中に収めるかどうか one_line_never推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_code_block_on_one_line" value="one_line_never"/>
+<!-- if ブロックの閉じ中括弧 } と、それに続く else を同じ行に配置するかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_else_statement_on_same_line" value="false"/>
+<!-- 空の配列初期化（{}）を1行に収めるかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_empty_array_initializer_on_one_line" value="false"/>
+<!-- Enumの定数定義を1行の中に収めるかどうか one_line_never推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_enum_constant_declaration_on_one_line" value="one_line_never"/>
+<!-- Enum自体の定義を1行の中に収めるかどうか one_line_never推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_enum_declaration_on_one_line" value="one_line_never"/>
+<!-- if 文の処理内容（thenブロック）を、中身がどれだけ短くても1行に収めるかどうか one_line_never推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_if_then_body_block_on_one_line" value="one_line_never"/>
+<!-- 中括弧 {} のない、ごく単純な1行の if 文（例：if (cond) return;）を、そのまま1行に維持するかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_imple_if_on_one_line" value="false"/>
+<!-- 中括弧 {} を伴うラムダ式の処理ブロックを、1行に収めるかどうか one_line_never推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_lambda_body_block_on_one_line" value="one_line_never"/>
+<!-- for や while などのループの処理ブロック（{ ... }）を、1行に収めるかどうか one_line_never推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_loop_body_block_on_one_line" value="one_line_never"/>
+<!-- メソッドの処理中身（ボディ）を、1行の中に収めるかどうか one_line_never推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_method_body_on_one_line" value="one_line_never"/>
+<!-- Recordクラスのコンストラクタ定義を1行の中に収めるかどうか one_line_never推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_record_constructor_on_one_line" value="one_line_never"/>
+<!-- Recordクラス自体の定義（宣言）を1行の中に収めるかどうか one_line_never推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_record_declaration_on_one_line" value="one_line_never"/>
+<!-- 中括弧 {} のない、ごく単純な do-while 文の処理（ボディ）を、do と同じ行に維持するかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_simple_do_while_body_on_same_line" value="false"/>
+<!-- 中括弧 {} のない、ごく単純な for 文の処理（ボディ）を、for と同じ行に維持するかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_simple_for_body_on_same_line" value="false"/>
+<!-- フィールドを返す・代入するだけの単純な Getter や Setter メソッドを、特別に1行で記述するのを許可するかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_simple_getter_setter_on_one_line" value="false"/>
+<!-- 中括弧 {} のない、ごく単純な while 文の処理（ボディ）を、while と同じ行に維持するかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_simple_while_body_on_same_line" value="false"/>
+<!-- switch 文全体のブロック（{ ... }）を1行の中に収めるかどうか one_line_never推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_switch_body_block_on_one_line" value="one_line_never"/>
+<!-- 新しいSwitch構文の、アロー演算子を伴う case 式（例：case A -> statement;）を1行の中に収めるかどうか one_line_never推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_switch_case_with_arrow_on_one_line" value="one_line_never"/>
+<!-- 中括弧 {} のない if 文において、処理（thenステートメント）を if と同じ行に維持するかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_then_statement_on_same_line" value="false"/>
+<!-- 通常のクラス（class）やインターフェース（interface）の定義を1行の中に収めるかどうか one_line_never推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.keep_type_declaration_on_one_line" value="one_line_never"/>
+<!-- 1行の最大文字数（折り返し位置） 120推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.lineSplit" value="120"/>
+<!-- 複数行コメント（/* ... */）をフォーマットする際、コードのインデント深さに合わせず、常にファイルの「左端（1列目）」へ強制的に移動させるかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.never_indent_block_comments_on_first_column" value="false"/>
+<!-- 単一行コメント（//）をフォーマットする際、コードのインデント深さに合わせず、常にファイルの「左端（1列目）」へ強制的に移動させるかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.never_indent_line_comments_on_first_column" value="false"/>
+<!-- 独立したコードブロック（{ ... }）の後ろに、自動で挿入する空行の数 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.number_of_blank_lines_after_code_block" value="0"/>
+<!-- 一般的なコードブロック（{）の開始直後に、自動で挿入する空行の数 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.number_of_blank_lines_at_beginning_of_code_block" value="0"/>
+<!-- メソッドの処理中身（ボディ）の開始直後に、自動で挿入する空行の数 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.number_of_blank_lines_at_beginning_of_method_body" value="0"/>
+<!-- 一般的なコードブロック（}）の終了直前に、自動で挿入する空行の数 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.number_of_blank_lines_at_end_of_code_block" value="0"/>
+<!-- メソッドの処理中身（ボディ）の終了直前に、自動で挿入する空行の数 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.number_of_blank_lines_at_end_of_method_body" value="0"/>
+<!-- 独立したコードブロック（{ ... }）の手前に、自動で挿入する空行の数 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.number_of_blank_lines_before_code_block" value="0"/>
+<!-- 開発者がコードの区切りのために意図的に入れた空行を、最大何行まで維持（キープ）するか 1推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.number_of_empty_lines_to_preserve" value="1"/>
+<!-- アノテーションの引数が長くなって改行される際、開始括弧 ( や閉じ括弧 ) の位置をどうするか common_lines推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_annotation" value="common_lines"/>
+<!-- catch 節の例外引数（マルチキャッチなど）が長くなって改行される際、丸括弧の位置をどうするか common_lines推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_catch_clause" value="common_lines"/>
+<!-- Enumの定数定義に渡す引数が長くなって改行される際、丸括弧の位置をどうするか common_lines推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_enum_constant_declaration" value="common_lines"/>
+<!-- for 文の条件式が長くなって改行される際、丸括弧の位置をどうするか common_lines推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_for_statment" value="common_lines"/>
+<!-- if 文や while 文の条件式が長くなって改行される際、丸括弧の位置をどうするか common_lines推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_if_while_statement" value="common_lines"/>
+<!-- ラムダ式の引数リストが長くなって改行される際、丸括弧の位置をどうするか common_lines推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_lambda_declaration" value="common_lines"/>
+<!-- メソッド定義の引数リストが長くなった際の括弧配置 common_lines推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_method_delcaration" value="common_lines"/>
+<!-- メソッド呼び出しの引数リストが長くなった際の括弧配置 common_lines推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_method_invocation" value="common_lines"/>
+<!-- Recordクラスの構成要素リストが長くなった際の括弧配置 common_lines推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_record_declaration" value="common_lines"/>
+<!-- switch 文の条件式（対象変数）が長くなった際の括弧配置 common_lines推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_switch_statement" value="common_lines"/>
+<!-- リソース付きtry文（try-with-resources）で、リソース宣言が長くなった際の括弧配置 common_lines推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_try_clause" value="common_lines"/>
+<!-- 空文（; だけの文）を独立した行に配置するかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.put_empty_statement_on_new_line" value="true"/>
-<setting id="org.eclipse.jdt.core.formatter.tabulation.char" value="tab"/>
+<!-- インデントに使用する文字の種類 space推奨 -->
+<setting id="org.eclipse.jdt.core.formatter.tabulation.char" value="space"/>
+<!-- 1レベルのインデントを何文字分（または何タブ分）とするか 4推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.tabulation.size" value="4"/>
+<!-- テキストブロック（""" で囲む文字列）の中身のインデントをどうするか 0推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.text_block_indentation" value="0"/>
+<!-- フォーマッタを一時的に「無効化するタグ」を使うかどうか true推奨-->
 <setting id="org.eclipse.jdt.core.formatter.use_on_off_tags" value="true"/>
+<!-- 行頭のインデントのみにタブを使用し、コード内の配置にはスペースを使うかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.use_tabs_only_for_leading_indentations" value="false"/>
+<!--  加法演算子（+, -）の直前で改行するかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.wrap_before_additive_operator" value="true"/>
+<!-- assert 文でメッセージを渡す際のコロン : の前で改行するかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.wrap_before_assertion_message_operator" value="true"/>
+<!-- 代入演算子（=, +=, -= など）の直前で改行するかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.wrap_before_assignment_operator" value="false"/>
+<!-- ビット演算子（&, |, ^）の直前で改行するかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.wrap_before_bitwise_operator" value="true"/>
+<!-- 三項演算子（?, :）の直前で改行するかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.wrap_before_conditional_operator" value="true"/>
+<!-- 論理演算子（&&, ||）の直前で改行するかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.wrap_before_logical_operator" value="true"/>
+<!-- 乗法演算子（*, /, %）の直前で改行するかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.wrap_before_multiplicative_operator" value="true"/>
+<!-- マルチキャッチ（catch (ExceptionA | ExceptionB e)）のパイプ | の直前で改行するかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.wrap_before_or_operator_multicatch" value="true"/>
+<!-- 比較演算子（<, >, <=, >=, ==, !=）の直前で改行するかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.wrap_before_relational_operator" value="true"/>
+<!-- ビットシフト演算子（<<, >>, >>>）の直前で改行するかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.wrap_before_shift_operator" value="true"/>
+<!-- 文字列結合のプラス演算子（+）の直前で改行するかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.wrap_before_string_concatenation" value="true"/>
+<!-- 新Switch文の矢印演算子（->）の直前で改行するかどうか false推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.wrap_before_switch_case_arrow_operator" value="false"/>
+<!-- 式の中にさらに式が含まれる（ネストしている）場合、外側の式から優先的に折り返すかどうか true推奨 -->
 <setting id="org.eclipse.jdt.core.formatter.wrap_outer_expressions_when_nested" value="true"/>
 </profile>
 </profiles>
