@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::div})}">
+    <body>
+        <div>
+            <div class="mb-4">
+                <h1 class="h2 border-bottom pb-2">📅 期間検索バリデーションの検証</h1>
+                <p class="text-muted">
+                    GETメソッドにおける「型変換（@DateTimeFormat）」と、自作アノテーションによる「相関チェック（@ChronologicalPeriod）」の挙動を検証します。
+                </p>
+            </div>
+
+            <div class="d-flex align-items-center my-5">
+                <div
+                    class="flex-grow-1 border-bottom border-primary border-opacity-25"
+                    style="border-style: dashed !important"
+                ></div>
+                <span class="mx-3 text-primary small fw-bold text-uppercase" style="letter-spacing: 0.1em"
+                    >GET Method Test Area</span
+                >
+                <div
+                    class="flex-grow-1 border-bottom border-primary border-opacity-25"
+                    style="border-style: dashed !important"
+                ></div>
+            </div>
+
+            <div th:if="${successMessage}" class="alert alert-success shadow-sm mb-4">
+                <h5 class="alert-heading fw-bold">✅ バリデーション成功（正常終了：GET）</h5>
+                <p class="mb-0" th:text="${successMessage}"></p>
+                <ul class="mt-2 mb-0 small">
+                    <li>開始日 (startDate): <strong th:text="${periodSearchForm.startDate}"></strong></li>
+                    <li>終了日 (endDate): <strong th:text="${periodSearchForm.endDate}"></strong></li>
+                </ul>
+            </div>
+
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-dark text-white fw-bold">
+                    📦 パターン5：GETメソッドによる期間相関チェック検証
+                </div>
+                <div class="card-body bg-white p-4">
+                    <p class="card-text text-secondary small">
+                        ※ボタンを押すと <code>/validation/period/search</code> にGET送信されます。<br />
+                        「あああああ」などの形式不正（typeMismatch）や、開始日 ＞ 終了日（相関エラー）を起こして、
+                        メッセージが連動して綺麗に切り替わるか検証してください。
+                    </p>
+
+                    <form th:action="@{/validation/period/search}" th:object="${periodSearchForm}" method="get">
+                        <div
+                            class="alert alert-danger shadow-sm mb-4"
+                            role="alert"
+                            th:if="${#fields.hasGlobalErrors()}"
+                        >
+                            <h6 class="alert-heading fw-bold">❌ 期間設定エラー</h6>
+                            <ul class="mb-0 pl-3">
+                                <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label th:for="startDate" class="form-label fw-bold">① 開始日 (yyyy-MM-dd)</label>
+                                <input
+                                    type="text"
+                                    th:field="*{startDate}"
+                                    class="form-control"
+                                    placeholder="2026-06-01"
+                                    th:errorclass="is-invalid"
+                                />
+                                <div
+                                    class="invalid-feedback"
+                                    th:if="${#fields.hasErrors('startDate')}"
+                                    th:errors="*{startDate}"
+                                ></div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label th:for="endDate" class="form-label fw-bold">② 終了日 (yyyy-MM-dd)</label>
+                                <input
+                                    type="text"
+                                    th:field="*{endDate}"
+                                    class="form-control"
+                                    placeholder="2026-06-10"
+                                    th:errorclass="is-invalid"
+                                />
+                                <div
+                                    class="invalid-feedback"
+                                    th:if="${#fields.hasErrors('endDate')}"
+                                    th:errors="*{endDate}"
+                                ></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary px-4 shadow-sm">
+                                🔍 期間検索を実行（GET）
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

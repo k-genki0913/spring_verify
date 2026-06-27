@@ -11,4 +11,5 @@ public interface View {
 
     String CORRELATION_FORM = "validation/correlation-form";
 
+    String PERIOD_SEARCH_FORM = "validation/period-search-form";
 }
