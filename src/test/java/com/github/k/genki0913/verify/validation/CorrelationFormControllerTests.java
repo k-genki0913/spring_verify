@@ -1,5 +1,6 @@
 package com.github.k.genki0913.verify.validation;
 
+import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -193,7 +194,7 @@ public class CorrelationFormControllerTests {
             assertTrue(bindingResult.hasGlobalErrors(), "グローバルエラーが発生していません");
 
             boolean containsSpecificError = bindingResult.getGlobalErrors().stream().map(ObjectError::getDefaultMessage)
-                    .allMatch(message -> message.equals("メールアドレスと再入力が一致しません"));
+                    .allMatch(message -> Objects.equals(message, "メールアドレスと再入力が一致しません"));
             assertTrue(containsSpecificError, "期待するグローバルエラーメッセージがありません");
         }
     }

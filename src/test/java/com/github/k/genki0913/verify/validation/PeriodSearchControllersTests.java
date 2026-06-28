@@ -7,6 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.Objects;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -100,7 +102,7 @@ public class PeriodSearchControllersTests {
 
                         boolean containsSpecificError = bindingResult.getGlobalErrors().stream()
                                         .map(ObjectError::getDefaultMessage)
-                                        .allMatch(message -> message.equals("日付の前後関係が不正です"));
+                                        .allMatch(message -> Objects.equals(message, "日付の前後関係が不正です"));
                         assertTrue(containsSpecificError, "期待する相関チェックのエラーメッセージがありません");
                 }
         }
