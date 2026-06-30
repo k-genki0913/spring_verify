@@ -6,6 +6,9 @@ services:
         container_name: spring-verify
         tty: true
         environment:
+            DB_HOST: ${DB_HOST}
+            DB_PORT: ${DB_PORT}
+            JPA_DDL_AUTO: ${JPA_DDL_AUTO}
             POSTGRES_DB: ${POSTGRES_DATABASE_NAME}
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
