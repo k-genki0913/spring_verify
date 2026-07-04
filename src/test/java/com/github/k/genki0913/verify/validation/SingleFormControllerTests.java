@@ -18,8 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.github.k.genki0913.verify.support.WebLayerTest;
+import com.github.k.genki0913.verify.validation.controller.SingleFormController;
 
-@WebLayerTest
+@WebLayerTest(SingleFormController.class)
 public class SingleFormControllerTests {
 
         @Autowired

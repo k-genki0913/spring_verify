@@ -12,7 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.access.AccessDeniedException;
@@ -24,8 +23,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.github.k.genki0913.verify.config.AppValidationProperties;
+import com.github.k.genki0913.verify.support.WebLayerTest;
 
-@WebMvcTest
+@WebLayerTest(WebExceptionHandler.class)
 @Import({ WebExceptionHandler.class, WebExceptionHandlerTest.TestController.class })
 @DisplayName("グローバルHTML例外ハンドラのテスト")
 public class WebExceptionHandlerTest {
