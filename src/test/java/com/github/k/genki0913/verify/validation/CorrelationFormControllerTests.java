@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 
 import com.github.k.genki0913.verify.support.WebLayerTest;
 import com.github.k.genki0913.verify.validation.controller.CorrelationFormController;
@@ -193,7 +192,9 @@ public class CorrelationFormControllerTests {
             assertNotNull(bindingResult);
             assertTrue(bindingResult.hasGlobalErrors(), "グローバルエラーが発生していません");
 
-            boolean containsSpecificError = bindingResult.getGlobalErrors().stream().map(ObjectError::getDefaultMessage)
+            boolean containsSpecificError = bindingResult.getGlobalErrors().stream()
+                    .filter(Objects::nonNull)
+                    .map(error -> error.getDefaultMessage())
                     .allMatch(message -> Objects.equals(message, "メールアドレスと再入力が一致しません"));
             assertTrue(containsSpecificError, "期待するグローバルエラーメッセージがありません");
         }

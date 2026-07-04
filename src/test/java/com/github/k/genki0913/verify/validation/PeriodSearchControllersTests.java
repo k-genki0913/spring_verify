@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 
 import com.github.k.genki0913.verify.support.WebLayerTest;
 import com.github.k.genki0913.verify.validation.controller.PeriodSearchController;
@@ -101,7 +100,8 @@ public class PeriodSearchControllersTests {
                         assertTrue(bindingResult.hasGlobalErrors(), "グローバルエラーが発生していません");
 
                         boolean containsSpecificError = bindingResult.getGlobalErrors().stream()
-                                        .map(ObjectError::getDefaultMessage)
+                                        .filter(Objects::nonNull)
+                                        .map(error -> error.getDefaultMessage())
                                         .allMatch(message -> Objects.equals(message, "日付の前後関係が不正です"));
                         assertTrue(containsSpecificError, "期待する相関チェックのエラーメッセージがありません");
                 }
