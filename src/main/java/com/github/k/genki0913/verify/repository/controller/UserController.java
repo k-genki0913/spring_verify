@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.github.k.genki0913.verify.repository.constant.View;
 import com.github.k.genki0913.verify.repository.jpa.UserRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -40,6 +41,6 @@ public class UserController {
             model.addAttribute("users", userRepository.findAll());
         }
 
-        return "user/view";
+        return View.VIEW;
     }
 }
