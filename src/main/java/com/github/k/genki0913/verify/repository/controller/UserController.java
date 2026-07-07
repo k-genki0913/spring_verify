@@ -1,22 +1,38 @@
 package com.github.k.genki0913.verify.repository.controller;
 
+import com.github.k.genki0913.verify.common.util.WebUrlUtils;
+import com.github.k.genki0913.verify.common.validation.UniqueEmailValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.github.k.genki0913.verify.repository.constant.View;
+import com.github.k.genki0913.verify.repository.form.UserRegistForm;
 import com.github.k.genki0913.verify.repository.jpa.UserRepository;
+
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
+    private final UniqueEmailValidator uniqueEmailValidator;
     private final UserRepository userRepository;
 
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, UniqueEmailValidator uniqueEmailValidator) {
         this.userRepository = userRepository;
+        this.uniqueEmailValidator = uniqueEmailValidator;
+    }
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(uniqueEmailValidator);
     }
 
     /**
@@ -42,5 +58,20 @@ public class UserController {
         }
 
         return View.VIEW;
+    }
+
+    @GetMapping("/regist")
+    public String showRegistForm(Model model) {
+        model.addAttribute("userRegistForm", new UserRegistForm());
+        return View.REGIST;
+    }
+
+    @PostMapping("/regist")
+    public Object regist(@Validated UserRegistForm form, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return View.REGIST;
+        }
+
+        return "redirect:/users";
     }
 }

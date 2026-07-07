@@ -49,4 +49,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return 検索条件に一致するユーザーのリスト
      */
     List<User> findByNameContaining(String name);
+
+    boolean existsByEmail(String email);
 }
