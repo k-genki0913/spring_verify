@@ -1,5 +1,7 @@
 package com.github.k.genki0913.verify.domain;
 
+import com.github.k.genki0913.verify.repository.form.UserRegistForm;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -49,6 +51,11 @@ public class User {
      * 別のコンストラクタを定義しても良いがデフォルトコンストラクタは必ず定義しなければいけない
      */
     public User() {
+    }
+
+    public User(UserRegistForm form) {
+        this.name = form.getName();
+        this.email = form.getEmail();
     }
 
     public Long getId() {

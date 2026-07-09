@@ -1,7 +1,9 @@
 package com.github.k.genki0913.verify.repository.controller;
 
-import com.github.k.genki0913.verify.common.util.WebUrlUtils;
 import com.github.k.genki0913.verify.common.validation.UniqueEmailValidator;
+import com.github.k.genki0913.verify.domain.User;
+
+import com.github.k.genki0913.verify.repository.service.UserRegistrationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,12 +24,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequestMapping("/users")
 public class UserController {
 
+    private final UserRegistrationService userRegistrationService;
     private final UniqueEmailValidator uniqueEmailValidator;
     private final UserRepository userRepository;
 
-    public UserController(UserRepository userRepository, UniqueEmailValidator uniqueEmailValidator) {
+    public UserController(UserRepository userRepository, UniqueEmailValidator uniqueEmailValidator,
+            UserRegistrationService userRegistrationService) {
         this.userRepository = userRepository;
         this.uniqueEmailValidator = uniqueEmailValidator;
+        this.userRegistrationService = userRegistrationService;
     }
 
     @InitBinder
@@ -71,6 +76,9 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return View.REGIST;
         }
+
+        User user = new User(form);
+        this.userRegistrationService.register(user);
 
         return "redirect:/users";
     }
