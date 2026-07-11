@@ -5,15 +5,15 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.github.k.genki0913.verify.repository.form.UserRegistForm;
-import com.github.k.genki0913.verify.repository.jpa.UserRepository;
+import com.github.k.genki0913.verify.repository.service.UserRegistrationService;
 
 @Component
 public class UniqueEmailValidator implements Validator {
 
-    private final UserRepository userRepository;
+    private final UserRegistrationService userRegistrationService;
 
-    public UniqueEmailValidator(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UniqueEmailValidator(UserRegistrationService userRegistrationService) {
+        this.userRegistrationService = userRegistrationService;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class UniqueEmailValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         UserRegistForm form = (UserRegistForm) target;
-        if (userRepository.existsByEmail(form.getEmail())) {
+        if (userRegistrationService.isEmailRegistered(form.getEmail())) {
             errors.rejectValue("email", "common.email.duplicate", "入力されたメールアドレスは既に登録されています。");
         }
     }

@@ -18,6 +18,20 @@ public class UserRegistrationService {
     }
 
     /**
+     * 指定されたメールアドレスが既に登録されているかを確認します。
+     * <p>
+     * データベース内のメールアドレスを検索し、存在有無を判定します。
+     * </p>
+     *
+     * @param email
+     *                  確認対象のメールアドレス
+     * @return 既に登録されている場合は {@code true}、登録されていない場合は {@code false}
+     */
+    public boolean isEmailRegistered(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    /**
      * ユーザーの新規登録を行います。
      * <p>
      * 指定された {@link User} エンティティをデータベースへ保存します。
