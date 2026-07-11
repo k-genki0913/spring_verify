@@ -50,5 +50,25 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     List<User> findByNameContaining(String name);
 
+    /**
+     * メールアドレスによる存在確認を行います。
+     * <p>
+     * <b>メソッド名のルール:</b>
+     * <ul>
+     * <li>{@code existsBy}: 存在判定を行う接頭辞</li>
+     * <li>{@code Email}: {@link User} クラスのプロパティ名（カラム名に対応）</li>
+     * </ul>
+     * </p>
+     * <p>
+     * <b>挙動:</b>
+     * <ul>
+     * <li>指定されたメールアドレスと<b>完全一致</b>するデータがテーブル内に存在するかを判定します。</li>
+     * </ul>
+     * </p>
+     *
+     * @param email
+     *                  検索対象のメールアドレス
+     * @return 存在する場合は {@code true}、存在しない場合は {@code false}
+     */
     boolean existsByEmail(String email);
 }

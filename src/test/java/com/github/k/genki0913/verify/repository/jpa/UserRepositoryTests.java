@@ -51,4 +51,23 @@ public class UserRepositoryTests {
                     .containsExactlyInAnyOrder("山田太郎", "山田花子");
         }
     }
+
+    @Nested
+    @DisplayName("メールアドレスの存在チェック(完全一致)")
+    class existsByEmail {
+
+        @Test
+        @DisplayName("メールアドレスが存在する場合")
+        void givenExistingEmail_whenExistsByEmail_thenReturnTrue() {
+            boolean exists = userRepository.existsByEmail("taro@example.com");
+            assertThat(exists).isTrue();
+        }
+
+        @Test
+        @DisplayName("メールアドレスが存在しない場合")
+        void givenNonExistingEmail_whenExistsByEmail_thenReturnFalse() {
+            boolean exists = userRepository.existsByEmail("unknown@example.com");
+            assertThat(exists).isFalse();
+        }
+    }
 }
