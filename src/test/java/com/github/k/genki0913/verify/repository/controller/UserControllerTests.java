@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -20,6 +21,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.github.k.genki0913.verify.repository.constant.View;
+import com.github.k.genki0913.verify.repository.form.UserRegistForm;
 
 import jakarta.transaction.Transactional;
 
@@ -113,5 +115,20 @@ public class UserControllerTests {
                     .andExpect(model().attribute("users", hasSize(0)));
         }
 
+    }
+
+    @Nested
+    @DisplayName("ユーザー登録画面の表示")
+    class showRegistForm {
+        @Test
+        @DisplayName("登録画面を表示")
+        void givenInitialAccess_whenShowRegistForm_thenStatus200AndReturnUserRegistViewWithUserRegistForm()
+                throws Exception {
+            mockMvc.perform(get("/users/regist"))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name(View.REGIST))
+                    .andExpect(model().attributeExists("userRegistForm"))
+                    .andExpect(model().attribute("userRegistForm", instanceOf(UserRegistForm.class)));
+        }
     }
 }
