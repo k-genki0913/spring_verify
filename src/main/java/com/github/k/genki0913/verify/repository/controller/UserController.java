@@ -35,6 +35,16 @@ public class UserController {
         this.userRegistrationService = userRegistrationService;
     }
 
+    /**
+     * Webデータバインダーを初期化します。
+     * <p>
+     * バリデーション処理に {@link UniqueEmailValidator} を追加登録し、
+     * フォーム入力値に対するカスタムバリデーションを有効化します。
+     * </p>
+     * 
+     * @param binder
+     *                   Webデータバインダー
+     */
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
         binder.addValidators(uniqueEmailValidator);
@@ -65,12 +75,35 @@ public class UserController {
         return View.VIEW;
     }
 
+    /**
+     * ユーザー登録画面を表示します。
+     * <p>
+     * 画面入力用オブジェクト {@link UserRegistForm} を初期化してモデルに追加します。
+     * </p>
+     * 
+     * @param model
+     *                  ビューにデータを渡すためのモデル。フォームオブジェクトが格納されます。
+     * @return ユーザー登録画面のテンプレート名 ("user/regist")
+     */
     @GetMapping("/regist")
     public String showRegistForm(Model model) {
         model.addAttribute("userRegistForm", new UserRegistForm());
         return View.REGIST;
     }
 
+    /**
+     * ユーザー登録処理を実行します。
+     * <p>
+     * 入力値のバリデーションを行い、エラーがある場合は登録画面へ戻ります。
+     * 正常終了した場合は、ユーザー一覧画面へリダイレクトします。
+     * </p>
+     * 
+     * @param form
+     *                          画面から入力されたユーザー登録情報。{@code @Validated} によりチェックされます。
+     * @param bindingResult
+     *                          バリデーション結果を保持するオブジェクト。エラー有無の判定に使用します。
+     * @return 処理結果に応じたビュー名またはリダイレクト先
+     */
     @PostMapping("/regist")
     public Object regist(@Validated UserRegistForm form, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
