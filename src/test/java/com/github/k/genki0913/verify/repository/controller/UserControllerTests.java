@@ -6,8 +6,11 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -129,6 +132,75 @@ public class UserControllerTests {
                     .andExpect(view().name(View.REGIST))
                     .andExpect(model().attributeExists("userRegistForm"))
                     .andExpect(model().attribute("userRegistForm", instanceOf(UserRegistForm.class)));
+        }
+    }
+
+    @Nested
+    @DisplayName("ユーザー登録処理")
+    class regist {
+        @Test
+        @DisplayName("登録処理: 入力値が不正な場合、エラー画面に戻ること")
+        void givenEmptyAllParams_whenRegist_thenHasRequiredErrorAndReturnFormView() throws Exception {
+            mockMvc.perform(post("/users/regist")
+                    .param("name", "")
+                    .param("email", "")
+                    .with(csrf()))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name(View.REGIST))
+                    .andExpect(model().attributeErrorCount("userRegistForm", 2))
+                    .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "name", "NotBlank"))
+                    .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "email", "NotBlank"));
+        }
+
+        @Test
+        @DisplayName("登録処理: メールアドレスにアットマークが含まれていない場合、パターンエラーが発生し、元画面が再描画されること")
+        void givenNotExistAtSignEmail_whenRegist_thenHasPatternErrorAndReturnFormView() throws Exception {
+            mockMvc.perform(post("/users/regist")
+                    .param("name", "テスト太郎")
+                    .param("email", "test")
+                    .with(csrf()))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name(View.REGIST))
+                    .andExpect(model().attributeErrorCount("userRegistForm", 1))
+                    .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "email", "Email"));
+        }
+
+        @Test
+        @DisplayName("登録処理: メールアドレスにドメインが含まれていない場合、パターンエラーが発生し、元画面が再描画されること")
+        void givenNotExistDomainEmail_whenRegist_thenHasPatternErrorAndReturnFormView() throws Exception {
+            mockMvc.perform(post("/users/regist")
+                    .param("name", "テスト太郎")
+                    .param("email", "test@")
+                    .with(csrf()))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name(View.REGIST))
+                    .andExpect(model().attributeErrorCount("userRegistForm", 1))
+                    .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "email", "Email"));
+        }
+
+        @Test
+        @DisplayName("登録処理: メールアドレスが既に存在する場合、重複エラーが発生し、元画面が再描画されること")
+        void givenDuplicatedEmail_whenRegist_thenHasCommonEmailDuplicateErrorAndReturnFormView() throws Exception {
+            mockMvc.perform(post("/users/regist")
+                    .param("name", "テスト太郎")
+                    .param("email", "taro@example.com")
+                    .with(csrf()))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name(View.REGIST))
+                    .andExpect(model().attributeErrorCount("userRegistForm", 1))
+                    .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "email", "common.email.duplicate"));
+        }
+
+        @Test
+        @DisplayName("登録処理: 正常終了")
+        void givenValidInput_whenRegist_thenNoErrorsAndRedirectForm() throws Exception {
+            mockMvc.perform(post("/users/regist")
+                    .param("name", "テスト太郎")
+                    .param("email", "test@example")
+                    .with(csrf()))
+                    .andExpect(status().isFound())
+                    .andExpect(redirectedUrl("/users"))
+                    .andExpect(model().hasNoErrors());
         }
     }
 }
