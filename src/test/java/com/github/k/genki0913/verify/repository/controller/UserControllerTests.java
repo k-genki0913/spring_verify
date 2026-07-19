@@ -131,7 +131,8 @@ public class UserControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(View.REGIST))
                     .andExpect(model().attributeExists("userRegistForm"))
-                    .andExpect(model().attribute("userRegistForm", instanceOf(UserRegistForm.class)));
+                    .andExpect(model().attribute("userRegistForm",
+                            instanceOf(UserRegistForm.class)));
         }
     }
 
@@ -148,8 +149,10 @@ public class UserControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(View.REGIST))
                     .andExpect(model().attributeErrorCount("userRegistForm", 2))
-                    .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "name", "NotBlank"))
-                    .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "email", "NotBlank"));
+                    .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "name",
+                            "NotBlank"))
+                    .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "email",
+                            "NotBlank"));
         }
 
         @Test
@@ -162,7 +165,8 @@ public class UserControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(View.REGIST))
                     .andExpect(model().attributeErrorCount("userRegistForm", 1))
-                    .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "email", "Email"));
+                    .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "email",
+                            "Email"));
         }
 
         @Test
@@ -175,12 +179,14 @@ public class UserControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(View.REGIST))
                     .andExpect(model().attributeErrorCount("userRegistForm", 1))
-                    .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "email", "Email"));
+                    .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "email",
+                            "Email"));
         }
 
         @Test
         @DisplayName("登録処理: メールアドレスが既に存在する場合、重複エラーが発生し、元画面が再描画されること")
-        void givenDuplicatedEmail_whenRegist_thenHasCommonEmailDuplicateErrorAndReturnFormView() throws Exception {
+        void givenDuplicatedEmail_whenRegist_thenHasCommonEmailDuplicateErrorAndReturnFormView()
+                throws Exception {
             mockMvc.perform(post("/users/regist")
                     .param("name", "テスト太郎")
                     .param("email", "taro@example.com")
@@ -188,7 +194,8 @@ public class UserControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(View.REGIST))
                     .andExpect(model().attributeErrorCount("userRegistForm", 1))
-                    .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "email", "common.email.duplicate"));
+                    .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "email",
+                            "common.email.duplicate"));
         }
 
         @Test
@@ -201,6 +208,31 @@ public class UserControllerTests {
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("/users"))
                     .andExpect(model().hasNoErrors());
+        }
+    }
+
+    @Nested
+    @DisplayName("ユーザー編集画面表示")
+    class showEditForm {
+
+        @Test
+        @DisplayName("更新対象ユーザーが存在する場合")
+        void givenExistUserId_whenShowEditForm_thenStatus200AndReturnUserEditViewWithUserUpdateForm() throws Exception {
+            mockMvc.perform(get("/users/1/edit"))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name(View.EDIT))
+                    .andExpect(model().attributeExists("userUpdateForm"))
+                    .andExpect(model().attribute("userUpdateForm", hasProperty("id", is(1L))))
+                    .andExpect(model().attribute("userUpdateForm", hasProperty("name", is("山田太郎"))))
+                    .andExpect(model().attribute("userUpdateForm", hasProperty("email", is("taro@example.com"))));
+        }
+
+        @Test
+        @DisplayName("更新対象ユーザーが存在しない場合")
+        void givenNotExistUserId_whenShowEditForm_thenStatus404AndReturn404ErrorView() throws Exception {
+            mockMvc.perform(get("/users/999/edit"))
+                    .andExpect(status().isNotFound())
+                    .andExpect(view().name("error/404"));
         }
     }
 }

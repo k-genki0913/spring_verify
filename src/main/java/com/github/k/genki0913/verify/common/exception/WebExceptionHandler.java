@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.github.k.genki0913.verify.config.AppValidationProperties;
+import com.github.k.genki0913.verify.repository.exception.UserNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -237,6 +238,13 @@ public class WebExceptionHandler {
 
         log.warn("【リソース未検出エラー】存在しないリソースへのリクエストを検知しました。エラー詳細: {}", ex.getMessage());
 
+        return new ModelAndView("error/404");
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ModelAndView handleUserNotFound(UserNotFoundException ex) {
+        log.warn("【ユーザー未検出】存在しないユーザーへのアクセスが発生しました。エラー詳細: {}", ex.getMessage());
         return new ModelAndView("error/404");
     }
 
