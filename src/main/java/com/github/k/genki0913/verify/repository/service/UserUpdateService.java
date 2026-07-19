@@ -1,5 +1,7 @@
 package com.github.k.genki0913.verify.repository.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.github.k.genki0913.verify.domain.User;
@@ -32,5 +34,12 @@ public class UserUpdateService {
     public User findById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("ユーザーが見つかりません"));
+    }
+
+    public boolean isEmailRegisteredByOther(Long id, String email) {
+
+        Optional<User> user = userRepository.findByEmail(email);
+
+        return user.isPresent() && !user.get().getId().equals(id);
     }
 }

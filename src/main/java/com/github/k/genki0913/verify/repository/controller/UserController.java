@@ -1,10 +1,10 @@
 package com.github.k.genki0913.verify.repository.controller;
 
-import com.github.k.genki0913.verify.common.validation.UniqueEmailValidator;
 import com.github.k.genki0913.verify.domain.User;
 
 import com.github.k.genki0913.verify.repository.service.UserRegistrationService;
 import com.github.k.genki0913.verify.repository.service.UserUpdateService;
+import com.github.k.genki0913.verify.repository.validation.UniqueEmailForRegistrationValidator;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,23 +31,23 @@ public class UserController {
 
     private final UserRegistrationService userRegistrationService;
     private final UserUpdateService userUpdateService;
-    private final UniqueEmailValidator uniqueEmailValidator;
+    private final UniqueEmailForRegistrationValidator uniqueEmailForRegistrationValidator;
     private final UserRepository userRepository;
 
     public UserController(UserRepository userRepository,
             UserUpdateService userUpdateService,
-            UniqueEmailValidator uniqueEmailValidator,
+            UniqueEmailForRegistrationValidator uniqueEmailForRegistrationValidator,
             UserRegistrationService userRegistrationService) {
         this.userRepository = userRepository;
         this.userUpdateService = userUpdateService;
-        this.uniqueEmailValidator = uniqueEmailValidator;
+        this.uniqueEmailForRegistrationValidator = uniqueEmailForRegistrationValidator;
         this.userRegistrationService = userRegistrationService;
     }
 
     /**
      * Webデータバインダーを初期化します。
      * <p>
-     * バリデーション処理に {@link UniqueEmailValidator} を追加登録し、
+     * バリデーション処理に {@link UniqueEmailForRegistrationValidator} を追加登録し、
      * フォーム入力値に対するカスタムバリデーションを有効化します。
      * </p>
      * 
@@ -56,7 +56,7 @@ public class UserController {
      */
     @InitBinder("userRegistForm")
     protected void initBinder(WebDataBinder binder) {
-        binder.addValidators(uniqueEmailValidator);
+        binder.addValidators(uniqueEmailForRegistrationValidator);
     }
 
     /**

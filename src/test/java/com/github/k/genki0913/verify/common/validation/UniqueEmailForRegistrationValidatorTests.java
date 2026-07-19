@@ -15,15 +15,16 @@ import org.springframework.validation.BeanPropertyBindingResult;
 
 import com.github.k.genki0913.verify.repository.form.UserRegistForm;
 import com.github.k.genki0913.verify.repository.service.UserRegistrationService;
+import com.github.k.genki0913.verify.repository.validation.UniqueEmailForRegistrationValidator;
 
 @ExtendWith(MockitoExtension.class)
-public class UniqueEmailValidatorTests {
+public class UniqueEmailForRegistrationValidatorTests {
 
     @Mock
     private UserRegistrationService userRegistrationService;
 
     @InjectMocks
-    private UniqueEmailValidator uniqueEmailValidator;
+    private UniqueEmailForRegistrationValidator uniqueEmailForRegistrationValidator;
 
     @Test
     @DisplayName("メールアドレスが重複している場合、エラーが登録されること")
@@ -34,7 +35,7 @@ public class UniqueEmailValidatorTests {
 
         doReturn(true).when(userRegistrationService).isEmailRegistered("duplicatedEmail@example.com");
 
-        uniqueEmailValidator.validate(form, errors);
+        uniqueEmailForRegistrationValidator.validate(form, errors);
 
         assertThat(errors.hasErrors()).isTrue();
         assertThat(errors.getFieldError("email").getCode()).isEqualTo("common.email.duplicate");
@@ -50,7 +51,7 @@ public class UniqueEmailValidatorTests {
 
         doReturn(false).when(userRegistrationService).isEmailRegistered("uniqueEmail@example.com");
 
-        uniqueEmailValidator.validate(form, errors);
+        uniqueEmailForRegistrationValidator.validate(form, errors);
 
         assertThat(errors.hasErrors()).isFalse();
         verify(userRegistrationService, times(1)).isEmailRegistered("uniqueEmail@example.com");

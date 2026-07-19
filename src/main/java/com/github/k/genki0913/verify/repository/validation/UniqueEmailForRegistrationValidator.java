@@ -1,4 +1,4 @@
-package com.github.k.genki0913.verify.common.validation;
+package com.github.k.genki0913.verify.repository.validation;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -8,11 +8,11 @@ import com.github.k.genki0913.verify.repository.form.UserRegistForm;
 import com.github.k.genki0913.verify.repository.service.UserRegistrationService;
 
 @Component
-public class UniqueEmailValidator implements Validator {
+public class UniqueEmailForRegistrationValidator implements Validator {
 
     private final UserRegistrationService userRegistrationService;
 
-    public UniqueEmailValidator(UserRegistrationService userRegistrationService) {
+    public UniqueEmailForRegistrationValidator(UserRegistrationService userRegistrationService) {
         this.userRegistrationService = userRegistrationService;
     }
 

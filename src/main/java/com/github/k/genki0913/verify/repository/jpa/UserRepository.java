@@ -1,6 +1,7 @@
 package com.github.k.genki0913.verify.repository.jpa;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -71,4 +72,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return 存在する場合は {@code true}、存在しない場合は {@code false}
      */
     boolean existsByEmail(String email);
+
+    Optional<User> findByEmail(String email);
 }
