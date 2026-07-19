@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.github.k.genki0913.verify.repository.constant.View;
+import com.github.k.genki0913.verify.repository.exception.UserNotFoundException;
 import com.github.k.genki0913.verify.repository.form.UserRegistForm;
 import com.github.k.genki0913.verify.repository.form.UserUpdateForm;
 import com.github.k.genki0913.verify.repository.jpa.UserRepository;
@@ -124,6 +125,23 @@ public class UserController {
         return "redirect:/users";
     }
 
+    /**
+     * ユーザー編集画面を表示します。
+     * <p>
+     * 指定されたIDに対応するユーザー情報を取得し、編集用オブジェクト {@link UserUpdateForm}
+     * に変換した上でモデルに追加します。<br>
+     * 該当するユーザーが存在しない場合は、{@link UserNotFoundException} がスローされ、
+     * 404エラーページへ遷移します。
+     * </p>
+     * 
+     * @param id
+     *                  更新対象となるユーザーのID
+     * @param model
+     *                  ビューにデータを渡すためのモデル。編集用フォームオブジェクトが格納されます。
+     * @return ユーザー編集画面のテンプレート名 ({@code View.EDIT})
+     * @throws UserNotFoundException
+     *                                   指定されたIDのユーザーが存在しない場合
+     */
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable Long id, Model model) {
         User user = userUpdateService.findById(id);
