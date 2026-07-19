@@ -23,6 +23,9 @@ public class UniqueEmailValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
+        if (!supports(target.getClass())) {
+            return;
+        }
         UserRegistForm form = (UserRegistForm) target;
         if (userRegistrationService.isEmailRegistered(form.getEmail())) {
             errors.rejectValue("email", "common.email.duplicate", "入力されたメールアドレスは既に登録されています。");

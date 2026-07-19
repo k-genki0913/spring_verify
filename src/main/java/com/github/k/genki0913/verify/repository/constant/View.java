@@ -5,4 +5,6 @@ public interface View {
     String VIEW = "user/view";
 
     String REGIST = "user/regist";
+
+    String EDIT = "user/edit";
 }

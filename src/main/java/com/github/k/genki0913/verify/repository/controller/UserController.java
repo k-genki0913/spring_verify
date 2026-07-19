@@ -4,6 +4,8 @@ import com.github.k.genki0913.verify.common.validation.UniqueEmailValidator;
 import com.github.k.genki0913.verify.domain.User;
 
 import com.github.k.genki0913.verify.repository.service.UserRegistrationService;
+import com.github.k.genki0913.verify.repository.service.UserUpdateService;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.github.k.genki0913.verify.repository.constant.View;
 import com.github.k.genki0913.verify.repository.form.UserRegistForm;
+import com.github.k.genki0913.verify.repository.form.UserUpdateForm;
 import com.github.k.genki0913.verify.repository.jpa.UserRepository;
 
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -25,12 +29,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class UserController {
 
     private final UserRegistrationService userRegistrationService;
+    private final UserUpdateService userUpdateService;
     private final UniqueEmailValidator uniqueEmailValidator;
     private final UserRepository userRepository;
 
-    public UserController(UserRepository userRepository, UniqueEmailValidator uniqueEmailValidator,
+    public UserController(UserRepository userRepository,
+            UserUpdateService userUpdateService,
+            UniqueEmailValidator uniqueEmailValidator,
             UserRegistrationService userRegistrationService) {
         this.userRepository = userRepository;
+        this.userUpdateService = userUpdateService;
         this.uniqueEmailValidator = uniqueEmailValidator;
         this.userRegistrationService = userRegistrationService;
     }
@@ -45,7 +53,7 @@ public class UserController {
      * @param binder
      *                   Webデータバインダー
      */
-    @InitBinder
+    @InitBinder("userRegistForm")
     protected void initBinder(WebDataBinder binder) {
         binder.addValidators(uniqueEmailValidator);
     }
@@ -114,5 +122,12 @@ public class UserController {
         this.userRegistrationService.register(user);
 
         return "redirect:/users";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        User user = userUpdateService.findById(id);
+        model.addAttribute("userUpdateForm", new UserUpdateForm(user));
+        return View.EDIT;
     }
 }

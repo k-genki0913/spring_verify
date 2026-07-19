@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::body})}">
+    <body>
+        <div class="container mt-4">
+            <div class="card shadow-sm col-md-8 mx-auto">
+                <div class="card-header bg-warning text-white">
+                    <h4 class="card-title mb-0">✏️ ユーザー編集</h4>
+                </div>
+
+                <div class="card-body">
+                    <!-- 更新用フォーム。th:actionは更新実行用URLを指定します -->
+                    <form
+                        th:action="@{/users/{id}/update(id=${userUpdateForm.id})}"
+                        th:object="${userUpdateForm}"
+                        method="post"
+                    >
+                        <!-- 隠しフィールド：更新対象のIDを保持するために必須 -->
+                        <input type="hidden" th:field="*{id}" />
+
+                        <!-- 名前入力 -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">名前</label>
+                            <input
+                                type="text"
+                                id="name"
+                                th:field="*{name}"
+                                th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"
+                                class="form-control"
+                                placeholder="例：山田 太郎"
+                            />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                                名前エラー
+                            </div>
+                        </div>
+
+                        <!-- メールアドレス入力 -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">メールアドレス</label>
+                            <input
+                                type="email"
+                                id="email"
+                                th:field="*{email}"
+                                th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"
+                                class="form-control"
+                                placeholder="例：yamada@example.com"
+                            />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                                メールエラー
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a th:href="@{/users}" class="btn btn-outline-secondary">キャンセル</a>
+                            <button type="submit" class="btn btn-warning text-white">更新する</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
