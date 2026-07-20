@@ -150,14 +150,32 @@ public class UserController {
         return View.EDIT;
     }
 
+    /**
+     * ユーザー情報を更新する。
+     * <p>
+     * 入力値のバリデーションチェックを行い、エラーが存在する場合は編集画面（{@link View#EDIT}）へ遷移する。
+     * バリデーションエラーがない場合は、受け取ったフォームの値を元にユーザー情報を更新し、
+     * 一覧画面（/users）へリダイレクトする。
+     * </p>
+     *
+     * @param form
+     *                          入力されたユーザー更新フォーム（バリデーション対象）
+     * @param bindingResult
+     *                          バリデーションの結果を格納するオブジェクト
+     * @return 処理成功時は一覧画面へのリダイレクト文字列（"redirect:/users"）、バリデーションエラー時は編集画面のビュー名
+     */
     @PostMapping("/{id}/update")
     public String update(
             @Validated(UserUpdateForm.ValidationSequence.class) @ModelAttribute("userUpdateForm") UserUpdateForm form,
             BindingResult bindingResult) {
+
         if (bindingResult.hasErrors()) {
             return View.EDIT;
         }
 
-        return View.VIEW;
+        User user = new User(form);
+        this.userUpdateService.update(user);
+
+        return "redirect:/users";
     }
 }

@@ -1,6 +1,7 @@
 package com.github.k.genki0913.verify.domain;
 
 import com.github.k.genki0913.verify.repository.form.UserRegistForm;
+import com.github.k.genki0913.verify.repository.form.UserUpdateForm;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -54,6 +55,12 @@ public class User {
     }
 
     public User(UserRegistForm form) {
+        this.name = form.getName();
+        this.email = form.getEmail();
+    }
+
+    public User(UserUpdateForm form) {
+        this.id = form.getId();
         this.name = form.getName();
         this.email = form.getEmail();
     }
