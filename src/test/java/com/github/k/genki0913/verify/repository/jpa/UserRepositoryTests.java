@@ -3,6 +3,7 @@ package com.github.k.genki0913.verify.repository.jpa;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -68,6 +69,32 @@ public class UserRepositoryTests {
         void givenNonExistingEmail_whenExistsByEmail_thenReturnFalse() {
             boolean exists = userRepository.existsByEmail("unknown@example.com");
             assertThat(exists).isFalse();
+        }
+    }
+
+    @Nested
+    @DisplayName("メールアドレスの完全一致取得")
+    class findByEmail {
+        @Test
+        @DisplayName("指定したメールアドレスのユーザーが存在する場合、取得できること")
+        void givenExistUserEmail_whenFindByEmail_thenReturnUser() {
+            String existingEmail = "taro@example.com";
+            Optional<User> result = userRepository.findByEmail(existingEmail);
+
+            assertThat(result).isPresent();
+            assertThat(result.get().getId()).isEqualTo(1L);
+            assertThat(result.get().getEmail()).isEqualTo(existingEmail);
+            assertThat(result.get().getName()).isEqualTo("山田太郎");
+        }
+
+        @Test
+        @DisplayName("指定したメールアドレスのユーザーが存在しない場合、空が変えること")
+        void givenNonExistUserEmail_whenFindByEmail_thenReturnEmpty() {
+            String nonExistentEmail = "notfound@example.com";
+
+            Optional<User> result = userRepository.findByEmail(nonExistentEmail);
+
+            assertThat(result).isEmpty();
         }
     }
 }
