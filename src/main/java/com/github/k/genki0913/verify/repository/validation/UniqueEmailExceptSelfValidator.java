@@ -1,6 +1,5 @@
 package com.github.k.genki0913.verify.repository.validation;
 
-import com.github.k.genki0913.verify.common.validation.FieldsMatchValidator;
 import com.github.k.genki0913.verify.repository.form.UserUpdateForm;
 import com.github.k.genki0913.verify.repository.service.UserUpdateService;
 
