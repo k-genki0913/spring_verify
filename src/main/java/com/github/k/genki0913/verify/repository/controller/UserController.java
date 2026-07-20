@@ -22,6 +22,7 @@ import com.github.k.genki0913.verify.repository.jpa.UserRepository;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -147,5 +148,16 @@ public class UserController {
         User user = userUpdateService.findById(id);
         model.addAttribute("userUpdateForm", new UserUpdateForm(user));
         return View.EDIT;
+    }
+
+    @PostMapping("/{id}/update")
+    public String update(
+            @Validated(UserUpdateForm.ValidationSequence.class) @ModelAttribute("userUpdateForm") UserUpdateForm form,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return View.EDIT;
+        }
+
+        return View.VIEW;
     }
 }

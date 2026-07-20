@@ -1,21 +1,33 @@
 package com.github.k.genki0913.verify.repository.form;
 
+import com.github.k.genki0913.verify.common.validation.ValidationGroup;
 import com.github.k.genki0913.verify.domain.User;
+import com.github.k.genki0913.verify.repository.validation.UniqueEmailExceptSelf;
 
+import jakarta.validation.GroupSequence;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+@UniqueEmailExceptSelf(groups = ValidationGroup.Correlation.class)
 public class UserUpdateForm {
 
-    @NotNull
+    @GroupSequence({
+            ValidationGroup.Required.class,
+            ValidationGroup.Format.class,
+            ValidationGroup.Correlation.class
+    })
+    public @interface ValidationSequence {
+    }
+
+    @NotNull(groups = ValidationGroup.Required.class)
     private Long id;
 
-    @NotBlank
+    @NotBlank(groups = ValidationGroup.Required.class)
     private String name;
 
-    @NotBlank
-    @Email
+    @NotBlank(groups = ValidationGroup.Required.class)
+    @Email(groups = ValidationGroup.Format.class)
     private String email;
 
     public UserUpdateForm() {
