@@ -1,4 +1,4 @@
-package com.github.k.genki0913.verify.common.validation;
+package com.github.k.genki0913.verify.repository.validation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
@@ -15,7 +15,6 @@ import org.springframework.validation.BeanPropertyBindingResult;
 
 import com.github.k.genki0913.verify.repository.form.UserRegistForm;
 import com.github.k.genki0913.verify.repository.service.UserRegistrationService;
-import com.github.k.genki0913.verify.repository.validation.UniqueEmailForRegistrationValidator;
 
 @ExtendWith(MockitoExtension.class)
 public class UniqueEmailForRegistrationValidatorTests {
