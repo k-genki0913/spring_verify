@@ -73,5 +73,26 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     boolean existsByEmail(String email);
 
+    /**
+     * メールアドレスによるユーザー情報の取得を行います。
+     * <p>
+     * <b>メソッド名のルール:</b>
+     * <ul>
+     * <li>{@code findBy}: データを検索・取得する接頭辞</li>
+     * <li>{@code Email}: {@link User} クラスのプロパティ名（カラム名に対応）</li>
+     * </ul>
+     * </p>
+     * <p>
+     * <b>挙動:</b>
+     * <ul>
+     * <li>指定されたメールアドレスと<b>完全一致</b>するユーザー情報をテーブルから検索します。</li>
+     * <li>データが存在する場合は {@link Optional} でラップしたユーザー情報を返し、存在しない場合は {@link Optional#empty()} を返します。</li>
+     * </ul>
+     * </p>
+     *
+     * @param email
+     *                  検索対象のメールアドレス
+     * @return 該当するユーザーが存在する場合は {@link Optional} に包まれた {@link User}、存在しない場合は空の {@link Optional}
+     */
     Optional<User> findByEmail(String email);
 }
