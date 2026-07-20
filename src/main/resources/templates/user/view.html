@@ -34,6 +34,7 @@
                                 <th scope="col">ID</th>
                                 <th scope="col">名前</th>
                                 <th scope="col">メールアドレス</th>
+                                <th scope="col" class="text-center">操作</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -41,6 +42,13 @@
                                 <td th:text="${user.id}">1</td>
                                 <td th:text="${user.name}">山田 太郎</td>
                                 <td th:text="${user.email}">yamada@example.com</td>
+                                <td class="text-center">
+                                    <a
+                                        th:href="@{/users/{id}/edit(id=${user.id})}"
+                                        class="btn btn-sm btn-outline-primary"
+                                        >編集</a
+                                    >
+                                </td>
                             </tr>
                         </tbody>
                     </table>
