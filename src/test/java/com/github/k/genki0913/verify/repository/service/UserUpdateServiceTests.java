@@ -60,4 +60,46 @@ public class UserUpdateServiceTests {
             verify(userRepository, times(1)).findById(id);
         }
     }
+
+    @Nested
+    @DisplayName("更新メールアドレスが別ユーザーで利用されているか確認する")
+    class isEmailRegisteredByOther {
+        @Test
+        @DisplayName("更新メールアドレスを利用しているユーザーがいない場合、falseを返す")
+        void givenNotExistEmail_whenIsEmailRegisteredByOther_thenReturnFalse() {
+            when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.empty());
+
+            boolean result = userUpdateService.isEmailRegisteredByOther(1L, "test@example.com");
+
+            assertThat(result).isFalse();
+        }
+
+        @Test
+        @DisplayName("更新メールアドレスを利用しているユーザーが存在し、別IDの場合、trueを返す")
+        void givenExistEmailExceptSelf_whenIsEmailRegisteredByOther_thenReturnTrue() {
+            User existingOther = new User();
+            existingOther.setId(2L);
+            existingOther.setName("テスト別太郎");
+            existingOther.setEmail("test@example.com");
+            when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(existingOther));
+
+            boolean result = userUpdateService.isEmailRegisteredByOther(1L, "test@example.com");
+
+            assertThat(result).isTrue();
+        }
+
+        @Test
+        @DisplayName("更新メールアドレスを利用しているユーザーが存在し、同一IDの場合、falseを返す")
+        void givenExistEmailOfSelf_whenIsEmailRegisteredByOther_thenReturnFalse() {
+            User existingSelf = new User();
+            existingSelf.setId(1L);
+            existingSelf.setName("テスト太郎");
+            existingSelf.setEmail("test@example.com");
+            when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(existingSelf));
+
+            boolean result = userUpdateService.isEmailRegisteredByOther(1L, "test@example.com");
+
+            assertThat(result).isFalse();
+        }
+    }
 }
