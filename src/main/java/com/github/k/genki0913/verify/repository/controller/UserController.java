@@ -164,7 +164,7 @@ public class UserController {
      *                          バリデーションの結果を格納するオブジェクト
      * @return 処理成功時は一覧画面へのリダイレクト文字列（"redirect:/users"）、バリデーションエラー時は編集画面のビュー名
      */
-    @PostMapping("/{id}/update")
+    @PostMapping("/update")
     public String update(
             @Validated(UserUpdateForm.ValidationSequence.class) @ModelAttribute("userUpdateForm") UserUpdateForm form,
             BindingResult bindingResult) {

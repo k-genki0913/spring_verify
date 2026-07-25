@@ -10,6 +10,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -233,6 +234,124 @@ public class UserControllerTests {
             mockMvc.perform(get("/users/999/edit"))
                     .andExpect(status().isNotFound())
                     .andExpect(view().name("error/404"));
+        }
+    }
+
+    @Nested
+    @DisplayName("ユーザー更新処理")
+    class update {
+        @Test
+        @DisplayName("POST検証: 異常系(id、名前、メールアドレスが未入力の場合、必須バリデーションエラーが発生し、元画面が再描画されること)")
+        void givenEmptyAllParams_whenUpdate_thenHasRequiredErrorAndReturnFormView() throws Exception {
+            mockMvc.perform(post("/users/update")
+                    .param("id", "")
+                    .param("name", "")
+                    .param("email", "")
+                    .with(csrf()))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name(View.EDIT))
+                    .andExpect(model().attributeErrorCount("userUpdateForm", 3))
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "id", "NotNull"))
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "name", "NotBlank"))
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email", "NotBlank"));
+        }
+
+        @Test
+        @DisplayName("POST検証: 異常系(名前が未入力の場合、必須バリデーションエラーが発生し、元画面が再描画されること)")
+        void givenEmptyIdParam_whenUpdate_thenHasRequiredErrorAndReturnFormView() throws Exception {
+            mockMvc.perform(post("/users/update")
+                    .param("id", "")
+                    .param("name", "テスト太郎")
+                    .param("email", "test@example.com")
+                    .with(csrf()))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name(View.EDIT))
+                    .andExpect(model().attributeErrorCount("userUpdateForm", 1))
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "id", "NotNull"));
+        }
+
+        @Test
+        @DisplayName("POST検証: 異常系(名前が未入力の場合、必須バリデーションエラーが発生し、元画面が再描画されること)")
+        void givenEmptyNameParam_whenUpdate_thenHasRequiredErrorAndReturnFormView() throws Exception {
+            mockMvc.perform(post("/users/update")
+                    .param("id", "999")
+                    .param("name", "")
+                    .param("email", "test@example.com")
+                    .with(csrf()))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name(View.EDIT))
+                    .andExpect(model().attributeErrorCount("userUpdateForm", 1))
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "name", "NotBlank"));
+        }
+
+        @Test
+        @DisplayName("POST検証: 異常系(メールアドレスが未入力の場合、必須バリデーションエラーが発生し、元画面が再描画されること)")
+        void givenEmptyEmailParam_whenUpdate_thenHasRequiredErrorAndReturnFormView() throws Exception {
+            mockMvc.perform(post("/users/update")
+                    .param("id", "999")
+                    .param("name", "テスト太郎")
+                    .param("email", "")
+                    .with(csrf()))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name(View.EDIT))
+                    .andExpect(model().attributeErrorCount("userUpdateForm", 1))
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email", "NotBlank"));
+        }
+
+        @Test
+        @DisplayName("POST検証: 異常系(メールアドレスにアットマークが含まれていない場合、パターンバリデーションエラーが発生し、元画面が再描画されること)")
+        void givenNotExistAtSignEmail_thenHasPatternErrorAndReturnFormView() throws Exception {
+            mockMvc.perform(post("/users/update")
+                    .param("id", "999")
+                    .param("name", "テスト太郎")
+                    .param("email", "test")
+                    .with(csrf()))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name(View.EDIT))
+                    .andExpect(model().attributeErrorCount("userUpdateForm", 1))
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email", "Email"));
+        }
+
+        @Test
+        @DisplayName("POST検証: 異常系(メールアドレスにドメインが含まれていない場合、パターンバリデーションエラーが発生し、元画面が再描画されること)")
+        void givenNotExistDomainEmail_thenHasPatternErrorAndReturnFormView() throws Exception {
+            mockMvc.perform(post("/users/update")
+                    .param("id", "999")
+                    .param("name", "テスト太郎")
+                    .param("email", "test@")
+                    .with(csrf()))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name(View.EDIT))
+                    .andExpect(model().attributeErrorCount("userUpdateForm", 1))
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email", "Email"));
+        }
+
+        @Test
+        @DisplayName("POST検証: 異常系(メールアドレスが更新者以外のIDで利用されている場合、パターンバリデーションエラーが発生し、元画面が再描画されること)")
+        void givenExistEmailByOther_whenUpdate_thenHasUniqueEmailExceptSelfErrorAndReturnFormView() throws Exception {
+            mockMvc.perform(post("/users/update")
+                    .param("id", "999")
+                    .param("name", "テスト太郎")
+                    .param("email", "taro@example.com")
+                    .with(csrf()))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name(View.EDIT))
+                    .andExpect(model().attributeErrorCount("userUpdateForm", 1))
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email", "UniqueEmailExceptSelf"));
+        }
+
+        @Test
+        @DisplayName("POST検証: 正常系(全ての入力値が正常な場合、エラーなしでユーザー一覧画面へリダイレクトされること)")
+        void givenValidInput_whenUpdate_thenNoErrorsAndRedirectToUsers() throws Exception {
+            mockMvc.perform(post("/users/update")
+                    .param("id", "3")
+                    .param("name", "テスト太郎")
+                    .param("email", "test@example.com")
+                    .with(csrf()))
+                    .andDo(print())
+                    .andExpect(status().isFound())
+                    .andExpect(redirectedUrl("/users"))
+                    .andExpect(model().hasNoErrors());
         }
     }
 }

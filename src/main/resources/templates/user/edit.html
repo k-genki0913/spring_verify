@@ -9,11 +9,7 @@
 
                 <div class="card-body">
                     <!-- 更新用フォーム。th:actionは更新実行用URLを指定します -->
-                    <form
-                        th:action="@{/users/{id}/update(id=${userUpdateForm.id})}"
-                        th:object="${userUpdateForm}"
-                        method="post"
-                    >
+                    <form th:action="@{/users/update}" th:object="${userUpdateForm}" method="post">
                         <!-- 隠しフィールド：更新対象のIDを保持するために必須 -->
                         <input type="hidden" th:field="*{id}" />
 
