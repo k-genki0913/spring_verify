@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -15,14 +16,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.github.k.genki0913.verify.repository.constant.View;
 import com.github.k.genki0913.verify.repository.form.UserRegistForm;
@@ -30,6 +35,7 @@ import com.github.k.genki0913.verify.repository.form.UserRegistForm;
 import jakarta.transaction.Transactional;
 
 @SpringBootTest
+@WithMockUser
 @AutoConfigureMockMvc
 @Transactional
 @Sql("users-test-data.sql")
@@ -37,6 +43,14 @@ public class UserControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @BeforeEach
+    void setup(WebApplicationContext context) {
+        this.mockMvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
+    }
 
     @Nested
     @DisplayName("一覧表示の結合テスト")
@@ -218,14 +232,16 @@ public class UserControllerTests {
 
         @Test
         @DisplayName("更新対象ユーザーが存在する場合")
-        void givenExistUserId_whenShowEditForm_thenStatus200AndReturnUserEditViewWithUserUpdateForm() throws Exception {
+        void givenExistUserId_whenShowEditForm_thenStatus200AndReturnUserEditViewWithUserUpdateForm()
+                throws Exception {
             mockMvc.perform(get("/users/1/edit"))
                     .andExpect(status().isOk())
                     .andExpect(view().name(View.EDIT))
                     .andExpect(model().attributeExists("userUpdateForm"))
                     .andExpect(model().attribute("userUpdateForm", hasProperty("id", is(1L))))
                     .andExpect(model().attribute("userUpdateForm", hasProperty("name", is("山田太郎"))))
-                    .andExpect(model().attribute("userUpdateForm", hasProperty("email", is("taro@example.com"))));
+                    .andExpect(model().attribute("userUpdateForm",
+                            hasProperty("email", is("taro@example.com"))));
         }
 
         @Test
@@ -251,9 +267,12 @@ public class UserControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(View.EDIT))
                     .andExpect(model().attributeErrorCount("userUpdateForm", 3))
-                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "id", "NotNull"))
-                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "name", "NotBlank"))
-                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email", "NotBlank"));
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "id",
+                            "NotNull"))
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "name",
+                            "NotBlank"))
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email",
+                            "NotBlank"));
         }
 
         @Test
@@ -267,7 +286,8 @@ public class UserControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(View.EDIT))
                     .andExpect(model().attributeErrorCount("userUpdateForm", 1))
-                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "id", "NotNull"));
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "id",
+                            "NotNull"));
         }
 
         @Test
@@ -281,7 +301,8 @@ public class UserControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(View.EDIT))
                     .andExpect(model().attributeErrorCount("userUpdateForm", 1))
-                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "name", "NotBlank"));
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "name",
+                            "NotBlank"));
         }
 
         @Test
@@ -295,7 +316,8 @@ public class UserControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(View.EDIT))
                     .andExpect(model().attributeErrorCount("userUpdateForm", 1))
-                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email", "NotBlank"));
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email",
+                            "NotBlank"));
         }
 
         @Test
@@ -309,7 +331,8 @@ public class UserControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(View.EDIT))
                     .andExpect(model().attributeErrorCount("userUpdateForm", 1))
-                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email", "Email"));
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email",
+                            "Email"));
         }
 
         @Test
@@ -323,12 +346,14 @@ public class UserControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(View.EDIT))
                     .andExpect(model().attributeErrorCount("userUpdateForm", 1))
-                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email", "Email"));
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email",
+                            "Email"));
         }
 
         @Test
         @DisplayName("POST検証: 異常系(メールアドレスが更新者以外のIDで利用されている場合、パターンバリデーションエラーが発生し、元画面が再描画されること)")
-        void givenExistEmailByOther_whenUpdate_thenHasUniqueEmailExceptSelfErrorAndReturnFormView() throws Exception {
+        void givenExistEmailByOther_whenUpdate_thenHasUniqueEmailExceptSelfErrorAndReturnFormView()
+                throws Exception {
             mockMvc.perform(post("/users/update")
                     .param("id", "999")
                     .param("name", "テスト太郎")
@@ -337,7 +362,8 @@ public class UserControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(View.EDIT))
                     .andExpect(model().attributeErrorCount("userUpdateForm", 1))
-                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email", "UniqueEmailExceptSelf"));
+                    .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email",
+                            "UniqueEmailExceptSelf"));
         }
 
         @Test
