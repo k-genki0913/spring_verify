@@ -1,4 +1,4 @@
-package com.github.k.genki0913.verify.auth.controller;
+package com.github.k.genki0913.verify.auth;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
