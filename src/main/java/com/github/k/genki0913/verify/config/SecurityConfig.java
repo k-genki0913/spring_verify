@@ -6,7 +6,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
-// AIの提示したコードを丸コピー（今後変えていく）
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -14,10 +13,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // ★全てのURLへのアクセスを、ログインなしで「全員許可（permitAll）」にする設定
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
-                // ログイン画面（Formログイン）も一旦無効化
-                .formLogin(form -> form.disable());
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().authenticated())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .permitAll()
+                        .defaultSuccessUrl("/", false))
+                .logout(logout -> logout
+                        .permitAll());
 
         return http.build();
     }
