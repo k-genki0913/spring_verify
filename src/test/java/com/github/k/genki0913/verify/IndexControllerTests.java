@@ -42,7 +42,6 @@ public class IndexControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name("index"))
                     .andExpect(content().string(containsString("Spring Boot 技術検証サンドボックスへようこそ！")));
-            ;
         }
     }
 }
