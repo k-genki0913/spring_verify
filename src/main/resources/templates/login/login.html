@@ -27,12 +27,7 @@
 
                         <div class="card-body p-4">
                             <!-- ログイン失敗時のエラーメッセージ表示 -->
-                            <div
-                                th:if="${param.error}"
-                                class="alert alert-danger"
-                                role="alert"
-                                th:text="#{login.error.message}"
-                            >
+                            <div th:if="${loginError}" class="alert alert-danger" role="alert" th:text="${loginError}">
                                 メールアドレスまたはパスワードが間違っています。
                             </div>
 
@@ -46,25 +41,30 @@
                                 ログアウトしました。
                             </div>
 
-                            <form th:action="@{/login}" method="post">
-                                <!-- ユーザー名（メールアドレスなど）入力 -->
+                            <!-- ★ th:object を追加 -->
+                            <form th:action="@{/login}" th:object="${loginForm}" method="post">
+                                <!-- ユーザー名（メールアドレス）入力 -->
                                 <div class="mb-3">
-                                    <label for="username" class="form-label" th:text="#{login.label.username}"
+                                    <label for="email" class="form-label" th:text="#{login.label.username}"
                                         >メールアドレス</label
                                     >
                                     <input
                                         type="text"
-                                        id="username"
-                                        name="username"
+                                        id="email"
+                                        th:field="*{email}"
                                         class="form-control"
                                         maxlength="255"
                                         th:placeholder="#{login.placeholder.username}"
                                         required
                                         autofocus
                                     />
+                                    <div
+                                        class="text-danger"
+                                        th:if="${#fields.hasErrors('email')}"
+                                        th:errors="*{email}"
+                                    ></div>
                                 </div>
 
-                                <!-- パスワード入力 -->
                                 <div class="mb-3">
                                     <label for="password" class="form-label" th:text="#{login.label.password}"
                                         >パスワード</label
@@ -72,11 +72,16 @@
                                     <input
                                         type="password"
                                         id="password"
-                                        name="password"
+                                        th:field="*{password}"
                                         class="form-control"
                                         maxlength="255"
                                         required
                                     />
+                                    <div
+                                        class="text-danger"
+                                        th:if="${#fields.hasErrors('password')}"
+                                        th:errors="*{password}"
+                                    ></div>
                                 </div>
 
                                 <div class="d-grid">
