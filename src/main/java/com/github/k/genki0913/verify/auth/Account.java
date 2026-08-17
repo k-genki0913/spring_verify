@@ -62,7 +62,7 @@ public class Account {
         this.accountLocked = false;
     }
 
-    static Account register(String email, String password, String name) {
+    static Account createUser(String email, String password, String name) {
         requireNonBlank(email, "Email");
         requireNonBlank(password, "Password");
         requireNonBlank(name, "Name");
