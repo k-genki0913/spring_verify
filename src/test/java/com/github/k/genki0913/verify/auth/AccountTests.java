@@ -3,6 +3,8 @@ package com.github.k.genki0913.verify.auth;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -269,4 +271,76 @@ public class AccountTests {
         }
     }
 
+    @Nested
+    @DisplayName("ログイン失敗リセット")
+    class resetFailedLogin {
+        @Test
+        @DisplayName("未ロックユーザーの場合、失敗回数が正しく初期化されること")
+        void givenAccountWithTwoFailedAttempsAndNotLocked_whenResetFailedLogin_thenFailedAttemptSetZero() {
+            Account account = Account.createUser("test@example.com", "password1234", "テストユーザー");
+
+            account.recordFailedLogin(3);
+            account.recordFailedLogin(3);
+
+            assertThat(account.getFailedAttempts()).isEqualTo(2);
+            assertThat(account.getAccountLocked()).isFalse();
+            assertThat(account.getLockTime()).isNull();
+
+            account.resetFailedLogin();
+
+            assertThat(account.getFailedAttempts()).isEqualTo(0);
+            assertThat(account.getAccountLocked()).isFalse();
+            assertThat(account.getLockTime()).isNull();
+        }
+
+        @Test
+        @DisplayName("ロック済みユーザーの場合、失敗回数、ロック状態、ロック時間が正しく初期化されること")
+        void givenAccountWithThreeFailedAttempsAndLocked_whenResetFailedLogin_thenInitialize() {
+            Account account = Account.createUser("test@example.com", "password1234", "テストユーザー");
+
+            account.recordFailedLogin(3);
+            account.recordFailedLogin(3);
+            account.recordFailedLogin(3);
+
+            assertThat(account.getFailedAttempts()).isEqualTo(3);
+            assertThat(account.getAccountLocked()).isTrue();
+            assertThat(account.getLockTime()).isNotNull();
+
+            account.resetFailedLogin();
+
+            assertThat(account.getFailedAttempts()).isEqualTo(0);
+            assertThat(account.getAccountLocked()).isFalse();
+            assertThat(account.getLockTime()).isNull();
+        }
+    }
+
+    @Nested
+    @DisplayName("パスワード更新")
+    class updatePassword {
+        @Test
+        @DisplayName("パスワードを引数の値で更新できること")
+        void givenNewPassword_whenUpdatePassword_thenUpdatedAccountPassword() {
+            Account account = Account.createUser("test@example.com", "oldPassword", "テストユーザー");
+            account.updatePassword("newSecurePassword1234");
+            assertThat(account.getPassword()).isEqualTo("newSecurePassword1234");
+        }
+    }
+
+    @Nested
+    @DisplayName("パスワードリセットトークン、有効期限設定")
+    class issuePasswordResetToken {
+        @Test
+        @DisplayName("トークンと有効期限を引数の値で更新できること")
+        void givenNewTokenAndNewExpiry_whenIssuePasswordResetToken_thenUpdatedTokenAndExpiry() {
+            Account account = Account.createUser("test@example.com", "password1234", "テストユーザー");
+            String token = "random-token-xyz";
+            LocalDateTime expiry = LocalDateTime.now().plusHours(1);
+
+            account.issuePasswordResetToken(token, expiry);
+
+            assertThat(account.getResetToken()).isEqualTo(token);
+            assertThat(account.getResetTokenExpiry()).isEqualTo(expiry);
+        }
+
+    }
 }
