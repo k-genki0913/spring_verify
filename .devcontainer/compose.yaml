@@ -36,11 +36,11 @@ services:
             - db-store:/var/lib/postgresql
             - ./postgres_logs:/var/log/postgresql
 
-    spring-test-db:
+    spring-db-test:
         image: postgres:18
         labels:
             - 'org.springframework.boot.service-connection=postgres'
-        container_name: spring-test-db
+        container_name: spring-db-test
         environment:
             POSTGRES_DB: ${POSTGRES_DATABASE_NAME}_test
             POSTGRES_USER: ${POSTGRES_USER}
