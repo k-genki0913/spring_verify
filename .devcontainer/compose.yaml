@@ -36,6 +36,22 @@ services:
             - db-store:/var/lib/postgresql
             - ./postgres_logs:/var/log/postgresql
 
+    spring-test-db:
+        image: postgres:18
+        labels:
+            - 'org.springframework.boot.service-connection=postgres'
+        container_name: spring-test-db
+        environment:
+            POSTGRES_DB: ${POSTGRES_DATABASE_NAME}_test
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        ports:
+            - 25432:5432
+        volumes:
+            - db-test-store:/var/lib/postgresql
+            - ./postgres_logs:/var/log/postgresql
+
 volumes:
     db-store:
+    db-test-store:
     maven-repo:
