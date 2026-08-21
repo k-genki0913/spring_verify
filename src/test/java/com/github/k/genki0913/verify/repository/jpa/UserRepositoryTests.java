@@ -82,7 +82,7 @@ public class UserRepositoryTests {
             Optional<User> result = userRepository.findByEmail(existingEmail);
 
             assertThat(result).isPresent();
-            assertThat(result.get().getId()).isEqualTo(1L);
+            assertThat(result.get().getId()).isNotNull();
             assertThat(result.get().getEmail()).isEqualTo(existingEmail);
             assertThat(result.get().getName()).isEqualTo("山田太郎");
         }

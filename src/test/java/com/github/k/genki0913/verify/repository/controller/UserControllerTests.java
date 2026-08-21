@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -15,6 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,8 +32,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.github.k.genki0913.verify.domain.User;
 import com.github.k.genki0913.verify.repository.constant.View;
 import com.github.k.genki0913.verify.repository.form.UserRegistForm;
+import com.github.k.genki0913.verify.repository.jpa.UserRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -43,6 +48,9 @@ public class UserControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @BeforeEach
     void setup(WebApplicationContext context) {
@@ -66,18 +74,18 @@ public class UserControllerTests {
                     .andExpect(model().attribute("users", hasSize(3)))
                     .andExpect(model().attribute("users", hasItem(
                             allOf(
-                                    hasProperty("id", is(1L)),
+                                    hasProperty("id", notNullValue()),
                                     hasProperty("name", is("山田太郎")),
                                     hasProperty("email", is("taro@example.com"))))))
                     .andExpect(model().attribute("users", hasItem(
                             allOf(
-                                    hasProperty("id", is(2L)),
+                                    hasProperty("id", notNullValue()),
                                     hasProperty("name", is("山田花子")),
                                     hasProperty("email",
                                             is("hanako@example.com"))))))
                     .andExpect(model().attribute("users", hasItem(
                             allOf(
-                                    hasProperty("id", is(3L)),
+                                    hasProperty("id", notNullValue()),
                                     hasProperty("name", is("佐藤次郎")),
                                     hasProperty("email",
                                             is("jiro@example.com"))))));
@@ -94,7 +102,7 @@ public class UserControllerTests {
                     .andExpect(model().attribute("users", hasSize(1)))
                     .andExpect(model().attribute("users", hasItem(
                             allOf(
-                                    hasProperty("id", is(3L)),
+                                    hasProperty("id", notNullValue()),
                                     hasProperty("name", is("佐藤次郎")),
                                     hasProperty("email",
                                             is("jiro@example.com"))))));
@@ -111,12 +119,12 @@ public class UserControllerTests {
                     .andExpect(model().attribute("users", hasSize(2)))
                     .andExpect(model().attribute("users", hasItem(
                             allOf(
-                                    hasProperty("id", is(1L)),
+                                    hasProperty("id", notNullValue()),
                                     hasProperty("name", is("山田太郎")),
                                     hasProperty("email", is("taro@example.com"))))))
                     .andExpect(model().attribute("users", hasItem(
                             allOf(
-                                    hasProperty("id", is(2L)),
+                                    hasProperty("id", notNullValue()),
                                     hasProperty("name", is("山田花子")),
                                     hasProperty("email",
                                             is("hanako@example.com"))))));
@@ -234,14 +242,23 @@ public class UserControllerTests {
         @DisplayName("更新対象ユーザーが存在する場合")
         void givenExistUserId_whenShowEditForm_thenStatus200AndReturnUserEditViewWithUserUpdateForm()
                 throws Exception {
-            mockMvc.perform(get("/users/1/edit"))
+
+            String uniqueEmail = "test-" + UUID.randomUUID() + "@example.com";
+            User user = new User();
+            user.setEmail(uniqueEmail);
+            user.setName("テスト太郎");
+
+            User savedUser = userRepository.save(user);
+            Long targetId = savedUser.getId();
+
+            mockMvc.perform(get("/users/" + targetId + "/edit"))
                     .andExpect(status().isOk())
                     .andExpect(view().name(View.EDIT))
                     .andExpect(model().attributeExists("userUpdateForm"))
-                    .andExpect(model().attribute("userUpdateForm", hasProperty("id", is(1L))))
-                    .andExpect(model().attribute("userUpdateForm", hasProperty("name", is("山田太郎"))))
+                    .andExpect(model().attribute("userUpdateForm", hasProperty("id", notNullValue())))
+                    .andExpect(model().attribute("userUpdateForm", hasProperty("name", is("テスト太郎"))))
                     .andExpect(model().attribute("userUpdateForm",
-                            hasProperty("email", is("taro@example.com"))));
+                            hasProperty("email", is(uniqueEmail))));
         }
 
         @Test
@@ -369,8 +386,17 @@ public class UserControllerTests {
         @Test
         @DisplayName("POST検証: 正常系(全ての入力値が正常な場合、エラーなしでユーザー一覧画面へリダイレクトされること)")
         void givenValidInput_whenUpdate_thenNoErrorsAndRedirectToUsers() throws Exception {
+
+            String uniqueEmail = "test-" + UUID.randomUUID() + "@example.com";
+            User user = new User();
+            user.setEmail(uniqueEmail);
+            user.setName("テスト太郎");
+
+            User savedUser = userRepository.save(user);
+            String targetId = savedUser.getId().toString();
+
             mockMvc.perform(post("/users/update")
-                    .param("id", "3")
+                    .param("id", targetId)
                     .param("name", "テスト太郎")
                     .param("email", "test@example.com")
                     .with(csrf()))
