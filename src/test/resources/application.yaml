@@ -1,0 +1,20 @@
+# =========================================================================
+# テスト環境用の上書き設定
+# =========================================================================
+spring:
+    profiles:
+        active: test # テスト実行時は常に「test」プロファイルが発動するようにする
+---
+# 「test」プロファイルが有効なときだけ、ここから下の設定で上書きする
+spring:
+    config:
+        activate:
+            on-profile: test
+    datasource:
+        url: jdbc:postgresql://${DB_HOST:spring-db}-test:${DB_PORT:5432}/${POSTGRES_DATABASE_NAME}_test
+        username: ${POSTGRES_USER}
+        password: ${POSTGRES_PASSWORD}
+    jpa:
+        hibernate:
+            # 毎回綺麗な状態でテストを開始するために create-drop を指定
+            ddl-auto: create-drop
