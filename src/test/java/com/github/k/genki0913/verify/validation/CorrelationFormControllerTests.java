@@ -1,5 +1,6 @@
 package com.github.k.genki0913.verify.validation;
 
+import java.util.Locale;
 import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -180,7 +181,8 @@ public class CorrelationFormControllerTests {
                     .param("userId", "user01")
                     .param("password", "Pass1234-")
                     .param("email", "test@example.com")
-                    .param("retryEmail", "test1@example.com"))
+                    .param("retryEmail", "test1@example.com")
+                    .locale(Locale.JAPAN))
                     .andExpect(status().isOk())
                     .andExpect(view().name("validation/correlation-form"))
                     .andExpect(model().hasErrors())

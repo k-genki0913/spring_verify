@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.Locale;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -45,7 +47,8 @@ public class ValidationControllerTest {
                 throws Exception {
             mockMvc.perform(get("/validation/single/query")
                     .param("requiredParam", "")
-                    .param("lengthParam", "12345"))
+                    .param("lengthParam", "12345")
+                    .locale(Locale.JAPAN))
                     .andExpect(status().isOk())
                     .andExpect(view().name("validation/single"))
                     .andExpect(model().attributeExists("errors"))
@@ -61,7 +64,8 @@ public class ValidationControllerTest {
                 throws Exception {
             mockMvc.perform(get("/validation/single/query")
                     .param("requiredParam", "あいうえお")
-                    .param("lengthParam", "123456"))
+                    .param("lengthParam", "123456")
+                    .locale(Locale.JAPAN))
                     .andExpect(status().isOk())
                     .andExpect(view().name("validation/single"))
                     .andExpect(model().attributeExists("errors"))
@@ -75,8 +79,10 @@ public class ValidationControllerTest {
         @DisplayName("GET検証：異常系（バリデーションエラーが発生し、例外ハンドラーによってエラーメッセージが画面に返却されること）")
         void givenInvalidParameters_whenExecuteQuerySingleValidation_thenStatus200AndReturnSingleViewWithErrors()
                 throws Exception {
-            mockMvc.perform(get("/validation/single/query").param("requiredParam", "").param("lengthParam",
-                    "123456"))
+            mockMvc.perform(get("/validation/single/query")
+                    .param("requiredParam", "")
+                    .param("lengthParam", "123456")
+                    .locale(Locale.JAPAN))
                     .andExpect(status().isOk()).andExpect(view().name("validation/single"))
                     .andExpect(model().attributeExists("errors"))
                     .andExpect(content().string(containsString("[必須チェック項目] は必須入力です。")))
@@ -88,9 +94,10 @@ public class ValidationControllerTest {
         @DisplayName("GET検証：正常系（パラメータが適切に入力されている場合、エラーなしで画面が表示されること）")
         void givenValidParameters_whenExecuteQuerySingleValidation_thenStatus200AndReturnSingleViewWithoutErrors()
                 throws Exception {
-            mockMvc.perform(
-                    get("/validation/single/query").param("requiredParam", "あいうえお")
-                            .param("lengthParam", "12345"))
+            mockMvc.perform(get("/validation/single/query")
+                    .param("requiredParam", "あいうえお")
+                    .param("lengthParam", "12345")
+                    .locale(Locale.JAPAN))
                     .andExpect(status().isOk()).andExpect(view().name("validation/single"))
                     .andExpect(model().attributeDoesNotExist("errors"));
         }
