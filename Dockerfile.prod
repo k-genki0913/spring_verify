@@ -1,0 +1,25 @@
+# prodとついているが、実際は本番リリースをイメージして簡易的につくった内容
+# ==========================================
+# Stage 1: ビルド環境（Mavenを使ってJARを作成）
+# ==========================================
+FROM maven:3.9-eclipse-temurin-21 AS build
+WORKDIR /app
+# pom.xmlとソースコードをコピーしてビルド（テストはスキップして高速化）
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# ==========================================
+# Stage 2: 実行環境（軽量なJRE環境でJARを動かす）
+# ==========================================
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+
+# ヘルスチェック用の curl をインストール
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+# Stage 1で出来上がったJARファイルだけをコピー
+COPY --from=build /app/target/*.jar app.jar
+
+# 起動コマンド
+ENTRYPOINT ["java", "-jar", "app.jar"]
