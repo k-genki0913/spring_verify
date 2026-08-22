@@ -18,5 +18,10 @@ RUN curl -o actions-runner-linux-arm64-2.317.0.tar.gz -L https://github.com/acti
 
 RUN ./bin/installdependencies.sh
 
+COPY entrypoint.sh /actions-runner/entrypoint.sh
+RUN chmod +x /actions-runner/entrypoint.sh
+
 RUN chown -R runneruser:runneruser /actions-runner
 USER runneruser
+
+ENTRYPOINT ["./entrypoint.sh"]

@@ -9,8 +9,7 @@ services:
           - ACCESS_TOKEN
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock
-        command: >
-          bash -c "
-          ./config.sh --url $$REPO_URL --token $$ACCESS_TOKEN --unattended --replace &&
-          ./run.sh
-          "
+          - runner_data:/actions-runner
+
+volumes:
+    runner_data:
