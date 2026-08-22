@@ -1,0 +1,16 @@
+services:
+    runner:
+        build: .
+        container_name: github-actions-runner
+        restart: unless-stopped
+        platform: linux/arm64
+        environment:
+          - REPO_URL
+          - ACCESS_TOKEN
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
+        command: >
+          bash -c "
+          ./config.sh --url $$REPO_URL --token $$ACCESS_TOKEN --unattended --replace &&
+          ./run.sh
+          "
