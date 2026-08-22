@@ -18,6 +18,12 @@ spring:
     web:
         locale: ja # デフォルトのロケールを日本語に固定
 
+management:
+    endpoints:
+        web:
+            exposure:
+                include: '*' # ローカルはデバック用に全てのエンドポイントを公開する
+
 logging:
     level:
         root: INFO
@@ -54,3 +60,9 @@ logging:
         # AWS用：CloudWatchで見やすいように「色なし（文字化け防止）」＆「フルパッケージ名」＆「等幅整列」
         # 順番（左側のフォーマット）をローカル用と完全に合わせることで、環境が変わっても解析しやすくなります
         console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%-22thread] [%-8.8X{traceId}] [%-5level] %logger{100} - [%-5.5X{status}] %msg%n'
+
+management:
+    endpoints:
+        web:
+            exposure:
+                include: 'health' # dev環境ではヘルスチェックだけ公開する
