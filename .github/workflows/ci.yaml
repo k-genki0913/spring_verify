@@ -10,17 +10,17 @@ jobs:
     build:
         runs-on: self-hosted
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-      - name: Show me the environment
-        run: |
-            echo "ランナーが動いている場所: ${hostname}"
-            echo "Javaのバージョン:"
-            java -version
-            echo "Dockerのバージョン:"
-            docker --version
+            - name: Show me the environment
+              run: |
+                  echo "ランナーが動いている場所: $(hostname)"
+                  echo "Javaのバージョン:"
+                  java -version
+                  echo "Dockerのバージョン:"
+                  docker --version
 
-      - name: Hello World
-        run: echo "Hello! 自分のPCのランナーで起動"
+            - name: Hello World
+              run: echo "Hello! 自分のPCのランナーで起動"
