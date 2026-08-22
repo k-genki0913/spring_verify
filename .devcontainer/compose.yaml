@@ -19,7 +19,10 @@ services:
         ports:
             - 18080:8080
         depends_on:
-            - spring-db
+            spring-db:
+                condition: service_healthy
+            spring-db-test:
+                condition: service_healthy
 
     spring-db:
         image: postgres:18
@@ -35,6 +38,11 @@ services:
         volumes:
             - db-store:/var/lib/postgresql
             - ./postgres_logs:/var/log/postgresql
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DATABASE_NAME}']
+            interval: 5s # 5秒おきにチェック
+            timeout: 5s # 5秒でタイムアウトしたら失敗
+            retries: 5
 
     spring-db-test:
         image: postgres:18
@@ -50,6 +58,11 @@ services:
         volumes:
             - db-test-store:/var/lib/postgresql
             - ./postgres_logs:/var/log/postgresql
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DATABASE_NAME}_test']
+            interval: 5s
+            timeout: 5s
+            retries: 5
 
 volumes:
     db-store:
