@@ -30,7 +30,7 @@ jobs:
 
             - name: Run Unit and Integration Tests
               env:
-                  DB_TEST_HOST: localhost
+                  DB_TEST_HOST: 127.0.0.1
                   DB_TEST_PORT: 25433
                   POSTGRES_TEST_DATABASE_NAME: spring-app_test
                   POSTGRES_TEST_USER: test_user
