@@ -12,8 +12,8 @@ spring:
             on-profile: test
     datasource:
         url: jdbc:postgresql://${DB_TEST_HOST:spring-db-test}:${DB_TEST_PORT:5432}/${POSTGRES_TEST_DATABASE_NAME}
-        username: ${POSTGRES_USER}
-        password: ${POSTGRES_PASSWORD}
+        username: ${POSTGRES_TEST_USER}
+        password: ${POSTGRES_TEST_PASSWORD}
     jpa:
         hibernate:
             # 毎回綺麗な状態でテストを開始するために create-drop を指定
