@@ -11,8 +11,9 @@ RUN mkdir -p /usr/local/lib/docker/cli-plugins \
     && curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-aarch64 -o /usr/local/lib/docker/cli-plugins/docker-compose \
     && chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 
-RUN useradd -ms /bin/bash runneruser \
-    && usermod -aG docker runneruser
+RUN groupadd -g 991 docker-colima \
+    && useradd -ms /bin/bash runneruser \
+    && usermod -aG docker-colima runneruser
 
 WORKDIR /actions-runner
 
