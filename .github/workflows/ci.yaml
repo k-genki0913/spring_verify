@@ -28,15 +28,15 @@ jobs:
                   DB_TEST_HOST_PORT: 25433
               run: docker compose -f .devcontainer/compose.yaml -p ci up -d spring-db-test
 
-            #- name: Run Unit and Integration Tests
-            #  env:
-            #      DB_TEST_HOST: localhost
-            #      DB_TEST_PORT: 25432
-            #      POSTGRES_TEST_DATABASE_NAME: spring-app_test
-            #      POSTGRES_TEST_USER: test_user
-            #      POSTGRES_TEST_PASSWORD: rootroot
-            #  run: |
-            #      ./mvnw test
+            - name: Run Unit and Integration Tests
+              env:
+                  DB_TEST_HOST: localhost
+                  DB_TEST_PORT: 25433
+                  POSTGRES_TEST_DATABASE_NAME: spring-app_test
+                  POSTGRES_TEST_USER: test_user
+                  POSTGRES_TEST_PASSWORD: rootroot
+              run: |
+                  ./mvnw test
 
             - name: Remove Test Database
               if: always()
