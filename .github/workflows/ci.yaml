@@ -23,7 +23,7 @@ jobs:
                   docker --version
 
             - name: Start Test Database
-              run: docker compose -f .devcontainer/compose.yaml up -d spring-db-test
+              run: docker compose -f .devcontainer/compose.yaml -p ci up -d spring-db-test
 
             #- name: Run Unit and Integration Tests
             #  env:
@@ -37,4 +37,4 @@ jobs:
 
             - name: Remove Test Database
               if: always()
-              run: docker compose -f .devcontainer/compose.yaml down -v
+              run: docker compose -f .devcontainer/compose.yaml -p ci down -v
