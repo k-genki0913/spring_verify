@@ -28,7 +28,7 @@ jobs:
             - name: Run Unit and Integration Tests
               env:
                   DB_TEST_HOST: ci-spring-db-test
-                  DB_TEST_PORT: 5433
+                  DB_TEST_PORT: 5432
                   POSTGRES_TEST_DATABASE_NAME: spring-app_test
                   POSTGRES_TEST_USER: test_user
                   POSTGRES_TEST_PASSWORD: rootroot
