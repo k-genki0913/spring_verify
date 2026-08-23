@@ -34,8 +34,6 @@ services:
 
     spring-db:
         image: postgres:18
-        labels:
-            - 'org.springframework.boot.service-connection=postgres'
         container_name: spring-db
         environment:
             POSTGRES_DB: ${POSTGRES_DATABASE_NAME}
@@ -54,8 +52,6 @@ services:
 
     spring-db-test:
         image: postgres:18
-        labels:
-            - 'org.springframework.boot.service-connection=postgres'
         container_name: ${DB_CONTAINER_NAME:-spring-db-test}
         environment:
             POSTGRES_DB: ${POSTGRES_TEST_DATABASE_NAME}
