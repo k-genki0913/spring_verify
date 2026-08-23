@@ -63,7 +63,7 @@ services:
             - db-test-store:/var/lib/postgresql
             - ./postgres_logs:/var/log/postgresql
         healthcheck:
-            test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_TEST_DATABASE_NAME}']
+            test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_TEST_USER} -d ${POSTGRES_TEST_DATABASE_NAME}']
             interval: 5s
             timeout: 5s
             retries: 5
