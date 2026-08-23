@@ -23,6 +23,8 @@ jobs:
                   docker --version
 
             - name: Start Test Database
+              env:
+                  DB_CONTAINER_NAME: ci-spring-db-test
               run: docker compose -f .devcontainer/compose.yaml -p ci up -d spring-db-test
 
             #- name: Run Unit and Integration Tests
