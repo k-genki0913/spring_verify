@@ -25,6 +25,7 @@ jobs:
             - name: Start Test Database
               env:
                   DB_CONTAINER_NAME: ci-spring-db-test
+                  DB_TEST_HOST_PORT: 25433
               run: docker compose -f .devcontainer/compose.yaml -p ci up -d spring-db-test
 
             #- name: Run Unit and Integration Tests
@@ -39,4 +40,7 @@ jobs:
 
             - name: Remove Test Database
               if: always()
+              env:
+                  DB_CONTAINER_NAME: ci-spring-db-test
+                  DB_TEST_HOST_PORT: 25433
               run: docker compose -f .devcontainer/compose.yaml -p ci down -v

@@ -62,7 +62,7 @@ services:
             POSTGRES_USER: ${POSTGRES_TEST_USER}
             POSTGRES_PASSWORD: ${POSTGRES_TEST_PASSWORD}
         ports:
-            - 25432:5432
+            - ${DB_TEST_HOST_PORT:-25432}:5432
         volumes:
             - db-test-store:/var/lib/postgresql
             - ./postgres_logs:/var/log/postgresql
