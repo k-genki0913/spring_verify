@@ -38,9 +38,9 @@ jobs:
               run: |
                   ./mvnw test
 
-            #- name: Remove Test Database
-            #  if: always()
-            #  env:
-            #      DB_CONTAINER_NAME: ci-spring-db-test
-            #      DB_TEST_HOST_PORT: 25433
-            #  run: docker compose -f .devcontainer/compose.yaml -p ci down -v
+            - name: Remove Test Database
+              if: always()
+              env:
+                  DB_CONTAINER_NAME: ci-spring-db-test
+                  DB_TEST_HOST_PORT: 25433
+              run: docker compose -f .devcontainer/compose.yaml -p ci down -v
