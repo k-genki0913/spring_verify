@@ -5,11 +5,18 @@ services:
         restart: unless-stopped
         platform: linux/arm64
         environment:
-          - REPO_URL
-          - ACCESS_TOKEN
+            - REPO_URL
+            - ACCESS_TOKEN
         volumes:
-          - /var/run/docker.sock:/var/run/docker.sock
-          - runner_data:/actions-runner
+            - /var/run/docker.sock:/var/run/docker.sock
+            - runner_data:/actions-runner
+        networks:
+            - runner_network
 
 volumes:
     runner_data:
+
+networks:
+    runner_network:
+        name: runner_network
+        driver: bridge
