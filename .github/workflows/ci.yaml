@@ -23,10 +23,7 @@ jobs:
                   docker --version
 
             - name: Start Test Database
-              env:
-                  DB_CONTAINER_NAME: ci-spring-db-test
-                  DB_TEST_HOST_PORT: 25433
-              run: docker compose -f .devcontainer/compose.yaml -p ci up -d spring-db-test
+              run: docker compose -f .github/workflows/infrastructure/compose.yaml up -d
 
             # TODO: DB接続ができずエラーになる
             # - name: Run Unit and Integration Tests
@@ -41,7 +38,4 @@ jobs:
 
             - name: Remove Test Database
               if: always()
-              env:
-                  DB_CONTAINER_NAME: ci-spring-db-test
-                  DB_TEST_HOST_PORT: 25433
-              run: docker compose -f .devcontainer/compose.yaml -p ci down -v
+              run: docker compose -f .github/workflows/infrastructure/compose.yaml down -v
