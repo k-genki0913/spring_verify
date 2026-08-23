@@ -7,6 +7,10 @@ RUN apt-get update && apt-get install -y \
     openjdk-21-jdk \
     && rm -rf /var/lib/apt/lists/*
 
+RUN mkdir -p /usr/local/lib/docker/cli-plugins \
+    && curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-aarch64 -o /usr/local/lib/docker/cli-plugins/docker-compose \
+    && chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+
 RUN useradd -ms /bin/bash runneruser \
     && usermod -aG docker runneruser
 
