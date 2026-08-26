@@ -2,13 +2,18 @@ services:
     runner:
         build: .
         container_name: github-actions-runner
+        # docker stopで停止しない限り、Dockerホストなどが再起動した場合でも本コンテナは自動で起動する
+        # Dockerエンジンが起動している前提のため、Dockerエンジンの自動起動も必要
         restart: unless-stopped
+        # DockerホストのCPUを指定
         platform: linux/arm64
         environment:
             - REPO_URL
             - ACCESS_TOKEN
         volumes:
+            # 本コンテナ内でDockerコマンドを実行した際、Dockerホスト側で処理を実行するために通信用ソケットファイルをバインド
             - /var/run/docker.sock:/var/run/docker.sock
+            # Runner情報が格納されているディレクトリをマウント
             - runner_data:/actions-runner
         networks:
             - runner_network
