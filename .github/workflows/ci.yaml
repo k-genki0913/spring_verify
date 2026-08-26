@@ -1,20 +1,37 @@
-name: CI for Local Runner
+# Github Actionsで実行するワークフローは、.github/workflows内にyaml形式で保存する必要がある
+# ファイル名は任意の名前を利用可能
 
+name: Spring Boot CI
+
+# ワークフローのトリガー設定
 on:
+    # 特定のブランチにコードがプッシュ（マージ）されたタイミング
     push:
         branches: ['main']
+    # 特定のブランチに対してプルリクエストが作成、作新されたタイミング
+    # プルリクエストのマージ元をマージ先へマージした状態でCIを実行する
+    # (Runner上でマージするためリポジトリへは影響がない)
     pull_request:
         branches: ['main']
 
+# Jobを定義する
 jobs:
-    build:
+    # Job ID
+    test:
+        # Runner 実行環境
         runs-on: self-hosted
 
+        # Job内の具体的な手順
+        # Runner上で実行される処理
         steps:
             - name: Checkout code
+              # users: 他者が定義した処理を実行する
+              # actions/checkout@v5: Github公式が提供するリポジトリのコードをランナーへクローンする機能
+              #                      クローン後、カレントディレクトリがルートディレクトリへ移動
               uses: actions/checkout@v5
 
             - name: Show me the environment
+              # run: 自分で処理を定義する
               run: |
                   echo "ランナーが動いている場所: $(hostname)"
                   echo "Javaのバージョン:"
@@ -26,6 +43,7 @@ jobs:
               run: docker compose -f .github/workflows/infrastructure/compose.yaml up -d
 
             - name: Run Unit and Integration Tests
+              # ステップ内だけで使用可能な環境変数を定義(追加 or 更新)
               env:
                   DB_TEST_HOST: ci-spring-db-test
                   DB_TEST_PORT: 5432
@@ -36,5 +54,6 @@ jobs:
                   ./mvnw test
 
             - name: Remove Test Database
+              # 必ず実行される処理
               if: always()
               run: docker compose -f .github/workflows/infrastructure/compose.yaml down -v
