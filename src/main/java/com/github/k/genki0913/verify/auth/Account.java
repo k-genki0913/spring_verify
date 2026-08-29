@@ -33,7 +33,7 @@ public class Account {
     private String role;
 
     @Column(nullable = false)
-    private boolean enabled = true;
+    private final boolean enabled = true;
 
     @Column(nullable = false)
     private Integer failedAttempts = 0;
@@ -48,7 +48,7 @@ public class Account {
     private LocalDateTime resetTokenExpiry;
 
     @Embedded
-    private AuditMetadata audit = new AuditMetadata();
+    private final AuditMetadata audit = new AuditMetadata();
 
     protected Account() {
     }
