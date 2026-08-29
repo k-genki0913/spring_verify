@@ -1,5 +1,6 @@
 package com.github.k.genki0913.verify.auth;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.github.k.genki0913.verify.common.entity.AuditMetadata;
@@ -14,7 +15,9 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "accounts")
-public class Account {
+public class Account implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
