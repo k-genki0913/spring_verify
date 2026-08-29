@@ -115,11 +115,7 @@ public class WebLogAspect {
         } catch (Throwable throwable) {
             long executionTime = System.currentTimeMillis() - startTime;
             MDC.put("status", "FAIL");
-            Class<?> causeClass = (throwable.getCause() != null) ? throwable.getCause().getClass()
-                    : throwable.getClass();
-            String exceptionMessage = throwable.getMessage();
-            log.warn("{}.{}() - 異常終了 [Time: {}ms] - Cause: {} - Message: {}", className, methodName, executionTime,
-                    causeClass.getName(), exceptionMessage);
+            log.warn("{}.{}() - 異常終了 [Time: {}ms]", className, methodName, executionTime, throwable);
             throw throwable;
         } finally {
             MDC.remove("traceId");
