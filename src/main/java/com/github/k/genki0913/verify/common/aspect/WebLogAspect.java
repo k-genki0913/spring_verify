@@ -114,7 +114,7 @@ public class WebLogAspect {
             long executionTime = System.currentTimeMillis() - startTime;
             MDC.put(MDC_STATUS_KEY, "END");
             log.info("{}.{}() - 正常終了 [Time: {}ms]", className, methodName, executionTime);
-        } catch (Exception ex) {
+        } catch (@SuppressWarnings("PMD.AvoidCatchingGenericException") Exception ex) {
             long executionTime = System.currentTimeMillis() - startTime;
             MDC.put(MDC_STATUS_KEY, "FAIL");
             log.warn("{}.{}() - 異常終了 [Time: {}ms]", className, methodName, executionTime, ex);
