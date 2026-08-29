@@ -51,7 +51,13 @@ jobs:
                   POSTGRES_TEST_USER: test_user
                   POSTGRES_TEST_PASSWORD: rootroot
               run: |
-                  ./mvnw test
+                  ./mvnw verify
+
+            - name: Upload Coverage Report
+              uses: actions/upload-artifact@v7
+              with:
+                  name: jacoco-coverage-report
+                  path: target/site/jacoco/
 
             - name: Remove Test Database
               # 必ず実行される処理
