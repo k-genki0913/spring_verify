@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 public class WebLogAspect {
 
     private static final Logger log = LoggerFactory.getLogger(WebLogAspect.class);
+    private static final String MDC_STATUS_KEY = "status";
+    private static final String MDC_TRACE_ID_KEY = "traceId";
 
     // =========================================================================
     // コントローラー層を特定するポイントカット
@@ -94,8 +96,8 @@ public class WebLogAspect {
     public Object logControllerExecution(ProceedingJoinPoint joinPoint) throws Throwable {
 
         String traceId = UUID.randomUUID().toString().substring(0, 8);
-        MDC.put("traceId", traceId);
-        MDC.put("status", "START");
+        MDC.put(MDC_TRACE_ID_KEY, traceId);
+        MDC.put(MDC_STATUS_KEY, "START");
 
         String className = joinPoint.getTarget().getClass().getSimpleName();
         String methodName = joinPoint.getSignature().getName();
@@ -110,16 +112,16 @@ public class WebLogAspect {
             result = joinPoint.proceed();
 
             long executionTime = System.currentTimeMillis() - startTime;
-            MDC.put("status", "END");
+            MDC.put(MDC_STATUS_KEY, "END");
             log.info("{}.{}() - 正常終了 [Time: {}ms]", className, methodName, executionTime);
         } catch (Throwable throwable) {
             long executionTime = System.currentTimeMillis() - startTime;
-            MDC.put("status", "FAIL");
+            MDC.put(MDC_STATUS_KEY, "FAIL");
             log.warn("{}.{}() - 異常終了 [Time: {}ms]", className, methodName, executionTime, throwable);
             throw throwable;
         } finally {
-            MDC.remove("traceId");
-            MDC.remove("status");
+            MDC.remove(MDC_TRACE_ID_KEY);
+            MDC.remove(MDC_STATUS_KEY);
         }
 
         return result;
