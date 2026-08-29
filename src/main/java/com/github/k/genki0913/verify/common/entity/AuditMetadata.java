@@ -1,5 +1,6 @@
 package com.github.k.genki0913.verify.common.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedBy;
@@ -11,7 +12,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class AuditMetadata {
+public class AuditMetadata implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
