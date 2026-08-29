@@ -39,6 +39,10 @@ jobs:
                   echo "Dockerのバージョン:"
                   docker --version
 
+            - name: Run Spotless Check
+              run: |
+                  ./mvnw spotless:check
+
             - name: Start Test Database
               run: docker compose -f .github/workflows/infrastructure/compose.yaml up -d
 
