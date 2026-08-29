@@ -114,11 +114,11 @@ public class WebLogAspect {
             long executionTime = System.currentTimeMillis() - startTime;
             MDC.put(MDC_STATUS_KEY, "END");
             log.info("{}.{}() - 正常終了 [Time: {}ms]", className, methodName, executionTime);
-        } catch (Throwable throwable) {
+        } catch (Exception ex) {
             long executionTime = System.currentTimeMillis() - startTime;
             MDC.put(MDC_STATUS_KEY, "FAIL");
-            log.warn("{}.{}() - 異常終了 [Time: {}ms]", className, methodName, executionTime, throwable);
-            throw throwable;
+            log.warn("{}.{}() - 異常終了 [Time: {}ms]", className, methodName, executionTime, ex);
+            throw ex;
         } finally {
             MDC.remove(MDC_TRACE_ID_KEY);
             MDC.remove(MDC_STATUS_KEY);
