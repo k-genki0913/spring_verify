@@ -68,7 +68,7 @@ public class LoginController {
     @GetMapping("/login")
     public String loginPage(Model model) {
         if (!model.containsAttribute("loginForm")) {
-            model.addAttribute("loginForm", new LoginForm());
+            model.addAttribute("loginForm", LoginForm.empty());
         }
         return "login/login";
     }
@@ -109,8 +109,8 @@ public class LoginController {
         }
 
         try {
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginForm.getEmail(),
-                    loginForm.getPassword());
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginForm.email(),
+                    loginForm.password());
 
             Authentication authentication = authenticationManager.authenticate(token);
 
