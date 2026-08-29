@@ -198,8 +198,9 @@ public class WebExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ModelAndView handleForbidden(AccessDeniedException ex) {
 
-        log.warn("【認可エラー】アクセス権限のないリクエストを検知しました。ブラウザには404を返却して隠蔽します。 エラー詳細: {}", ex.getMessage());
-
+        if (log.isWarnEnabled()) {
+            log.warn("【認可エラー】アクセス権限のないリクエストを検知しました。ブラウザには404を返却して隠蔽します。 エラー詳細: {}", ex.getMessage());
+        }
         return new ModelAndView("error/404");
     }
 
@@ -236,15 +237,18 @@ public class WebExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ModelAndView handleNotFound(NoResourceFoundException ex) {
 
-        log.warn("【リソース未検出エラー】存在しないリソースへのリクエストを検知しました。エラー詳細: {}", ex.getMessage());
-
+        if (log.isWarnEnabled()) {
+            log.warn("【リソース未検出エラー】存在しないリソースへのリクエストを検知しました。エラー詳細: {}", ex.getMessage());
+        }
         return new ModelAndView("error/404");
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ModelAndView handleUserNotFound(UserNotFoundException ex) {
-        log.warn("【ユーザー未検出】存在しないユーザーへのアクセスが発生しました。エラー詳細: {}", ex.getMessage());
+        if (log.isWarnEnabled()) {
+            log.warn("【ユーザー未検出】存在しないユーザーへのアクセスが発生しました。エラー詳細: {}", ex.getMessage());
+        }
         return new ModelAndView("error/404");
     }
 
@@ -285,7 +289,9 @@ public class WebExceptionHandler {
     public ModelAndView handleMethodNotAllowed(HttpRequestMethodNotSupportedException ex,
             HttpServletResponse response) {
 
-        log.warn("【未許可メソッドエラー】許可していないメソッドのリクエストを検知しました。エラー詳細: {}", ex.getMessage());
+        if (log.isWarnEnabled()) {
+            log.warn("【未許可メソッドエラー】許可していないメソッドのリクエストを検知しました。エラー詳細: {}", ex.getMessage());
+        }
 
         if (ex.getHeaders().getAllow() != null && !ex.getHeaders().getAllow().isEmpty()) {
             response.setHeader("Allow", ex.getHeaders().getFirst("Allow"));
@@ -334,7 +340,7 @@ public class WebExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ModelAndView handleAllException(Exception ex) {
-        log.error("【システムエラー】予期せぬ例外が発生しました。");
+        log.error("【システムエラー】予期せぬ例外が発生しました。", ex);
 
         return new ModelAndView("error/500");
     }
