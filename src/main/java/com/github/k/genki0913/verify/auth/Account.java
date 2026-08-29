@@ -140,6 +140,7 @@ public class Account {
         }
     }
 
+    @SuppressWarnings("PMD.NullAssignment")
     void resetFailedLogin() {
         this.failedAttempts = 0;
         this.accountLocked = false;
