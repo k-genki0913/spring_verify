@@ -33,6 +33,7 @@ public class Account {
     private String role;
 
     @Column(nullable = false)
+    @SuppressWarnings("PMD.FinalFieldCouldBeStatic")
     private final boolean enabled = true;
 
     @Column(nullable = false)
