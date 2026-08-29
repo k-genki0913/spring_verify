@@ -20,7 +20,7 @@ public class ValidationController {
     /**
      * 単項目チェック画面の初期表示
      * URL: http://localhost:8080/validation/single
-     * 
+     *
      * @return 遷移先のリファレンス画面パス
      */
     @GetMapping("/single")

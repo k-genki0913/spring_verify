@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * カスタムログイン処理を管理するコントローラー。
- * 
+ *
  * <p>
  * Spring Securityのデフォルトのフォームログイン機能を使用せず、
  * 自前でログイン画面の表示と認証処理、およびログイン成功後のリダイレクト制御を行います。
@@ -50,7 +50,7 @@ public class LoginController {
 
     /**
      * コントローラーのコンストラクタ。
-     * 
+     *
      * @param authenticationManager
      *                                  SecurityConfigで公開されたAuthenticationManager
      */
@@ -60,7 +60,7 @@ public class LoginController {
 
     /**
      * ログイン画面を表示します。
-     * 
+     *
      * @param model
      *                  ビューに渡すデータを保持するオブジェクト
      * @return ログイン画面のテンプレートパス
@@ -75,7 +75,7 @@ public class LoginController {
 
     /**
      * ログインフォームの送信を受け取り、認証処理を実行します。
-     * 
+     *
      * <p>
      * 以下の手順で処理を行います：
      * </p>

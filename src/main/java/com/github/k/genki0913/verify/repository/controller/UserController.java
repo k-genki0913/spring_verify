@@ -51,7 +51,7 @@ public class UserController {
      * バリデーション処理に {@link UniqueEmailForRegistrationValidator} を追加登録し、
      * フォーム入力値に対するカスタムバリデーションを有効化します。
      * </p>
-     * 
+     *
      * @param binder
      *                   Webデータバインダー
      */
@@ -67,7 +67,7 @@ public class UserController {
      * 該当するユーザー名で絞り込み検索を行い、それ以外の場合は全件取得します。
      * </p>
      * * @param keyword 検索キーワード（名前の部分一致）。指定がない場合は {@code null}。
-     * 
+     *
      * @param model
      *                  ビューにデータを渡すためのモデル。検索結果やキーワードが格納されます。
      * @return ユーザー一覧画面のテンプレート名 ("user/view")
@@ -90,7 +90,7 @@ public class UserController {
      * <p>
      * 画面入力用オブジェクト {@link UserRegistForm} を初期化してモデルに追加します。
      * </p>
-     * 
+     *
      * @param model
      *                  ビューにデータを渡すためのモデル。フォームオブジェクトが格納されます。
      * @return ユーザー登録画面のテンプレート名 ("user/regist")
@@ -107,7 +107,7 @@ public class UserController {
      * 入力値のバリデーションを行い、エラーがある場合は登録画面へ戻ります。
      * 正常終了した場合は、ユーザー一覧画面へリダイレクトします。
      * </p>
-     * 
+     *
      * @param form
      *                          画面から入力されたユーザー登録情報。{@code @Validated} によりチェックされます。
      * @param bindingResult
@@ -134,7 +134,7 @@ public class UserController {
      * 該当するユーザーが存在しない場合は、{@link UserNotFoundException} がスローされ、
      * 404エラーページへ遷移します。
      * </p>
-     * 
+     *
      * @param id
      *                  更新対象となるユーザーのID
      * @param model

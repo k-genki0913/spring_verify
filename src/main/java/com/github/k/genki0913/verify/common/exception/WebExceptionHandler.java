@@ -328,7 +328,7 @@ public class WebExceptionHandler {
      * </p>
      * * @param ex
      * 発生した予期せぬ例外オブジェクト。ログへのスタックトレース出力に使用。
-     * 
+     *
      * @return 遷移先テンプレートのパス {@code "error/500"} を含むModelAndView
      */
     @ExceptionHandler(Exception.class)
