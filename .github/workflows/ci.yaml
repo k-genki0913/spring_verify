@@ -58,6 +58,7 @@ jobs:
               with:
                   name: jacoco-coverage-report
                   path: target/site/jacoco/
+                  retention-days: 7
 
             - name: Remove Test Database
               # 必ず実行される処理
