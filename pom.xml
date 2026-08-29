@@ -103,7 +103,7 @@
                 <configuration>
                     <java>
                         <eclipse>
-                            <file>${project.basedir}/.devcontainer/eclipse-formatter.xml</file>
+                            <file>${project.basedir}/.config/eclipse-formatter.xml</file>
                             <version>4.33</version>
                         </eclipse>
                         <removeUnusedImports/>

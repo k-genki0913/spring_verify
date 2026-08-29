@@ -44,7 +44,7 @@
                 "java.debug.settings.onBuildFailureProceed": true,
                 // Null安全性を高めるための分析
                 "java.compile.nullAnalysis.mode": "automatic",
-                "java.format.settings.url": "${workspaceFolder}/.devcontainer/eclipse-formatter.xml",
+                "java.format.settings.url": "${workspaceFolder}/.config/eclipse-formatter.xml",
                 "java.format.settings.profile": "Eclipse",
                 "java.jdt.ls.vmargs": "-Xmx8G -XX:+UseG1GC -XX:+UseStringDeduplication"
             },
