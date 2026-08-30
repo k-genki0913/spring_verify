@@ -24,7 +24,7 @@ public final class WebUrlUtils {
      */
     public static <T> String getPath(Class<T> controllerClass, String methodName) {
         return MvcUriComponentsBuilder
-                .fromMethodName(controllerClass, methodName, new Object[] { null })
+                .fromMethodName(controllerClass, methodName, (Object) null)
                 .toUriString();
     }
 }
