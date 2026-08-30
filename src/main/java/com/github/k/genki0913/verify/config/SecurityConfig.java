@@ -38,6 +38,7 @@ public class SecurityConfig {
      *                       設定時の例外
      */
     @Bean
+    @SuppressWarnings("PMD.SignatureDeclareThrowsException")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 // AuthorizationFilterのカスタム設定
@@ -67,6 +68,7 @@ public class SecurityConfig {
      *                       取得時の例外
      */
     @Bean
+    @SuppressWarnings("PMD.SignatureDeclareThrowsException")
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
