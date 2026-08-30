@@ -41,52 +41,31 @@ import jakarta.validation.constraints.Size;
  * </p>
  */
 
-public class UserForm {
+public record UserForm(
+        /**
+         * 必須入力チェックのみを第一段階として実施します。
+         */
+        @NotBlank(message = "{common.notItemName.blank}", groups = ValidationGroup.Required.class) String username,
+
+        /**
+         * <p>
+         * <strong>■ 適用されるバリデーションルール</strong>
+         * <ul>
+         * <li>{@link NotBlank}（第1段階）：必須入力。空文字・スペースのみを許容しません。</li>
+         * <li>{@link Size}（第2段階）：最小8文字、最大16文字の長さ制限。</li>
+         * <li>{@link Pattern}（第2段階）：正規表現による複雑さの担保。<br>
+         * <b>正規表現解説：</b>{@code "^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9-]+$"}<br>
+         * 「半角英字」および「半角数字」をそれぞれ最低1文字以上含めることを強制する（先行評価ルックアヘッド）。
+         * かつ、使用可能文字を半角英数字に加えて<b>記号のハイフン（{@code -}）のみ</b>に限定します。</li>
+         * </ul>
+         * </p>
+         */
+        @NotBlank(message = "{common.notItemName.blank}", groups = ValidationGroup.Required.class) @Size(min = 8, max = 16, message = "{common.notItemName.size}", groups = ValidationGroup.Format.class) @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9-]+$", message = "{common.notItemName.pattern}", groups = ValidationGroup.Format.class) String password) {
 
     @GroupSequence({
             ValidationGroup.Required.class,
             ValidationGroup.Format.class
     })
     public @interface ValidationSequence {
-    }
-
-    /**
-     * 必須入力チェックのみを第一段階として実施します。
-     */
-    @NotBlank(message = "{common.notItemName.blank}", groups = ValidationGroup.Required.class)
-    private String username;
-
-    /**
-     * <p>
-     * <strong>■ 適用されるバリデーションルール</strong>
-     * <ul>
-     * <li>{@link NotBlank}（第1段階）：必須入力。空文字・スペースのみを許容しません。</li>
-     * <li>{@link Size}（第2段階）：最小8文字、最大16文字の長さ制限。</li>
-     * <li>{@link Pattern}（第2段階）：正規表現による複雑さの担保。<br>
-     * <b>正規表現解説：</b>{@code "^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9-]+$"}<br>
-     * 「半角英字」および「半角数字」をそれぞれ最低1文字以上含めることを強制する（先行評価ルックアヘッド）。
-     * かつ、使用可能文字を半角英数字に加えて<b>記号のハイフン（{@code -}）のみ</b>に限定します。</li>
-     * </ul>
-     * </p>
-     */
-    @NotBlank(message = "{common.notItemName.blank}", groups = ValidationGroup.Required.class)
-    @Size(min = 8, max = 16, message = "{common.notItemName.size}", groups = ValidationGroup.Format.class)
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9-]+$", message = "{common.notItemName.pattern}", groups = ValidationGroup.Format.class)
-    private String password;
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }
