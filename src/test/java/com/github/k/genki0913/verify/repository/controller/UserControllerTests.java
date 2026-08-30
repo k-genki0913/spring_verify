@@ -33,7 +33,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.github.k.genki0913.verify.domain.User;
-import com.github.k.genki0913.verify.repository.constant.View;
+import com.github.k.genki0913.verify.repository.constant.ViewConst;
 import com.github.k.genki0913.verify.repository.form.UserRegistForm;
 import com.github.k.genki0913.verify.repository.jpa.UserRepository;
 
@@ -70,7 +70,7 @@ public class UserControllerTests {
             mockMvc.perform(get("/users"))
                     .andExpect(status().isOk())
                     .andExpect(model().attributeExists("users"))
-                    .andExpect(view().name(View.VIEW))
+                    .andExpect(view().name(ViewConst.VIEW))
                     .andExpect(model().attribute("users", hasSize(3)))
                     .andExpect(model().attribute("users", hasItem(
                             allOf(
@@ -98,7 +98,7 @@ public class UserControllerTests {
                     .param("keyword", "佐藤"))
                     .andExpect(status().isOk())
                     .andExpect(model().attributeExists("users"))
-                    .andExpect(view().name(View.VIEW))
+                    .andExpect(view().name(ViewConst.VIEW))
                     .andExpect(model().attribute("users", hasSize(1)))
                     .andExpect(model().attribute("users", hasItem(
                             allOf(
@@ -115,7 +115,7 @@ public class UserControllerTests {
                     .param("keyword", "山田"))
                     .andExpect(status().isOk())
                     .andExpect(model().attributeExists("users"))
-                    .andExpect(view().name(View.VIEW))
+                    .andExpect(view().name(ViewConst.VIEW))
                     .andExpect(model().attribute("users", hasSize(2)))
                     .andExpect(model().attribute("users", hasItem(
                             allOf(
@@ -137,7 +137,7 @@ public class UserControllerTests {
                     .param("keyword", "田中"))
                     .andExpect(status().isOk())
                     .andExpect(model().attributeExists("users"))
-                    .andExpect(view().name(View.VIEW))
+                    .andExpect(view().name(ViewConst.VIEW))
                     .andExpect(model().attribute("users", hasSize(0)));
         }
 
@@ -152,7 +152,7 @@ public class UserControllerTests {
                 throws Exception {
             mockMvc.perform(get("/users/regist"))
                     .andExpect(status().isOk())
-                    .andExpect(view().name(View.REGIST))
+                    .andExpect(view().name(ViewConst.REGIST))
                     .andExpect(model().attributeExists("userRegistForm"))
                     .andExpect(model().attribute("userRegistForm",
                             instanceOf(UserRegistForm.class)));
@@ -170,7 +170,7 @@ public class UserControllerTests {
                     .param("email", "")
                     .with(csrf()))
                     .andExpect(status().isOk())
-                    .andExpect(view().name(View.REGIST))
+                    .andExpect(view().name(ViewConst.REGIST))
                     .andExpect(model().attributeErrorCount("userRegistForm", 2))
                     .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "name",
                             "NotBlank"))
@@ -186,7 +186,7 @@ public class UserControllerTests {
                     .param("email", "test")
                     .with(csrf()))
                     .andExpect(status().isOk())
-                    .andExpect(view().name(View.REGIST))
+                    .andExpect(view().name(ViewConst.REGIST))
                     .andExpect(model().attributeErrorCount("userRegistForm", 1))
                     .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "email",
                             "Email"));
@@ -200,7 +200,7 @@ public class UserControllerTests {
                     .param("email", "test@")
                     .with(csrf()))
                     .andExpect(status().isOk())
-                    .andExpect(view().name(View.REGIST))
+                    .andExpect(view().name(ViewConst.REGIST))
                     .andExpect(model().attributeErrorCount("userRegistForm", 1))
                     .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "email",
                             "Email"));
@@ -215,7 +215,7 @@ public class UserControllerTests {
                     .param("email", "taro@example.com")
                     .with(csrf()))
                     .andExpect(status().isOk())
-                    .andExpect(view().name(View.REGIST))
+                    .andExpect(view().name(ViewConst.REGIST))
                     .andExpect(model().attributeErrorCount("userRegistForm", 1))
                     .andExpect(model().attributeHasFieldErrorCode("userRegistForm", "email",
                             "common.email.duplicate"));
@@ -253,7 +253,7 @@ public class UserControllerTests {
 
             mockMvc.perform(get("/users/" + targetId + "/edit"))
                     .andExpect(status().isOk())
-                    .andExpect(view().name(View.EDIT))
+                    .andExpect(view().name(ViewConst.EDIT))
                     .andExpect(model().attributeExists("userUpdateForm"))
                     .andExpect(model().attribute("userUpdateForm", hasProperty("id", notNullValue())))
                     .andExpect(model().attribute("userUpdateForm", hasProperty("name", is("テスト太郎"))))
@@ -282,7 +282,7 @@ public class UserControllerTests {
                     .param("email", "")
                     .with(csrf()))
                     .andExpect(status().isOk())
-                    .andExpect(view().name(View.EDIT))
+                    .andExpect(view().name(ViewConst.EDIT))
                     .andExpect(model().attributeErrorCount("userUpdateForm", 3))
                     .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "id",
                             "NotNull"))
@@ -301,7 +301,7 @@ public class UserControllerTests {
                     .param("email", "test@example.com")
                     .with(csrf()))
                     .andExpect(status().isOk())
-                    .andExpect(view().name(View.EDIT))
+                    .andExpect(view().name(ViewConst.EDIT))
                     .andExpect(model().attributeErrorCount("userUpdateForm", 1))
                     .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "id",
                             "NotNull"));
@@ -316,7 +316,7 @@ public class UserControllerTests {
                     .param("email", "test@example.com")
                     .with(csrf()))
                     .andExpect(status().isOk())
-                    .andExpect(view().name(View.EDIT))
+                    .andExpect(view().name(ViewConst.EDIT))
                     .andExpect(model().attributeErrorCount("userUpdateForm", 1))
                     .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "name",
                             "NotBlank"));
@@ -331,7 +331,7 @@ public class UserControllerTests {
                     .param("email", "")
                     .with(csrf()))
                     .andExpect(status().isOk())
-                    .andExpect(view().name(View.EDIT))
+                    .andExpect(view().name(ViewConst.EDIT))
                     .andExpect(model().attributeErrorCount("userUpdateForm", 1))
                     .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email",
                             "NotBlank"));
@@ -346,7 +346,7 @@ public class UserControllerTests {
                     .param("email", "test")
                     .with(csrf()))
                     .andExpect(status().isOk())
-                    .andExpect(view().name(View.EDIT))
+                    .andExpect(view().name(ViewConst.EDIT))
                     .andExpect(model().attributeErrorCount("userUpdateForm", 1))
                     .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email",
                             "Email"));
@@ -361,7 +361,7 @@ public class UserControllerTests {
                     .param("email", "test@")
                     .with(csrf()))
                     .andExpect(status().isOk())
-                    .andExpect(view().name(View.EDIT))
+                    .andExpect(view().name(ViewConst.EDIT))
                     .andExpect(model().attributeErrorCount("userUpdateForm", 1))
                     .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email",
                             "Email"));
@@ -377,7 +377,7 @@ public class UserControllerTests {
                     .param("email", "taro@example.com")
                     .with(csrf()))
                     .andExpect(status().isOk())
-                    .andExpect(view().name(View.EDIT))
+                    .andExpect(view().name(ViewConst.EDIT))
                     .andExpect(model().attributeErrorCount("userUpdateForm", 1))
                     .andExpect(model().attributeHasFieldErrorCode("userUpdateForm", "email",
                             "UniqueEmailExceptSelf"));

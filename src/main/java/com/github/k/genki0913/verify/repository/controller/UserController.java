@@ -13,7 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.github.k.genki0913.verify.repository.constant.View;
+import com.github.k.genki0913.verify.repository.constant.ViewConst;
 import com.github.k.genki0913.verify.repository.exception.UserNotFoundException;
 import com.github.k.genki0913.verify.repository.form.UserRegistForm;
 import com.github.k.genki0913.verify.repository.form.UserUpdateForm;
@@ -82,7 +82,7 @@ public class UserController {
             model.addAttribute("users", userRepository.findAll());
         }
 
-        return View.VIEW;
+        return ViewConst.VIEW;
     }
 
     /**
@@ -98,7 +98,7 @@ public class UserController {
     @GetMapping("/regist")
     public String showRegistForm(Model model) {
         model.addAttribute("userRegistForm", new UserRegistForm());
-        return View.REGIST;
+        return ViewConst.REGIST;
     }
 
     /**
@@ -117,7 +117,7 @@ public class UserController {
     @PostMapping("/regist")
     public Object regist(@Validated UserRegistForm form, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return View.REGIST;
+            return ViewConst.REGIST;
         }
 
         User user = new User(form);
@@ -147,13 +147,13 @@ public class UserController {
     public String showEditForm(@PathVariable Long id, Model model) {
         User user = userUpdateService.findById(id);
         model.addAttribute("userUpdateForm", new UserUpdateForm(user));
-        return View.EDIT;
+        return ViewConst.EDIT;
     }
 
     /**
      * ユーザー情報を更新する。
      * <p>
-     * 入力値のバリデーションチェックを行い、エラーが存在する場合は編集画面（{@link View#EDIT}）へ遷移する。
+     * 入力値のバリデーションチェックを行い、エラーが存在する場合は編集画面（{@link ViewConst#EDIT}）へ遷移する。
      * バリデーションエラーがない場合は、受け取ったフォームの値を元にユーザー情報を更新し、
      * 一覧画面（/users）へリダイレクトする。
      * </p>
@@ -170,7 +170,7 @@ public class UserController {
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return View.EDIT;
+            return ViewConst.EDIT;
         }
 
         User user = new User(form);
