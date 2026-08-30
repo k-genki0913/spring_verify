@@ -3,28 +3,12 @@ package com.github.k.genki0913.verify.repository.form;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public class UserRegistForm {
+public record UserRegistForm(
+        @NotBlank String name,
 
-    @NotBlank
-    private String name;
+        @NotBlank @Email String email) {
 
-    @NotBlank
-    @Email
-    private String email;
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public static UserRegistForm empty() {
+        return new UserRegistForm("", "");
     }
 }
