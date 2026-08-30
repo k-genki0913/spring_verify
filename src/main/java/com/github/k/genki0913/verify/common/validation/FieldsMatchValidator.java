@@ -84,14 +84,11 @@ public class FieldsMatchValidator implements ConstraintValidator<FieldsMatch, Ob
             Object fieldValue = new BeanWrapperImpl(value).getPropertyValue(this.field);
             Object fieldToMatchValud = new BeanWrapperImpl(value).getPropertyValue(this.fieldToMatch);
 
-            // 2つの値がどちらもnull（未入力）の場合は、単項目チェック（@NotBlank）に任せるため、ここではtrueにする
-            if (fieldValue == null && fieldToMatchValud == null) {
-                return true;
-            }
-
-            // 2つのフィールドの値を比較した結果を返す（一致していれば true、違えば false）
-            return fieldValue != null && fieldValue.equals(fieldToMatchValud);
-        } catch (Exception e) {
+            // 2つの値がどちらもnull（未入力）の場合は、単項目チェック（@NotBlank）に任せるため、trueをリターンする
+            // 2つの値がどちらか存在する場合は、2つのフィールドの値を比較した結果を返す（一致していれば true、違えば false）
+            return (fieldValue == null && fieldToMatchValud == null)
+                    || (fieldValue != null && fieldValue.equals(fieldToMatchValud));
+        } catch (@SuppressWarnings("PMD.AvoidCatchingGenericException") Exception e) {
             return false;
         }
     }
