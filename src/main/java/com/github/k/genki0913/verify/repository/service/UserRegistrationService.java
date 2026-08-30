@@ -11,7 +11,7 @@ import com.github.k.genki0913.verify.repository.jpa.UserRepository;
 @Transactional
 public class UserRegistrationService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserRegistrationService(UserRepository userRepository) {
         this.userRepository = userRepository;
