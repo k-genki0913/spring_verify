@@ -8,7 +8,7 @@ on:
     # 特定のブランチにコードがプッシュ（マージ）されたタイミング
     push:
         branches: ['main']
-    # 特定のブランチに対してプルリクエストが作成、作新されたタイミング
+    # 特定のブランチに対してプルリクエストが作成、更新されたタイミング
     # プルリクエストのマージ元をマージ先へマージした状態でCIを実行する
     # (Runner上でマージするためリポジトリへは影響がない)
     pull_request:
@@ -16,7 +16,31 @@ on:
 
 # Jobを定義する
 jobs:
-    # Job ID
+    lint:
+        # Runner 実行環境
+        runs-on: self-hosted
+
+        # Job内の具体的な手順
+        # Runner上で実行される処理
+        steps:
+            - name: Checkout code
+              # users: 他者が定義した処理を実行する
+              # actions/checkout@v5: Github公式が提供するリポジトリのコードをランナーへクローンする機能
+              #                      クローン後、カレントディレクトリがルートディレクトリへ移動
+              uses: actions/checkout@v5
+
+            - name: Show me the environment
+              run: |
+                  echo "ランナーが動いている場所: $(hostname)"
+                  echo "Javaのバージョン:"
+                  java -version
+
+            - name: Run Spotless Check
+              run: ./mvnw spotless:check
+
+            - name: Run PMD Check
+              run: ./mvnw pmd:check
+
     test:
         # Runner 実行環境
         runs-on: self-hosted
@@ -38,10 +62,6 @@ jobs:
                   java -version
                   echo "Dockerのバージョン:"
                   docker --version
-
-            - name: Run Spotless Check
-              run: |
-                  ./mvnw spotless:check
 
             - name: Start Test Database
               run: docker compose -f .github/workflows/infrastructure/compose.yaml up -d
