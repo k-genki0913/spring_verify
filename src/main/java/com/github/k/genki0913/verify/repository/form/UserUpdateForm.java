@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @UniqueEmailExceptSelf(groups = ValidationGroup.Correlation.class)
+@SuppressWarnings("PMD.DataClass")
 public class UserUpdateForm {
 
     @GroupSequence({
