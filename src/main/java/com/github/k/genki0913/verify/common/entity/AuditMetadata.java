@@ -12,6 +12,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
+@SuppressWarnings("PMD.DataClass")
 public class AuditMetadata implements Serializable {
 
     private static final long serialVersionUID = 1L;
