@@ -19,6 +19,7 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "users")
+@SuppressWarnings("PMD.DataClass")
 public class User {
 
     /**
