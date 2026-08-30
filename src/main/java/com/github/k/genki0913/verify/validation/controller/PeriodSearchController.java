@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import com.github.k.genki0913.verify.validation.constant.View;
+import com.github.k.genki0913.verify.validation.constant.ViewConst;
 import com.github.k.genki0913.verify.validation.form.PeriodSearchForm;
 
 /**
@@ -55,11 +55,11 @@ public class PeriodSearchController {
             BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
-            return View.PERIOD_SEARCH_FORM;
+            return ViewConst.PERIOD_SEARCH_FORM;
         }
 
         model.addAttribute("successMessage", "日付形式チェック、期間チェックが正常終了しました。");
 
-        return View.PERIOD_SEARCH_FORM;
+        return ViewConst.PERIOD_SEARCH_FORM;
     }
 }

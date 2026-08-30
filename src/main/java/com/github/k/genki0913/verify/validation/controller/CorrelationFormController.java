@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.github.k.genki0913.verify.common.util.WebUrlUtils;
-import com.github.k.genki0913.verify.validation.constant.View;
+import com.github.k.genki0913.verify.validation.constant.ViewConst;
 import com.github.k.genki0913.verify.validation.form.CorrelationUserRegistForm;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +38,7 @@ public class CorrelationFormController {
      */
     @GetMapping("/form")
     public String showCorrelationForm(CorrelationUserRegistForm correlationUserRegistForm) {
-        return View.CORRELATION_FORM;
+        return ViewConst.CORRELATION_FORM;
     }
 
     /**
@@ -70,7 +70,7 @@ public class CorrelationFormController {
             @Validated(CorrelationUserRegistForm.ValidationSequence.class) @ModelAttribute("correlationUserRegistForm") CorrelationUserRegistForm form,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return View.CORRELATION_FORM;
+            return ViewConst.CORRELATION_FORM;
         }
 
         String redirectUrl = WebUrlUtils.getPath(CorrelationFormController.class, "showCorrelationForm");
