@@ -5,6 +5,9 @@ package com.github.k.genki0913.verify.validation.constant;
  */
 public final class ViewConst {
 
+    private ViewConst() {
+    }
+
     public static final String SINGLE = "validation/single";
 
     public static final String SINGLE_FORM = "validation/single-form";
