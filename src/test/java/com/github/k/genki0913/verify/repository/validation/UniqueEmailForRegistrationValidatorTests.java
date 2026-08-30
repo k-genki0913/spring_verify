@@ -28,8 +28,7 @@ public class UniqueEmailForRegistrationValidatorTests {
     @Test
     @DisplayName("メールアドレスが重複している場合、エラーが登録されること")
     void givenDuplicateEmail_whenValidate_thenReturnEmailFieldError() {
-        UserRegistForm form = new UserRegistForm();
-        form.setEmail("duplicatedEmail@example.com");
+        UserRegistForm form = new UserRegistForm("", "duplicatedEmail@example.com");
         BeanPropertyBindingResult errors = new BeanPropertyBindingResult(form, "userRegistForm");
 
         doReturn(true).when(userRegistrationService).isEmailRegistered("duplicatedEmail@example.com");
@@ -44,8 +43,7 @@ public class UniqueEmailForRegistrationValidatorTests {
     @Test
     @DisplayName("メールアドレスが重複していない場合、エラーが登録さないこと")
     void givenUniqueEmail_whenValidate_thenReturnNonError() {
-        UserRegistForm form = new UserRegistForm();
-        form.setEmail("uniqueEmail@example.com");
+        UserRegistForm form = new UserRegistForm("", "uniqueEmail@example.com");
         BeanPropertyBindingResult errors = new BeanPropertyBindingResult(form, "userRegistForm");
 
         doReturn(false).when(userRegistrationService).isEmailRegistered("uniqueEmail@example.com");

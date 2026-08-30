@@ -27,7 +27,7 @@ public class UniqueEmailForRegistrationValidator implements Validator {
             return;
         }
         UserRegistForm form = (UserRegistForm) target;
-        if (userRegistrationService.isEmailRegistered(form.getEmail())) {
+        if (userRegistrationService.isEmailRegistered(form.email())) {
             errors.rejectValue("email", "common.email.duplicate", "入力されたメールアドレスは既に登録されています。");
         }
     }

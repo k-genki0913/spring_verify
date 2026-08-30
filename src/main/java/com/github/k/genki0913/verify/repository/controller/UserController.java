@@ -97,7 +97,7 @@ public class UserController {
      */
     @GetMapping("/regist")
     public String showRegistForm(Model model) {
-        model.addAttribute("userRegistForm", new UserRegistForm());
+        model.addAttribute("userRegistForm", UserRegistForm.empty());
         return ViewConst.REGIST;
     }
 

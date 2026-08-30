@@ -56,8 +56,8 @@ public class User {
     }
 
     public User(UserRegistForm form) {
-        this.name = form.getName();
-        this.email = form.getEmail();
+        this.name = form.name();
+        this.email = form.email();
     }
 
     public User(UserUpdateForm form) {

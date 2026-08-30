@@ -33,9 +33,7 @@ public class UserRegistrationServiceTests {
         @DisplayName("ユーザー登録: 正常系")
         void givenNonExistingIdUser_whenRegister_thenSuccessReturnRegisteredUser() {
             String inputEmail = generateUniqueEmail();
-            UserRegistForm form = new UserRegistForm();
-            form.setName("テスト太郎");
-            form.setEmail(inputEmail);
+            UserRegistForm form = new UserRegistForm("テスト太郎", inputEmail);
             User user = new User(form);
 
             User registeredUser = service.register(user);
