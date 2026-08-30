@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties(prefix = "app.validation")
+@SuppressWarnings("PMD.FinalFieldCouldBeStatic")
 public class AppValidationProperties {
 
     /**
