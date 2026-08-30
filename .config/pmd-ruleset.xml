@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Custom PMD Ruleset"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>Custom PMD ruleset for Spring Boot project (Modern tuned)</description>
+
+    <!-- 1. ベストプラクティス（効率的で安全な作法） -->
+    <rule ref="category/java/bestpractices.xml"/>
+
+    <!-- 2. エラー処理の不備（空のcatchやリソースリークの温床など） -->
+    <rule ref="category/java/errorprone.xml"/>
+
+    <!-- 3. セキュリティ上の懸念 -->
+    <rule ref="category/java/security.xml"/>
+
+    <!-- 4. 設計チェック（ただしモダン開発の邪魔になるものは除外する） -->
+    <rule ref="category/java/design.xml">
+        <!-- StreamAPIやメソッドチェーンで誤検知しやすいデメテルの法則は除外 -->
+        <exclude name="LawOfDemeter"/>
+        <!-- SpringのDI構造やDTOで必ず引っかかる結合度チェックは除外 -->
+        <exclude name="CouplingBetweenObjects"/>
+        <!-- パッケージ間の依存関係の個別設定を行っていないため除外 -->
+        <exclude name="LoosePackageCoupling"/>
+    </rule>
+
+</ruleset>
