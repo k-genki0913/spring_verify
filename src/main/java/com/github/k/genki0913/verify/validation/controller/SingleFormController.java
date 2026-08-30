@@ -78,8 +78,8 @@ public class SingleFormController {
         }
 
         model.addAttribute("successMessagePost", "サーバー側でFormオブジェクトを正常に受け取りました!(POST)");
-        model.addAttribute("savedUsername", userForm.getUsername());
-        model.addAttribute("savedPassword", userForm.getPassword());
+        model.addAttribute("savedUsername", userForm.username());
+        model.addAttribute("savedPassword", userForm.password());
 
         return ViewConst.SINGLE_FORM;
     }
