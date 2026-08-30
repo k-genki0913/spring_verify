@@ -3,6 +3,7 @@ package com.github.k.genki0913.verify.validation.constant;
 /**
  * Validationパッケージ専用のビュー名定数定義。
  */
+@SuppressWarnings("PMD.DataClass")
 public final class ViewConst {
 
     private ViewConst() {
