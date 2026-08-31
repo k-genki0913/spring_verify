@@ -12,21 +12,33 @@ public class AppValidationProperties {
      * * GETバリデーション時に、メッセージから項目名を抽出するためのクエリマーカー。
      * デフォルト値として "?item.name=" を設定しておく。
      */
-    private final String queryParamItemName = "?item.name=";
+    private String queryParamItemName = "?item.name=";
+
+    public void setQueryParamItemName(String queryParamItemName) {
+        this.queryParamItemName = queryParamItemName;
+    }
 
     public String getQueryParamItemName() {
         return queryParamItemName;
     }
 
     /** プロパティファイル側で項目名を置換するための変数名テンプレート */
-    private final String placeholder = "{item.name}";
+    private String placeholder = "{item.name}";
+
+    public void setPlaceholder(String placeholder) {
+        this.placeholder = placeholder;
+    }
 
     public String getPlaceholder() {
         return this.placeholder;
     }
 
     /** エラーメッセージをmodelに設定するためのattributeName */
-    private final String errorAttributeName = "errors";
+    private String errorAttributeName = "errors";
+
+    public void setErrorAttributeName(String errorAttributeName) {
+        this.errorAttributeName = errorAttributeName;
+    }
 
     public String getErrorAttributeName() {
         return this.errorAttributeName;
