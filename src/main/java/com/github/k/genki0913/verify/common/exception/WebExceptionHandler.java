@@ -28,11 +28,9 @@ public class WebExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(WebExceptionHandler.class);
 
-    private final AppValidationProperties validationProperties;
     private final MessageSource messageSource;
 
-    public WebExceptionHandler(AppValidationProperties validationProperties, MessageSource messageSource) {
-        this.validationProperties = validationProperties;
+    public WebExceptionHandler(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
@@ -82,8 +80,8 @@ public class WebExceptionHandler {
             HttpServletRequest request) {
 
         List<String> errorMessages = ex.getConstraintViolations().stream().map(violation -> {
-            final String placeholder = validationProperties.getPlaceholder();
-            final String queryParamItemName = validationProperties.getQueryParamItemName();
+            final String placeholder = AppValidationProperties.PLACEHOLDER;
+            final String queryParamItemName = AppValidationProperties.QUERY_PARAM_ITEM_NAME;
             String resolvedMessage = violation.getMessage();
             String template = violation.getMessageTemplate();
 
@@ -103,7 +101,7 @@ public class WebExceptionHandler {
             return cleanMessage.replace(placeholder, fieldName);
         }).toList();
 
-        model.addAttribute(validationProperties.getErrorAttributeName(), errorMessages);
+        model.addAttribute(AppValidationProperties.ERROR_ATTRIBUTE_NAME, errorMessages);
 
         String requestURI = request.getRequestURI();
         String viewName = deriveViewName(requestURI);
