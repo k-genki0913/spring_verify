@@ -18,8 +18,12 @@ public class StartupHealthCheck {
     public void onApplicationReady() {
         try {
             File file = new File("/tmp/started");
-            file.createNewFile();
-            log.info(">>> 起動完了ファイルを生成しました: /tmp/started");
+            boolean created = file.createNewFile();
+            if (created) {
+                log.info(">>> 起動完了ファイルを生成しました: /tmp/started");
+            } else {
+                log.info(">>> 起動完了ファイルは既に存在しています: /tmp/started");
+            }
         } catch (IOException e) {
             log.error("起動完了ファイルの生成に失敗しました", e);
         }
