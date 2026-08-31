@@ -1,6 +1,7 @@
 package com.github.k.genki0913.verify.common.exception;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,9 +88,11 @@ public class WebExceptionHandler {
             String template = violation.getMessageTemplate();
 
             if (!template.contains(queryParamItemName)) {
+                Locale locale = request.getLocale() != null ? request.getLocale() : Locale.getDefault();
                 String defaultField = messageSource.getMessage("common.default.field", null, "対象項目",
-                        request.getLocale());
-                return resolvedMessage.replace(placeholder, defaultField);
+                        locale);
+                String safeDefaultField = defaultField != null ? defaultField : "";
+                return resolvedMessage.replace(placeholder, safeDefaultField);
             }
 
             int queryParamItemNameIndexInMsg = resolvedMessage.indexOf(queryParamItemName);
