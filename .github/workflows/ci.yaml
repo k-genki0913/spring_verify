@@ -41,6 +41,9 @@ jobs:
             - name: Run PMD Check
               run: ./mvnw pmd:check
 
+            - name: Run SpotBugs Check
+              run: ./mvnw spotbugs:check
+
     test:
         # Runner 実行環境
         runs-on: self-hosted
