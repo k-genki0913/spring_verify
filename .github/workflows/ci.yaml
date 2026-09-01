@@ -45,6 +45,7 @@ jobs:
               run: ./mvnw spotbugs:check
 
     test:
+        needs: lint
         # Runner 実行環境
         runs-on: self-hosted
 
