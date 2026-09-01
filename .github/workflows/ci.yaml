@@ -1,5 +1,4 @@
 # Github Actionsで実行するワークフローは、.github/workflows内にyaml形式で保存する必要がある
-# ファイル名は任意の名前を利用可能
 
 name: Spring Boot CI
 
