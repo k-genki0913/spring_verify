@@ -19,6 +19,7 @@ jobs:
     lint:
         # Runner 実行環境
         runs-on: self-hosted
+        if: github.actor == 'k-genki0913'
 
         # Job内の具体的な手順
         # Runner上で実行される処理
@@ -48,6 +49,7 @@ jobs:
         needs: lint
         # Runner 実行環境
         runs-on: self-hosted
+        if: github.actor == 'k-genki0913'
 
         # Job内の具体的な手順
         # Runner上で実行される処理
