@@ -16,9 +16,10 @@ on:
 # Jobを定義する
 jobs:
     lint:
+        if: github.actor == 'k-genki0913'
+
         # Runner 実行環境
         runs-on: self-hosted
-        if: github.actor == 'k-genki0913'
 
         # Job内の具体的な手順
         # Runner上で実行される処理
@@ -46,9 +47,11 @@ jobs:
 
     test:
         needs: lint
+
+        if: github.actor == 'k-genki0913'
+
         # Runner 実行環境
         runs-on: self-hosted
-        if: github.actor == 'k-genki0913'
 
         # Job内の具体的な手順
         # Runner上で実行される処理
@@ -83,7 +86,7 @@ jobs:
                   ./mvnw verify
 
             - name: Upload Coverage Report
-              uses: actions/upload-artifact@v7
+              uses: actions/upload-artifact@v4
               with:
                   name: jacoco-coverage-report
                   path: target/site/jacoco/
@@ -93,3 +96,20 @@ jobs:
               # 必ず実行される処理
               if: always()
               run: docker compose -f .github/workflows/infrastructure/compose.yaml down -v
+    build:
+        needs: test
+        if: github.actor == 'k-genki0913'
+        runs-on: self-hosted
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v5
+
+            - name: Build JAR without running tests
+              run: ./mvnw package -DskipTests
+
+            - name: Upload JAR Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: spring-boot-jar
+                  path: target/*.jar
+                  retention-days: 7
