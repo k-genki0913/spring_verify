@@ -1,0 +1,105 @@
+package com.github.k.genki0913.verify.auth;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.oneOf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+
+import com.github.k.genki0913.verify.support.WebLayerTest;
+
+@WebLayerTest(LoginController.class)
+public class LoginControllerTests {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockitoBean
+    private AuthenticationManager authenticationManager;
+
+    @Nested
+    @DisplayName("ログインページ表示")
+    class loginPage {
+        @Test
+        @DisplayName("初回アクセスした場合、空のloginFormを格納してログインページを返却する")
+        void givenFirstAccess_whenLoginPage_thenStatus200AndReturnLoginViewwithEmptyLoginForm() throws Exception {
+            mockMvc.perform(get("/login")).andExpect(status().isOk())
+                    .andExpect(view().name("login/login"))
+                    .andExpect(model().attributeExists("loginForm"))
+                    .andExpect(model().attribute("loginForm", is(LoginForm.empty())));
+        }
+
+        @Test
+        @DisplayName("modelにLoginFormがすでに存在する場合、既存のデータが上書きされずにログインページへ遷移する")
+        void givenModelWithLoginForm_whenLoginPage_thenStatus200AndReturnLoginViewWithSameLoginForm() throws Exception {
+            LoginForm existingForm = new LoginForm("test@example.com", "password1234");
+
+            mockMvc.perform(get("/login")
+                    .flashAttr("loginForm", existingForm))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("login/login"))
+                    .andExpect(model().attributeExists("loginForm"))
+                    .andExpect(model().attribute("loginForm", is(existingForm)));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("ログイン処理")
+    class login {
+        @Test
+        @DisplayName("メールアドレスとパスワードが空の場合、必須チェックのバリデーションエラーになること")
+        void givenBlankParams_whenLogin_thenHasRequiredErrorAndReturnFormView() throws Exception {
+            mockMvc.perform(post("/login").param("email", "").param("password", "")).andExpect(status().isOk())
+                    .andExpect(view().name("login/login"))
+                    .andExpect(model().attributeErrorCount("loginForm", 2))
+                    .andExpect(model().attributeHasFieldErrorCode("loginForm", "email", "NotBlank"))
+                    .andExpect(model().attributeHasFieldErrorCode("loginForm", "password", "NotBlank"));
+        }
+
+        @Test
+        @DisplayName("メールアドレスの形式が不正な場合、バリデーションエラーとなる")
+        void givenInvalidFormatEmail_whenLogin_thenHasEmailErrorAndReturnFormView() throws Exception {
+            mockMvc.perform(
+                    post("/login").param("email", "invalid-email-format").param("password", "validPassword1234"))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("login/login"))
+                    .andExpect(model().attributeErrorCount("loginForm", 1))
+                    .andExpect(model().attributeHasFieldErrorCode("loginForm", "email", "Email"));
+        }
+
+        @Test
+        @DisplayName("メールアドレスが255文字を超える場合、バリデーションエラーとなる")
+        void givenTooLongEmail_whenLogin_thenHasSizeAndEmailErrorAndReturnFormView() throws Exception {
+            String tooLongEmail = "a".repeat(246).concat("@example.com");
+
+            mockMvc.perform(post("/login")
+                    .param("email", tooLongEmail)
+                    .param("password", "validPassword1234"))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("login/login"))
+                    .andExpect(model().attributeErrorCount("loginForm", 2))
+                    .andExpect(model().attributeHasFieldErrorCode("loginForm", "email", is(oneOf("Size", "Email"))));
+        }
+
+        @Test
+        @DisplayName("パスワードが8文字未満の場合、バリデーションエラーとなる")
+        void givenTooShortPassword_whenLogin_thenHasSizeErrorAndReturnFormView() throws Exception {
+            mockMvc.perform(post("/login").param("email", "test@example.com").param("password", "short"))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("login/login"))
+                    .andExpect(model().attributeErrorCount("loginForm", 1))
+                    .andExpect(model().attributeHasFieldErrorCode("loginForm", "password", "Size"));
+        }
+    }
+}
