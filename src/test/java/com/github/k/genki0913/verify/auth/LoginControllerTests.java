@@ -1,10 +1,17 @@
 package com.github.k.genki0913.verify.auth;
 
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.oneOf;
+import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -12,20 +19,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.github.k.genki0913.verify.support.WebLayerTest;
-
-@WebLayerTest(LoginController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@Sql("accounts-test-data.sql")
 public class LoginControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @MockitoBean
-    private AuthenticationManager authenticationManager;
 
     @Nested
     @DisplayName("ログインページ表示")
@@ -60,7 +65,11 @@ public class LoginControllerTests {
         @Test
         @DisplayName("メールアドレスとパスワードが空の場合、必須チェックのバリデーションエラーになること")
         void givenBlankParams_whenLogin_thenHasRequiredErrorAndReturnFormView() throws Exception {
-            mockMvc.perform(post("/login").param("email", "").param("password", "")).andExpect(status().isOk())
+            mockMvc.perform(post("/login")
+                    .param("email", "")
+                    .param("password", "")
+                    .with(csrf()))
+                    .andExpect(status().isOk())
                     .andExpect(view().name("login/login"))
                     .andExpect(model().attributeErrorCount("loginForm", 2))
                     .andExpect(model().attributeHasFieldErrorCode("loginForm", "email", "NotBlank"))
@@ -71,7 +80,10 @@ public class LoginControllerTests {
         @DisplayName("メールアドレスの形式が不正な場合、バリデーションエラーとなる")
         void givenInvalidFormatEmail_whenLogin_thenHasEmailErrorAndReturnFormView() throws Exception {
             mockMvc.perform(
-                    post("/login").param("email", "invalid-email-format").param("password", "validPassword1234"))
+                    post("/login")
+                            .param("email", "invalid-email-format")
+                            .param("password", "validPassword1234")
+                            .with(csrf()))
                     .andExpect(status().isOk())
                     .andExpect(view().name("login/login"))
                     .andExpect(model().attributeErrorCount("loginForm", 1))
@@ -85,7 +97,8 @@ public class LoginControllerTests {
 
             mockMvc.perform(post("/login")
                     .param("email", tooLongEmail)
-                    .param("password", "validPassword1234"))
+                    .param("password", "validPassword1234")
+                    .with(csrf()))
                     .andExpect(status().isOk())
                     .andExpect(view().name("login/login"))
                     .andExpect(model().attributeErrorCount("loginForm", 2))
@@ -95,11 +108,35 @@ public class LoginControllerTests {
         @Test
         @DisplayName("パスワードが8文字未満の場合、バリデーションエラーとなる")
         void givenTooShortPassword_whenLogin_thenHasSizeErrorAndReturnFormView() throws Exception {
-            mockMvc.perform(post("/login").param("email", "test@example.com").param("password", "short"))
+            mockMvc.perform(post("/login")
+                    .param("email", "test@example.com")
+                    .param("password", "short")
+                    .with(csrf()))
                     .andExpect(status().isOk())
                     .andExpect(view().name("login/login"))
                     .andExpect(model().attributeErrorCount("loginForm", 1))
                     .andExpect(model().attributeHasFieldErrorCode("loginForm", "password", "Size"));
+        }
+
+        @Test
+        @DisplayName("正しい認証情報でログインした場合、ホームページへリダイレクトする")
+        void testLogin_Success() throws Exception {
+            mockMvc.perform(post("/login")
+                    .param("email", "test@example.com")
+                    .param("password", "password")
+                    .with(csrf()))
+                    .andExpect(status().isFound())
+                    .andExpect(redirectedUrl("/"))
+                    .andExpect(request().sessionAttribute(
+                            SPRING_SECURITY_CONTEXT_KEY,
+                            notNullValue()))
+                    .andExpect(request().sessionAttribute(
+                            SPRING_SECURITY_CONTEXT_KEY,
+                            hasProperty("authentication",
+                                    allOf(
+                                            hasProperty("authenticated", is(true)),
+                                            hasProperty("principal",
+                                                    hasProperty("username", is("test@example.com")))))));
         }
     }
 }
