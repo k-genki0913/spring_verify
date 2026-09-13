@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -21,6 +22,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -120,7 +123,7 @@ public class LoginControllerTests {
 
         @Test
         @DisplayName("正しい認証情報でログインした場合、ホームページへリダイレクトする")
-        void testLogin_Success() throws Exception {
+        void givenValidAuthenticationParam_whenLogin_thenRedirectToHomePage() throws Exception {
             mockMvc.perform(post("/login")
                     .param("email", "test@example.com")
                     .param("password", "password")
@@ -137,6 +140,38 @@ public class LoginControllerTests {
                                             hasProperty("authenticated", is(true)),
                                             hasProperty("principal",
                                                     hasProperty("username", is("test@example.com")))))));
+        }
+
+        @Test
+        @DisplayName("ログイン前に認証が必要なページへアクセスしようとした場合、認証後にリダイレクトされること")
+        void givenNeedAuthenticationPageRequest_whenLogin_thenRedirectAuthenticationPage() throws Exception {
+
+            MockHttpServletRequest dummyRequest = new MockHttpServletRequest("GET", "/secret-page");
+            DefaultSavedRequest savedRequest = new DefaultSavedRequest(dummyRequest);
+
+            String savedRequestKey = "SPRING_SECURITY_SAVED_REQUEST";
+
+            mockMvc.perform(post("/login")
+                    .param("email", "test@example.com")
+                    .param("password", "password")
+                    .with(csrf())
+                    .sessionAttr(savedRequestKey, savedRequest))
+                    .andExpect(status().isFound())
+                    .andExpect(redirectedUrlPattern("**/secret-page"));
+        }
+
+        @Test
+        @DisplayName("パスワードが間違っている場合、認証失敗となりエラーメッセージがモデルに格納されてログイン画面に戻ること")
+        void givenWrongPassword_whenLogin_thenAuthenticationExceptionAndReturnLoginViewWithLoginError()
+                throws Exception {
+            mockMvc.perform(post("/login")
+                    .param("email", "test@example.com")
+                    .param("password", "wrongPassword!") // 間違ったパスワード
+                    .with(csrf()))
+                    .andExpect(status().isOk()) // 例外がキャッチされてビューを返すため200 OK
+                    .andExpect(view().name("login/login"))
+                    .andExpect(model().attributeExists("loginError"))
+                    .andExpect(model().attribute("loginError", "メールアドレスまたはパスワードが間違っています。"));
         }
     }
 }
